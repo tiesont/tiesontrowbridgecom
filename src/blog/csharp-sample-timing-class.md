@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C# Sample: Timing Class](/blog/csharp-sample-timing-class)
+## [C# Sample: Timing Class](../blog/csharp-sample-timing-class)
 
 Posted on **Sunday, January 25, 2009**
 </div>
@@ -92,8 +92,8 @@ class Timing
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C# Sample: RandomDataSet Class](/blog/csharp-sample-randomdataset-class)
-[View all](/blog)
-[The Many Faces of the Hyperlink Element <i class="fas fa-chevron-right"></i>](/blog/the-many-faces-of-the-hyperlink-element)
+[<i class="fas fa-chevron-left"></i> C# Sample: RandomDataSet Class](../blog/csharp-sample-randomdataset-class)
+[View all](../blog)
+[The Many Faces of the Hyperlink Element <i class="fas fa-chevron-right"></i>](../blog/the-many-faces-of-the-hyperlink-element)
 </div>
 

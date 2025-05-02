@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Making Your XML Sitemap a Little More Useful](/blog/making-your-xml-sitemap-a-little-more-useful)
+## [Making Your XML Sitemap a Little More Useful](../blog/making-your-xml-sitemap-a-little-more-useful)
 
 Posted on **Monday, February 21, 2011**
 </div>
@@ -51,8 +51,8 @@ If you updated your sitemap correctly, and everything is in place, you should se
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Using LINQ to Easily Serialize an Exception to XML](/blog/using-linq-to-easily-serialize-an-exception-to-xml)
-[View all](/blog)
-[The Not-So-Great PHP/MySQL Tutorial, Part 1 <i class="fas fa-chevron-right"></i>](/blog/the-not-so-great-php-mysql-tutorial-part-1)
+[<i class="fas fa-chevron-left"></i> Using LINQ to Easily Serialize an Exception to XML](../blog/using-linq-to-easily-serialize-an-exception-to-xml)
+[View all](../blog)
+[The Not-So-Great PHP/MySQL Tutorial, Part 1 <i class="fas fa-chevron-right"></i>](../blog/the-not-so-great-php-mysql-tutorial-part-1)
 </div>
 

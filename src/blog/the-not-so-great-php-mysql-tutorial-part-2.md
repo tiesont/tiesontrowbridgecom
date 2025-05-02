@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [The Not-So-Great PHP/MySQL Tutorial, Part 2](/blog/the-not-so-great-php-mysql-tutorial-part-2)
+## [The Not-So-Great PHP/MySQL Tutorial, Part 2](../blog/the-not-so-great-php-mysql-tutorial-part-2)
 
 Posted on **Wednesday, March 23, 2011**
 </div>
@@ -379,8 +379,8 @@ And that's pretty much it. Again, this is a super simple example of extracting o
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> The Not-So-Great PHP/MySQL Tutorial, Part 1](/blog/the-not-so-great-php-mysql-tutorial-part-1)
-[View all](/blog)
-[Overloading Constructors in Java <i class="fas fa-chevron-right"></i>](/blog/overloading-constructors-in-java)
+[<i class="fas fa-chevron-left"></i> The Not-So-Great PHP/MySQL Tutorial, Part 1](../blog/the-not-so-great-php-mysql-tutorial-part-1)
+[View all](../blog)
+[Overloading Constructors in Java <i class="fas fa-chevron-right"></i>](../blog/overloading-constructors-in-java)
 </div>
 

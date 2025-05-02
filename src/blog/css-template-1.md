@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [CSS Template 1](/blog/css-template-1)
+## [CSS Template 1](../blog/css-template-1)
 
 Posted on **Tuesday, July 7, 2009**
 </div>
@@ -100,8 +100,8 @@ This is the companion CSS template for the [HTML template](/code/html-template-1
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> HTML Template 1](/blog/html-template-1)
-[View all](/blog)
-[falcon1986 is my hero... <i class="fas fa-chevron-right"></i>](/blog/falcon1986-is-my-hero)
+[<i class="fas fa-chevron-left"></i> HTML Template 1](../blog/html-template-1)
+[View all](../blog)
+[falcon1986 is my hero... <i class="fas fa-chevron-right"></i>](../blog/falcon1986-is-my-hero)
 </div>
 

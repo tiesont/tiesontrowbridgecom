@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [A Discussion of Class ](/blog/a-discussion-of-class)
+## [A Discussion of Class ](../blog/a-discussion-of-class)
 
 Posted on **Wednesday, March 3, 2010**
 </div>
@@ -41,8 +41,8 @@ This seems like a good stopping point. Again, if you need anything cleared up, p
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Deleting an XML Node](/blog/c-xml-and-linq-deleting-an-xml-node)
-[View all](/blog)
-[Thinking About the Past... <i class="fas fa-chevron-right"></i>](/blog/thinking-about-the-past)
+[<i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Deleting an XML Node](../blog/c-xml-and-linq-deleting-an-xml-node)
+[View all](../blog)
+[Thinking About the Past... <i class="fas fa-chevron-right"></i>](../blog/thinking-about-the-past)
 </div>
 

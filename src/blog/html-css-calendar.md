@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [HTML + CSS = A Calendar? Cool!](/blog/html-css-calendar)
+## [HTML + CSS = A Calendar? Cool!](../blog/html-css-calendar)
 
 Posted on **Saturday, December 20, 2008**
 </div>
@@ -125,8 +125,8 @@ Month 00 0000 HH:MM:SS
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> An Interesting Use of a C# Foreach Loop](/blog/an-interesting-use-of-a-csharp-foreach-loop)
-[View all](/blog)
-[OOP and C#: Making a Sample Class <i class="fas fa-chevron-right"></i>](/blog/oop-and-csharp-making-a-sample-class)
+[<i class="fas fa-chevron-left"></i> An Interesting Use of a C# Foreach Loop](../blog/an-interesting-use-of-a-csharp-foreach-loop)
+[View all](../blog)
+[OOP and C#: Making a Sample Class <i class="fas fa-chevron-right"></i>](../blog/oop-and-csharp-making-a-sample-class)
 </div>
 

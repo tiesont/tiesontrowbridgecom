@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C#, XML, and LINQ: Deleting an XML Node](/blog/c-xml-and-linq-deleting-an-xml-node)
+## [C#, XML, and LINQ: Deleting an XML Node](../blog/c-xml-and-linq-deleting-an-xml-node)
 
 Posted on **Friday, January 22, 2010**
 </div>
@@ -120,8 +120,8 @@ Questions or comments? You know what to do... :]
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Updating an XML File](/blog/c-xml-and-linq-sample-3)
-[View all](/blog)
-[A Discussion of Class  <i class="fas fa-chevron-right"></i>](/blog/a-discussion-of-class)
+[<i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Updating an XML File](../blog/c-xml-and-linq-sample-3)
+[View all](../blog)
+[A Discussion of Class  <i class="fas fa-chevron-right"></i>](../blog/a-discussion-of-class)
 </div>
 

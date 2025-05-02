@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [The Not-So-Great PHP/MySQL Tutorial, Part 1](/blog/the-not-so-great-php-mysql-tutorial-part-1)
+## [The Not-So-Great PHP/MySQL Tutorial, Part 1](../blog/the-not-so-great-php-mysql-tutorial-part-1)
 
 Posted on **Wednesday, March 16, 2011**
 </div>
@@ -225,8 +225,8 @@ That's it for Part 1. Part 2 will cover building the report from the data we ins
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Making Your XML Sitemap a Little More Useful](/blog/making-your-xml-sitemap-a-little-more-useful)
-[View all](/blog)
-[The Not-So-Great PHP/MySQL Tutorial, Part 2 <i class="fas fa-chevron-right"></i>](/blog/the-not-so-great-php-mysql-tutorial-part-2)
+[<i class="fas fa-chevron-left"></i> Making Your XML Sitemap a Little More Useful](../blog/making-your-xml-sitemap-a-little-more-useful)
+[View all](../blog)
+[The Not-So-Great PHP/MySQL Tutorial, Part 2 <i class="fas fa-chevron-right"></i>](../blog/the-not-so-great-php-mysql-tutorial-part-2)
 </div>
 

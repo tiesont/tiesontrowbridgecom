@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Object-Oriented Programming](/blog/object-oriented-programming)
+## [Object-Oriented Programming](../blog/object-oriented-programming)
 
 Posted on **Saturday, September 27, 2008**
 </div>
@@ -57,8 +57,8 @@ Object-oriented programming is a method used to represent real-word objects elec
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Tutorial One: HTML &gt;&gt; PHP](/blog/tutorial-one-html-php)
-[View all](/blog)
-[Conditional Statements <i class="fas fa-chevron-right"></i>](/blog/conditional-statements)
+[<i class="fas fa-chevron-left"></i> Tutorial One: HTML &gt;&gt; PHP](../blog/tutorial-one-html-php)
+[View all](../blog)
+[Conditional Statements <i class="fas fa-chevron-right"></i>](../blog/conditional-statements)
 </div>
 

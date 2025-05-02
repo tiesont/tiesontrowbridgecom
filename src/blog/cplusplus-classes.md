@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C/C++ : Creating a Custom Class](/blog/cplusplus-classes)
+## [C/C++ : Creating a Custom Class](../blog/cplusplus-classes)
 
 Posted on **Friday, October 3, 2008**
 </div>
@@ -191,8 +191,8 @@ The "return type" of the function needs to match the data type of the variable w
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C/C++ : Includes](/blog/cplusplus-includes)
-[View all](/blog)
-[Why Sherlock Holmes Would Have Made A Kick-Ass Programmer <i class="fas fa-chevron-right"></i>](/blog/why-sherlock-holmes-would-have-made-a-kick-ass-programmer)
+[<i class="fas fa-chevron-left"></i> C/C++ : Includes](../blog/cplusplus-includes)
+[View all](../blog)
+[Why Sherlock Holmes Would Have Made A Kick-Ass Programmer <i class="fas fa-chevron-right"></i>](../blog/why-sherlock-holmes-would-have-made-a-kick-ass-programmer)
 </div>
 

@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C# Hashing Utility](/blog/c-hashing-utility)
+## [C# Hashing Utility](../blog/c-hashing-utility)
 
 Posted on **Monday, September 2, 2013**
 </div>
@@ -30,8 +30,8 @@ Enjoy.
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Hobbies, Standards, and Ethics - Oh My!](/blog/hobbies-standards-and-ethics-oh-my)
-[View all](/blog)
-[Implementing ASP.NET Membership with a Custom Provider <i class="fas fa-chevron-right"></i>](/blog/implementing-aspnet-membership-with-a-custom-provider)
+[<i class="fas fa-chevron-left"></i> Hobbies, Standards, and Ethics - Oh My!](../blog/hobbies-standards-and-ethics-oh-my)
+[View all](../blog)
+[Implementing ASP.NET Membership with a Custom Provider <i class="fas fa-chevron-right"></i>](../blog/implementing-aspnet-membership-with-a-custom-provider)
 </div>
 

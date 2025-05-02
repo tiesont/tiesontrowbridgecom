@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C#, XML, and LINQ: Load &amp; Parse an XML File](/blog/c-xml-and-linq-sample-1)
+## [C#, XML, and LINQ: Load &amp; Parse an XML File](../blog/c-xml-and-linq-sample-1)
 
 Posted on **Saturday, August 22, 2009**
 </div>
@@ -351,8 +351,8 @@ Pretty cool, huh?
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Fun with LINQ](/blog/fun-with-linq)
-[View all](/blog)
-[C#, XML, and LINQ: Adding Nodes to an XML File <i class="fas fa-chevron-right"></i>](/blog/c-xml-and-linq-sample-2)
+[<i class="fas fa-chevron-left"></i> Fun with LINQ](../blog/fun-with-linq)
+[View all](../blog)
+[C#, XML, and LINQ: Adding Nodes to an XML File <i class="fas fa-chevron-right"></i>](../blog/c-xml-and-linq-sample-2)
 </div>
 

@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Creating A C++ Application, Part 1](/blog/creating-a-cplusplus-console-application-part-1)
+## [Creating A C++ Application, Part 1](../blog/creating-a-cplusplus-console-application-part-1)
 
 Posted on **Saturday, April 25, 2009**
 </div>
@@ -122,8 +122,8 @@ Enjoy!
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Yur Doin' It Wrong...](/blog/yur-doin-it-wrong)
-[View all](/blog)
-[Nifty Corners = Sah-weeeeet... <i class="fas fa-chevron-right"></i>](/blog/nifty-corners-sah-weeeeet)
+[<i class="fas fa-chevron-left"></i> Yur Doin' It Wrong...](../blog/yur-doin-it-wrong)
+[View all](../blog)
+[Nifty Corners = Sah-weeeeet... <i class="fas fa-chevron-right"></i>](../blog/nifty-corners-sah-weeeeet)
 </div>
 

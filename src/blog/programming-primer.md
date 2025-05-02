@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Programming Primer](/blog/programming-primer)
+## [Programming Primer](../blog/programming-primer)
 
 Posted on **Sunday, March 1, 2009**
 </div>
@@ -149,8 +149,8 @@ The term "scope" refers to the valid lifetime of a variable within a program. Th
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> The Many Faces of the Hyperlink Element](/blog/the-many-faces-of-the-hyperlink-element)
-[View all](/blog)
-[Debt Repayment Calculator, Part One <i class="fas fa-chevron-right"></i>](/blog/debt-repayment-calculator-part-one)
+[<i class="fas fa-chevron-left"></i> The Many Faces of the Hyperlink Element](../blog/the-many-faces-of-the-hyperlink-element)
+[View all](../blog)
+[Debt Repayment Calculator, Part One <i class="fas fa-chevron-right"></i>](../blog/debt-repayment-calculator-part-one)
 </div>
 

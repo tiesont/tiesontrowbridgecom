@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [OOP and C#: Making a Sample Class](/blog/oop-and-csharp-making-a-sample-class)
+## [OOP and C#: Making a Sample Class](../blog/oop-and-csharp-making-a-sample-class)
 
 Posted on **Friday, January 2, 2009**
 </div>
@@ -303,8 +303,8 @@ While not the best of walk-throughs, I do think the information I presented here
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> HTML + CSS = A Calendar? Cool!](/blog/html-css-calendar)
-[View all](/blog)
-[C# Sample: RandomDataSet Class <i class="fas fa-chevron-right"></i>](/blog/csharp-sample-randomdataset-class)
+[<i class="fas fa-chevron-left"></i> HTML + CSS = A Calendar? Cool!](../blog/html-css-calendar)
+[View all](../blog)
+[C# Sample: RandomDataSet Class <i class="fas fa-chevron-right"></i>](../blog/csharp-sample-randomdataset-class)
 </div>
 

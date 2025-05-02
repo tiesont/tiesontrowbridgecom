@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C#, XML, and LINQ: Adding Nodes to an XML File](/blog/c-xml-and-linq-sample-2)
+## [C#, XML, and LINQ: Adding Nodes to an XML File](../blog/c-xml-and-linq-sample-2)
 
 Posted on **Wednesday, November 4, 2009**
 </div>
@@ -110,8 +110,8 @@ It is worth noting the try-catch blocks I have around this bit of code. These ar
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Load &amp; Parse an XML File](/blog/c-xml-and-linq-sample-1)
-[View all](/blog)
-[C#, XML, and LINQ: Updating an XML File <i class="fas fa-chevron-right"></i>](/blog/c-xml-and-linq-sample-3)
+[<i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Load &amp; Parse an XML File](../blog/c-xml-and-linq-sample-1)
+[View all](../blog)
+[C#, XML, and LINQ: Updating an XML File <i class="fas fa-chevron-right"></i>](../blog/c-xml-and-linq-sample-3)
 </div>
 

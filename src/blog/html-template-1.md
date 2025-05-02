@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [HTML Template 1](/blog/html-template-1)
+## [HTML Template 1](../blog/html-template-1)
 
 Posted on **Tuesday, July 7, 2009**
 </div>
@@ -103,8 +103,8 @@ I put together a simple HTML/XHTML template for anyone that wants it. If you're 
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Survey of Programming Languages I](/blog/survey-of-programming-languages-i)
-[View all](/blog)
-[CSS Template 1 <i class="fas fa-chevron-right"></i>](/blog/css-template-1)
+[<i class="fas fa-chevron-left"></i> Survey of Programming Languages I](../blog/survey-of-programming-languages-i)
+[View all](../blog)
+[CSS Template 1 <i class="fas fa-chevron-right"></i>](../blog/css-template-1)
 </div>
 

@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Survey of Programming Languages I](/blog/survey-of-programming-languages-i)
+## [Survey of Programming Languages I](../blog/survey-of-programming-languages-i)
 
 Posted on **Tuesday, July 7, 2009**
 </div>
@@ -36,8 +36,8 @@ So there you have it. So far, none of these pretenders can even hold a candle to
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Fixing an odd bug in .htaccess](/blog/fixing-an-odd-bug-in-htaccess)
-[View all](/blog)
-[HTML Template 1 <i class="fas fa-chevron-right"></i>](/blog/html-template-1)
+[<i class="fas fa-chevron-left"></i> Fixing an odd bug in .htaccess](../blog/fixing-an-odd-bug-in-htaccess)
+[View all](../blog)
+[HTML Template 1 <i class="fas fa-chevron-right"></i>](../blog/html-template-1)
 </div>
 

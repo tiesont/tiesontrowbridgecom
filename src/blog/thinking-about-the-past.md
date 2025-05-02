@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Thinking About the Past...](/blog/thinking-about-the-past)
+## [Thinking About the Past...](../blog/thinking-about-the-past)
 
 Posted on **Wednesday, March 10, 2010**
 </div>
@@ -58,8 +58,8 @@ Serendipity. Hoo-rah. :]
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> A Discussion of Class ](/blog/a-discussion-of-class)
-[View all](/blog)
-[Using LINQ to Easily Serialize an Exception to XML <i class="fas fa-chevron-right"></i>](/blog/using-linq-to-easily-serialize-an-exception-to-xml)
+[<i class="fas fa-chevron-left"></i> A Discussion of Class ](../blog/a-discussion-of-class)
+[View all](../blog)
+[Using LINQ to Easily Serialize an Exception to XML <i class="fas fa-chevron-right"></i>](../blog/using-linq-to-easily-serialize-an-exception-to-xml)
 </div>
 

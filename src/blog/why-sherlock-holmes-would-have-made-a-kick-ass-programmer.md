@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Why Sherlock Holmes Would Have Made A Kick-Ass Programmer](/blog/why-sherlock-holmes-would-have-made-a-kick-ass-programmer)
+## [Why Sherlock Holmes Would Have Made A Kick-Ass Programmer](../blog/why-sherlock-holmes-would-have-made-a-kick-ass-programmer)
 
 Posted on **Wednesday, October 8, 2008**
 </div>
@@ -40,8 +40,8 @@ _SMACK!_
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C/C++ : Creating a Custom Class](/blog/cplusplus-classes)
-[View all](/blog)
-[Pretty URLs For Everyone! <i class="fas fa-chevron-right"></i>](/blog/pretty-urls-for-everyone)
+[<i class="fas fa-chevron-left"></i> C/C++ : Creating a Custom Class](../blog/cplusplus-classes)
+[View all](../blog)
+[Pretty URLs For Everyone! <i class="fas fa-chevron-right"></i>](../blog/pretty-urls-for-everyone)
 </div>
 

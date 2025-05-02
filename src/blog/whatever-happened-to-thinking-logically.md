@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [What Ever Happened to Thinking Logically?](/blog/whatever-happened-to-thinking-logically)
+## [What Ever Happened to Thinking Logically?](../blog/whatever-happened-to-thinking-logically)
 
 Posted on **Friday, September 12, 2008**
 </div>
@@ -24,8 +24,8 @@ So, am I just way out in left field on this? Do you agree? Disagree? Post your t
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Obsession of the moment: M-V-C](/blog/obsession-of-the-moment-m-v-c)
-[View all](/blog)
-[Tutorial One: HTML &gt;&gt; PHP <i class="fas fa-chevron-right"></i>](/blog/tutorial-one-html-php)
+[<i class="fas fa-chevron-left"></i> Obsession of the moment: M-V-C](../blog/obsession-of-the-moment-m-v-c)
+[View all](../blog)
+[Tutorial One: HTML &gt;&gt; PHP <i class="fas fa-chevron-right"></i>](../blog/tutorial-one-html-php)
 </div>
 

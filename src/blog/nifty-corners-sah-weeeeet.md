@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Nifty Corners = Sah-weeeeet...](/blog/nifty-corners-sah-weeeeet)
+## [Nifty Corners = Sah-weeeeet...](../blog/nifty-corners-sah-weeeeet)
 
 Posted on **Monday, May 11, 2009**
 </div>
@@ -35,8 +35,8 @@ If you have some time, I thoroughly recommend you check out the link I provided 
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Creating A C++ Application, Part 1](/blog/creating-a-cplusplus-console-application-part-1)
-[View all](/blog)
-[Fixing an odd bug in .htaccess <i class="fas fa-chevron-right"></i>](/blog/fixing-an-odd-bug-in-htaccess)
+[<i class="fas fa-chevron-left"></i> Creating A C++ Application, Part 1](../blog/creating-a-cplusplus-console-application-part-1)
+[View all](../blog)
+[Fixing an odd bug in .htaccess <i class="fas fa-chevron-right"></i>](../blog/fixing-an-odd-bug-in-htaccess)
 </div>
 

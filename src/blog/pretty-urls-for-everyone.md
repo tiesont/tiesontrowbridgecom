@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Pretty URLs For Everyone!](/blog/pretty-urls-for-everyone)
+## [Pretty URLs For Everyone!](../blog/pretty-urls-for-everyone)
 
 Posted on **Monday, October 13, 2008**
 </div>
@@ -74,8 +74,8 @@ Enjoy!
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Why Sherlock Holmes Would Have Made A Kick-Ass Programmer](/blog/why-sherlock-holmes-would-have-made-a-kick-ass-programmer)
-[View all](/blog)
-[Coding Like Forrest Gump <i class="fas fa-chevron-right"></i>](/blog/coding-like-forrest-gump)
+[<i class="fas fa-chevron-left"></i> Why Sherlock Holmes Would Have Made A Kick-Ass Programmer](../blog/why-sherlock-holmes-would-have-made-a-kick-ass-programmer)
+[View all](../blog)
+[Coding Like Forrest Gump <i class="fas fa-chevron-right"></i>](../blog/coding-like-forrest-gump)
 </div>
 

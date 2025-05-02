@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Debt Repayment Calculator, Part One](/blog/debt-repayment-calculator-part-one)
+## [Debt Repayment Calculator, Part One](../blog/debt-repayment-calculator-part-one)
 
 Posted on **Wednesday, March 25, 2009**
 </div>
@@ -136,8 +136,8 @@ Hopefully, if I have been clear enough, you were able to follow along with this 
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Programming Primer](/blog/programming-primer)
-[View all](/blog)
-[Yur Doin' It Wrong... <i class="fas fa-chevron-right"></i>](/blog/yur-doin-it-wrong)
+[<i class="fas fa-chevron-left"></i> Programming Primer](../blog/programming-primer)
+[View all](../blog)
+[Yur Doin' It Wrong... <i class="fas fa-chevron-right"></i>](../blog/yur-doin-it-wrong)
 </div>
 

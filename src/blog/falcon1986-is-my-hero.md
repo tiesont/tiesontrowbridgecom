@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [falcon1986 is my hero...](/blog/falcon1986-is-my-hero)
+## [falcon1986 is my hero...](../blog/falcon1986-is-my-hero)
 
 Posted on **Saturday, July 11, 2009**
 </div>
@@ -37,8 +37,8 @@ So I'm very happy right about now.
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> CSS Template 1](/blog/css-template-1)
-[View all](/blog)
-[PHP Referrer Snippet <i class="fas fa-chevron-right"></i>](/blog/php-referrer-snippet)
+[<i class="fas fa-chevron-left"></i> CSS Template 1](../blog/css-template-1)
+[View all](../blog)
+[PHP Referrer Snippet <i class="fas fa-chevron-right"></i>](../blog/php-referrer-snippet)
 </div>
 

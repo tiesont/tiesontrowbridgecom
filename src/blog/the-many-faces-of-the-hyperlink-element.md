@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [The Many Faces of the Hyperlink Element](/blog/the-many-faces-of-the-hyperlink-element)
+## [The Many Faces of the Hyperlink Element](../blog/the-many-faces-of-the-hyperlink-element)
 
 Posted on **Thursday, February 5, 2009**
 </div>
@@ -87,8 +87,8 @@ I will eventually update this post to include some script links, as well, but fo
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C# Sample: Timing Class](/blog/csharp-sample-timing-class)
-[View all](/blog)
-[Programming Primer <i class="fas fa-chevron-right"></i>](/blog/programming-primer)
+[<i class="fas fa-chevron-left"></i> C# Sample: Timing Class](../blog/csharp-sample-timing-class)
+[View all](../blog)
+[Programming Primer <i class="fas fa-chevron-right"></i>](../blog/programming-primer)
 </div>
 

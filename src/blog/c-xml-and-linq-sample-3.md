@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C#, XML, and LINQ: Updating an XML File](/blog/c-xml-and-linq-sample-3)
+## [C#, XML, and LINQ: Updating an XML File](../blog/c-xml-and-linq-sample-3)
 
 Posted on **Monday, November 30, 2009**
 </div>
@@ -89,8 +89,8 @@ The conditional I placed around the actual save code is more or less optional. I
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Adding Nodes to an XML File](/blog/c-xml-and-linq-sample-2)
-[View all](/blog)
-[C#, XML, and LINQ: Deleting an XML Node <i class="fas fa-chevron-right"></i>](/blog/c-xml-and-linq-deleting-an-xml-node)
+[<i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Adding Nodes to an XML File](../blog/c-xml-and-linq-sample-2)
+[View all](../blog)
+[C#, XML, and LINQ: Deleting an XML Node <i class="fas fa-chevron-right"></i>](../blog/c-xml-and-linq-deleting-an-xml-node)
 </div>
 

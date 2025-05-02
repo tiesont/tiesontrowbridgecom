@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [(Don't) Catch 'Em All!](/blog/dont-catch-em-all)
+## [(Don't) Catch 'Em All!](../blog/dont-catch-em-all)
 
 Posted on **Wednesday, March 15, 2017**
 </div>
@@ -53,7 +53,7 @@ What we should have done is abort the method once we knew we had an exception, s
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Implementing ASP.NET Membership with a Custom Provider](/blog/implementing-aspnet-membership-with-a-custom-provider)
-[View all](/blog)
+[<i class="fas fa-chevron-left"></i> Implementing ASP.NET Membership with a Custom Provider](../blog/implementing-aspnet-membership-with-a-custom-provider)
+[View all](../blog)
 </div>
 

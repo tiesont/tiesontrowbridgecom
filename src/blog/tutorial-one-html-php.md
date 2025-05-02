@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Tutorial One: HTML &gt;&gt; PHP](/blog/tutorial-one-html-php)
+## [Tutorial One: HTML &gt;&gt; PHP](../blog/tutorial-one-html-php)
 
 Posted on **Thursday, September 18, 2008**
 </div>
@@ -261,8 +261,8 @@ Hopefully, if I have been clear enough, you were able to follow along with this 
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> What Ever Happened to Thinking Logically?](/blog/whatever-happened-to-thinking-logically)
-[View all](/blog)
-[Object-Oriented Programming <i class="fas fa-chevron-right"></i>](/blog/object-oriented-programming)
+[<i class="fas fa-chevron-left"></i> What Ever Happened to Thinking Logically?](../blog/whatever-happened-to-thinking-logically)
+[View all](../blog)
+[Object-Oriented Programming <i class="fas fa-chevron-right"></i>](../blog/object-oriented-programming)
 </div>
 

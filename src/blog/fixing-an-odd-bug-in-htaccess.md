@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Fixing an odd bug in .htaccess](/blog/fixing-an-odd-bug-in-htaccess)
+## [Fixing an odd bug in .htaccess](../blog/fixing-an-odd-bug-in-htaccess)
 
 Posted on **Sunday, June 21, 2009**
 </div>
@@ -67,8 +67,8 @@ This also seems to have the added bonus of keeping people from snooping in my va
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Nifty Corners = Sah-weeeeet...](/blog/nifty-corners-sah-weeeeet)
-[View all](/blog)
-[Survey of Programming Languages I <i class="fas fa-chevron-right"></i>](/blog/survey-of-programming-languages-i)
+[<i class="fas fa-chevron-left"></i> Nifty Corners = Sah-weeeeet...](../blog/nifty-corners-sah-weeeeet)
+[View all](../blog)
+[Survey of Programming Languages I <i class="fas fa-chevron-right"></i>](../blog/survey-of-programming-languages-i)
 </div>
 

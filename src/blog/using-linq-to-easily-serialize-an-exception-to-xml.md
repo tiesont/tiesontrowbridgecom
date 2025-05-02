@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Using LINQ to Easily Serialize an Exception to XML](/blog/using-linq-to-easily-serialize-an-exception-to-xml)
+## [Using LINQ to Easily Serialize an Exception to XML](../blog/using-linq-to-easily-serialize-an-exception-to-xml)
 
 Posted on **Monday, February 7, 2011**
 </div>
@@ -117,8 +117,8 @@ Enjoy!
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Thinking About the Past...](/blog/thinking-about-the-past)
-[View all](/blog)
-[Making Your XML Sitemap a Little More Useful <i class="fas fa-chevron-right"></i>](/blog/making-your-xml-sitemap-a-little-more-useful)
+[<i class="fas fa-chevron-left"></i> Thinking About the Past...](../blog/thinking-about-the-past)
+[View all](../blog)
+[Making Your XML Sitemap a Little More Useful <i class="fas fa-chevron-right"></i>](../blog/making-your-xml-sitemap-a-little-more-useful)
 </div>
 

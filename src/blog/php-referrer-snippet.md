@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [PHP Referrer Snippet](/blog/php-referrer-snippet)
+## [PHP Referrer Snippet](../blog/php-referrer-snippet)
 
 Posted on **Friday, July 31, 2009**
 </div>
@@ -44,8 +44,8 @@ Enjoy!
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> falcon1986 is my hero...](/blog/falcon1986-is-my-hero)
-[View all](/blog)
-[Fun with LINQ <i class="fas fa-chevron-right"></i>](/blog/fun-with-linq)
+[<i class="fas fa-chevron-left"></i> falcon1986 is my hero...](../blog/falcon1986-is-my-hero)
+[View all](../blog)
+[Fun with LINQ <i class="fas fa-chevron-right"></i>](../blog/fun-with-linq)
 </div>
 

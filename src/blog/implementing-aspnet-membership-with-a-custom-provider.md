@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Implementing ASP.NET Membership with a Custom Provider](/blog/implementing-aspnet-membership-with-a-custom-provider)
+## [Implementing ASP.NET Membership with a Custom Provider](../blog/implementing-aspnet-membership-with-a-custom-provider)
 
 Posted on **Tuesday, September 3, 2013**
 </div>
@@ -306,8 +306,8 @@ You also need, at a minimum, to add code to the `ValidateUser()` method to query
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> C# Hashing Utility](/blog/c-hashing-utility)
-[View all](/blog)
-[(Don't) Catch 'Em All! <i class="fas fa-chevron-right"></i>](/blog/dont-catch-em-all)
+[<i class="fas fa-chevron-left"></i> C# Hashing Utility](../blog/c-hashing-utility)
+[View all](../blog)
+[(Don't) Catch 'Em All! <i class="fas fa-chevron-right"></i>](../blog/dont-catch-em-all)
 </div>
 

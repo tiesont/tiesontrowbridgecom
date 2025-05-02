@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Fun with LINQ](/blog/fun-with-linq)
+## [Fun with LINQ](../blog/fun-with-linq)
 
 Posted on **Monday, August 17, 2009**
 </div>
@@ -36,8 +36,8 @@ Cheers!
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> PHP Referrer Snippet](/blog/php-referrer-snippet)
-[View all](/blog)
-[C#, XML, and LINQ: Load &amp; Parse an XML File <i class="fas fa-chevron-right"></i>](/blog/c-xml-and-linq-sample-1)
+[<i class="fas fa-chevron-left"></i> PHP Referrer Snippet](../blog/php-referrer-snippet)
+[View all](../blog)
+[C#, XML, and LINQ: Load &amp; Parse an XML File <i class="fas fa-chevron-right"></i>](../blog/c-xml-and-linq-sample-1)
 </div>
 

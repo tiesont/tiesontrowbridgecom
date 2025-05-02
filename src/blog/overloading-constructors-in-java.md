@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Overloading Constructors in Java](/blog/overloading-constructors-in-java)
+## [Overloading Constructors in Java](../blog/overloading-constructors-in-java)
 
 Posted on **Thursday, March 24, 2011**
 </div>
@@ -234,8 +234,8 @@ Hopefully, this all makes sense. If not, either use the comment feature below or
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> The Not-So-Great PHP/MySQL Tutorial, Part 2](/blog/the-not-so-great-php-mysql-tutorial-part-2)
-[View all](/blog)
-[Hobbies, Standards, and Ethics - Oh My! <i class="fas fa-chevron-right"></i>](/blog/hobbies-standards-and-ethics-oh-my)
+[<i class="fas fa-chevron-left"></i> The Not-So-Great PHP/MySQL Tutorial, Part 2](../blog/the-not-so-great-php-mysql-tutorial-part-2)
+[View all](../blog)
+[Hobbies, Standards, and Ethics - Oh My! <i class="fas fa-chevron-right"></i>](../blog/hobbies-standards-and-ethics-oh-my)
 </div>
 

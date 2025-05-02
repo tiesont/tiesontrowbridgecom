@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C# Sample: RandomDataSet Class](/blog/csharp-sample-randomdataset-class)
+## [C# Sample: RandomDataSet Class](../blog/csharp-sample-randomdataset-class)
 
 Posted on **Friday, January 23, 2009**
 </div>
@@ -28,8 +28,8 @@ Here's the code:
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> OOP and C#: Making a Sample Class](/blog/oop-and-csharp-making-a-sample-class)
-[View all](/blog)
-[C# Sample: Timing Class <i class="fas fa-chevron-right"></i>](/blog/csharp-sample-timing-class)
+[<i class="fas fa-chevron-left"></i> OOP and C#: Making a Sample Class](../blog/oop-and-csharp-making-a-sample-class)
+[View all](../blog)
+[C# Sample: Timing Class <i class="fas fa-chevron-right"></i>](../blog/csharp-sample-timing-class)
 </div>
 

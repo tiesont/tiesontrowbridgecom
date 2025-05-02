@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [C/C++ : Includes](/blog/cplusplus-includes)
+## [C/C++ : Includes](../blog/cplusplus-includes)
 
 Posted on **Friday, October 3, 2008**
 </div>
@@ -103,8 +103,8 @@ These include:
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Conditional Statements](/blog/conditional-statements)
-[View all](/blog)
-[C/C++ : Creating a Custom Class <i class="fas fa-chevron-right"></i>](/blog/cplusplus-classes)
+[<i class="fas fa-chevron-left"></i> Conditional Statements](../blog/conditional-statements)
+[View all](../blog)
+[C/C++ : Creating a Custom Class <i class="fas fa-chevron-right"></i>](../blog/cplusplus-classes)
 </div>
 

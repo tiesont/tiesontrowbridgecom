@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Hobbies, Standards, and Ethics - Oh My!](/blog/hobbies-standards-and-ethics-oh-my)
+## [Hobbies, Standards, and Ethics - Oh My!](../blog/hobbies-standards-and-ethics-oh-my)
 
 Posted on **Monday, February 11, 2013**
 </div>
@@ -34,8 +34,8 @@ In summary, while consciously considering the ethics of my projects while I buil
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Overloading Constructors in Java](/blog/overloading-constructors-in-java)
-[View all](/blog)
-[C# Hashing Utility <i class="fas fa-chevron-right"></i>](/blog/c-hashing-utility)
+[<i class="fas fa-chevron-left"></i> Overloading Constructors in Java](../blog/overloading-constructors-in-java)
+[View all](../blog)
+[C# Hashing Utility <i class="fas fa-chevron-right"></i>](../blog/c-hashing-utility)
 </div>
 

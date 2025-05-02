@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [An Interesting Use of a C# Foreach Loop](/blog/an-interesting-use-of-a-csharp-foreach-loop)
+## [An Interesting Use of a C# Foreach Loop](../blog/an-interesting-use-of-a-csharp-foreach-loop)
 
 Posted on **Tuesday, November 4, 2008**
 </div>
@@ -40,8 +40,8 @@ Enjoy!
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Coding Like Forrest Gump](/blog/coding-like-forrest-gump)
-[View all](/blog)
-[HTML + CSS = A Calendar? Cool! <i class="fas fa-chevron-right"></i>](/blog/html-css-calendar)
+[<i class="fas fa-chevron-left"></i> Coding Like Forrest Gump](../blog/coding-like-forrest-gump)
+[View all](../blog)
+[HTML + CSS = A Calendar? Cool! <i class="fas fa-chevron-right"></i>](../blog/html-css-calendar)
 </div>
 

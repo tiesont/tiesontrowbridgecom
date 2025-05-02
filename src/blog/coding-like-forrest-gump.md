@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Coding Like Forrest Gump](/blog/coding-like-forrest-gump)
+## [Coding Like Forrest Gump](../blog/coding-like-forrest-gump)
 
 Posted on **Friday, October 24, 2008**
 </div>
@@ -33,8 +33,8 @@ So, maybe Forrest should say this if they ever make a sequel: _"I may be a simpl
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Pretty URLs For Everyone!](/blog/pretty-urls-for-everyone)
-[View all](/blog)
-[An Interesting Use of a C# Foreach Loop <i class="fas fa-chevron-right"></i>](/blog/an-interesting-use-of-a-csharp-foreach-loop)
+[<i class="fas fa-chevron-left"></i> Pretty URLs For Everyone!](../blog/pretty-urls-for-everyone)
+[View all](../blog)
+[An Interesting Use of a C# Foreach Loop <i class="fas fa-chevron-right"></i>](../blog/an-interesting-use-of-a-csharp-foreach-loop)
 </div>
 

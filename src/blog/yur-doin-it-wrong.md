@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Yur Doin' It Wrong...](/blog/yur-doin-it-wrong)
+## [Yur Doin' It Wrong...](../blog/yur-doin-it-wrong)
 
 Posted on **Sunday, April 5, 2009**
 </div>
@@ -34,8 +34,8 @@ In other words, they're doing it wrong...
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Debt Repayment Calculator, Part One](/blog/debt-repayment-calculator-part-one)
-[View all](/blog)
-[Creating A C++ Application, Part 1 <i class="fas fa-chevron-right"></i>](/blog/creating-a-cplusplus-console-application-part-1)
+[<i class="fas fa-chevron-left"></i> Debt Repayment Calculator, Part One](../blog/debt-repayment-calculator-part-one)
+[View all](../blog)
+[Creating A C++ Application, Part 1 <i class="fas fa-chevron-right"></i>](../blog/creating-a-cplusplus-console-application-part-1)
 </div>
 

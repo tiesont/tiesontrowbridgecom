@@ -6,7 +6,7 @@ render_quote: true
 ---
 
 <div class="post-title" markdown="1">
-## [Conditional Statements](/blog/conditional-statements)
+## [Conditional Statements](../blog/conditional-statements)
 
 Posted on **Wednesday, October 1, 2008**
 </div>
@@ -244,8 +244,8 @@ End Select
 ---
 
 <div class="blog-pager" markdown="1">
-[<i class="fas fa-chevron-left"></i> Object-Oriented Programming](/blog/object-oriented-programming)
-[View all](/blog)
-[C/C++ : Includes <i class="fas fa-chevron-right"></i>](/blog/cplusplus-includes)
+[<i class="fas fa-chevron-left"></i> Object-Oriented Programming](../blog/object-oriented-programming)
+[View all](../blog)
+[C/C++ : Includes <i class="fas fa-chevron-right"></i>](../blog/cplusplus-includes)
 </div>
 
