@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Survey of Programming Languages I / Tieson Trowbridge</title>
+    <title>{{ page.title }} / Tieson Trowbridge</title>
     <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
 
     <link rel="shortcut icon" href="../favicon.ico" />
@@ -18,61 +18,17 @@
 <body>
     <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
         <header class="masthead mb-auto text-center">
-            
+            {% if page.with_header %}
             <div class="page-header">
                 <h2>Hello, I'm</h2>
                 <h1 class="display-5 font-weight-bold mb-2"><a href="../">Tieson Trowbridge</a></h1>
                 <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
             </div>
-            
-            
-            <div id="random-quote" class="random-quote-light">
-                <span class="quote-loading text-center">
-                    <i class="fas fa-3x fa-spin fa-spinner"></i>
-                </span>
-            </div>
-            
+            {% endif %}
         </header>
 
-        <main role="main" class="post-container">
-            <div class="post-title">
-  <h2 id="survey-of-programming-languages-i"><a href="/blog/survey-of-programming-languages-i">Survey of Programming Languages I</a></h2>
-
-  <p>Posted on <strong>Tuesday, July 7, 2009</strong></p>
-</div>
-
-<p>I’m currently taking a course that is called “Programming Language Pragmatics” but could just as easily have been called “Survey of Programming Languages,” or something similar. We’re basically discussing various programming languages, and then writing simple programs as a method of learning the idiosyncrasies of how different languages are implemented. So far, we’ve done COBOL, Ruby, Python, and F#. Since I have a penchant for being outspoken, I thought this would be a good time to <s>rant</s> discuss my opinion(s) so far.</p>
-
-<h4 id="cobol">COBOL</h4>
-
-<p>I can only say this: Thank you, ANSI. Learning your language left me feeling like my I.Q. just dropped at least 10 points…</p>
-
-<h4 id="ruby">Ruby</h4>
-
-<p>I can sum up my feelings about Ruby in one word: Meh. Honestly. What is all the fuss about Ruby coming from? I can only guess that it’s a Rails thing. I didn’t do a Ruby-on-Rails application. I wrote a simple Ruby console app. And it was BORING. And irritating. Man, do I hate that coding style…</p>
-
-<h4 id="python">Python</h4>
-
-<s>I haven't actually written my Python project yet, but</s>
-<p>I did have the misfortune of having to become a little bit familiar with it a few months ago. If you want to know how I feel about Python, you’ll have to IM me, because what I would say is unprintable here. I <em>can</em> sum up my feelings about Python in one word, though: <strong>ugh</strong>. Why does anyone think that a white-space aware language that uses indents to define code blocks is a good thing? HUH? Bleh…</p>
-
-<h4 id="f">F#</h4>
-
-<p>Holy crap. That’s all I can say. <strong>F# broke my brain.</strong> I cannot code in functional programming languages. It’s not a matter of “I don’t want to.” It is a matter of “Ow, ow, oh, please make the bad man go away.” I have never been so frustrated in my life, and that’s saying something…</p>
-
-<p>So there you have it. So far, none of these pretenders can even hold a candle to my beloved C#.</p>
-
-<p>:]</p>
-
-<hr />
-
-<div class="blog-pager">
-  <p><a href="/blog/fixing-an-odd-bug-in-htaccess"><i class="fas fa-chevron-left"></i> Fixing an odd bug in .htaccess</a>
-<a href="/blog">View all</a>
-<a href="/blog/html-template-1">HTML Template 1 <i class="fas fa-chevron-right"></i></a></p>
-</div>
-
-
+        <main role="main" class="inner cover">
+            {{ content }}
         </main>
 
         <div class="marque">
@@ -87,7 +43,7 @@
         <footer id="footer" class="mastfoot mt-auto text-center">
             <div class="inner">
                 <p>
-                    &copy; 2025 Tieson Trowbridge
+                    &copy; {{ 'now' | date: '%Y' }} Tieson Trowbridge
                     &middot;
                     Released under a
                     <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
@@ -125,10 +81,9 @@
     </div>
 
     <script src="../libs/jquery/jquery-3.2.1.min.js"></script>
-    <script src="../libs/prismjs/js/prism.min.js"></script>
-    
+    {% if page.render_quote %}
     <script src="../js/data/quotes.js"></script>
     <script src="../js/random-quote.js"></script>
-    
+    {% endif %}
 </body>
 </html>
