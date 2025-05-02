@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pretty URLs For Everyone! / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="pretty-urls-for-everyone"><a href="/blog/pretty-urls-for-everyone">Pretty URLs For Everyone!</a></h2>
+
+  <p>Posted on <strong>Monday, October 13, 2008</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">PHP</span></li>
+<li><span class="badge badge-success p-2">Apache</span></li>
+<li><span class="badge badge-success p-2">htaccess</span></li>
+</ul>
+
+<p>Have you ever visited a website, and wondered how the person managing it is able to have their pages display without having the file extension on every page? I used to. Turns out, it’s not so hard to get what is commonly referred to as “pretty URLs.” It’s as simple as adding a few lines of text to a special file most people have on their host servers: the <code class="language-plaintext highlighter-rouge">.htaccess</code> file.</p>
+
+<h4 id="what-is-a-htaccess-file">What is a “.htaccess” file?</h4>
+
+<p>According to <a href="http://httpd.apache.org/docs/1.3/howto/htaccess.html">Apache.org</a>, a .htaccess file is a “distributed configuration file.” They also go on to describe what it does:</p>
+
+<blockquote>
+  <p>[.htaccess files] provide a way to make configuration changes on a per-directory basis. A file, containing one or more configuration directives, is placed in a particular document directory, and the directives apply to that directory, and all sub-directories thereof.</p>
+</blockquote>
+
+<p>In a nutshell, it means we can use this file to make configuration changes to our host server’s Apache module, allowing us to set certain file-handling behaviors as we see fit without needing to make permanent changes to the Apache module. It may also be the only way we can modify the Apache module, as is usually the case with shared hosting.</p>
+
+<h4 id="so-what-are-we-doing-then">So, what are WE doing, then?</h4>
+
+<p>We are going to use something called a <code class="language-plaintext highlighter-rouge">mod_rewrite.</code> What we will do is write some logic out that tells Apache to automagically append a file extension to the file part of the URL containing the page name. This happens in the background, at the server level, so our users are none-the-wiser that we are manipulating the URL. As an added bonus, this also hides the technology we use for our site from our users. This also gives us a small amount of protection from low-level hackers, too.</p>
+
+<h4 id="the-code">The Code!</h4>
+
+<p>This example shows how simple a mod_rewrite can be. It only takes three to four lines to get pretty URLs. Look the sample over, then keep reading.</p>
+
+<pre><code class="language-apacheconf"># Enable Rewrite Engine so that our regex kicks in.
+RewriteEngine On
+
+# Don't attempt to add extension to directory.
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Automagically append .php to URL.
+RewriteCond %{REQUEST_FILENAME}\\.php -f
+RewriteRule ^(.*)$ $1.php
+</code></pre>
+
+<h4 id="the-explanation">The Explanation!</h4>
+
+<p>The first thing we do is turn on the Rewrite Engine. This tells Apache we are shaking things up a bit. If we don’t add this line, our rewrites are ignored. Next, we tell Apache to skip anything that would map to a directory, and to only rewrite files that already exist on the server. The last line there is a small bit of regex, or <strong>regular expression,</strong> that is applied if both of our conditions pass. The upward caret denotes the beginning of the string, while the dollar sign indicates the end of the string. Once the pattern matching finds the end of the string, it will add <code class="language-plaintext highlighter-rouge">.php</code> to it.</p>
+
+<p>For example, let’s see what happens if the user enters the URL of</p>
+
+<p><code class="language-plaintext highlighter-rouge">http://example.com/sample-page</code></p>
+
+<p>The regex will parse that string and add <code class="language-plaintext highlighter-rouge">.php</code> to the end. So the URL sent to the server is actually:</p>
+
+<p><code class="language-plaintext highlighter-rouge">http://example.com/sample-page.php</code></p>
+
+<p>You can use this same idea for any extension you can think of, such as <code class="language-plaintext highlighter-rouge">.htm</code>, <code class="language-plaintext highlighter-rouge">.html</code>, <code class="language-plaintext highlighter-rouge">.aspx</code>, and so on. Just swap out <code class="language-plaintext highlighter-rouge">.php</code> in the sample above with whatever type you are using.</p>
+
+<p>The nice thing is that everything happens at the <strong>server</strong> level, meaning the user is unaware anything has been changed. They still see the original URL, unmodified.</p>
+
+<p>And that is it. Pretty cool, huh? :)</p>
+
+<h4 id="the-wrap-up">The Wrap Up</h4>
+
+<p>Using pretty URLs not only improves your site by making your URLs easier to remember, it also tends to improve your SEO, or “search-engine optimization.” Better SEO equals better search results equals more traffic for you…</p>
+
+<p>Enjoy!</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/why-sherlock-holmes-would-have-made-a-kick-ass-programmer"><i class="fas fa-chevron-left"></i> Why Sherlock Holmes Would Have Made A Kick-Ass Programmer</a>
+<a href="/blog">View all</a>
+<a href="/blog/coding-like-forrest-gump">Coding Like Forrest Gump <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

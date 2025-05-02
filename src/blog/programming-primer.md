@@ -1,0 +1,156 @@
+---
+title: Programming Primer
+layout: blog
+with_header: true
+render_quote: true
+---
+
+<div class="post-title" markdown="1">
+## [Programming Primer](/blog/programming-primer)
+
+Posted on **Sunday, March 1, 2009**
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">programming</span></li>
+<li><span class="badge badge-success p-2">primer</span></li>
+</ul>
+
+Modern programming has a set of terms that every wannabe programmer must know. Master these terms first. Once you get these terms down pat, it is easier to understand the jargon of each specific programming language.
+
+<dl>
+<dt>Variable:</dt>
+<dd>
+
+A variable is a named location in memory. We create variables to hold data that we need to access again at some later point. The [compiler](#compiler) keeps a list of memory addresses to access these variables, but we use spoken-language-based names since most people would have a hard time memorizing hexadecimal codes.
+
+As part of the declaration of a variable, we must define the data type and the name of the variable. Optionally, we can also define the [accessibility level](#accessibility-level) and the initial value (or values, in the case of arrays) of the variable.
+
+Examples:
+
+- `private int iVariable = 1;`
+- `double dVariable = 2.45643;`
+- `DIM fVariable AS float = 1.78`
+
+</dd>
+</dl>
+
+<dl>
+<dt id="function">Function:</dt>
+<dd>
+(1) A function is a named piece of executable code.
+
+(2) A function is a distinct chunk of code that we can call multiple times within our main program.
+
+One of the primary benefits of function calls is that we do not have to type and retype a useful section of code.
+
+Some languages use different terms for functions, depending on whether or not [calling](#function-call) the function results in a value being returned to the calling program code. For instance, Visual Basic refers to "void" functions (functions that do not return a value) as subroutines. The C# and Java languages use the same concept as C/C++ (that is, that every callable piece of code is a function) but use the term "method" instead.
+
+As part of the function definition, we must define the return type, name, and any parameters. Optionally, we can also specify the [accessibility level](#accessibility-level). Additionally, C++ requires that we define the scope of the function if we are creating a class.
+
+Examples:
+
+- `public int FirstFunction( void )`
+- `double SecondFunction( int iFirstParam, single sSecondParam )`
+- `Public Sub MyVBSubroutine ( ByVal fParam1 As Float )`
+- `Public Function MyVBFunction ( ByVal fParam1 As Float ) As String`
+</dd>
+</dl>
+
+<dl>
+<dt id="function-call">Function call:</dt>
+<dd>
+
+When programmers use the term "function call" what they are really saying is "I am now executing the function named *func_name*," where *func_name* would be replaced by the name of the function. To the [compiler](#compiler), this means that control of the flow of execution is passed from the main (or "calling") program code to the "called" function code.
+</dd>
+<dt id="function-header">Function header:</dt>
+<dd>
+
+A function header defines the various aspects of the function, such as the name, the scope, the return type, and any parameters necessary for proper execution of the function's code.
+</dd>
+</dl>
+
+<dl>
+<dt>Method:</dt>
+<dd>
+
+See [Function](#function)
+</dd>
+</dl>
+
+<dl>
+<dt>Subroutine:</dt>
+<dd>
+
+See [Function](#function)
+</dd>
+</dl>
+
+<dl>
+<dt id="parameter">Parameter:</dt>
+<dd>
+
+A parameter is a special type of variable used within the declaration of a function. This variable defines the type and order of values that can be "passed" to the function. A parameter only exists in the definition of the function; when we call the function, the value passed into the function is then considered to be an [argument](#argument).
+</dd>
+</dl>
+
+<dl>
+<dt id="argument">Argument:</dt>
+<dd>
+
+An argument is the actual value being passed into a function call. The data type of the argument must match the data type specified in the function header, or must be of a type that is capable of being [promoted](#promotion) to the correct type.
+</dd>
+</dl>
+
+<dl>
+<dt id="promotion">Promotion:</dt>
+<dd>
+
+Promotion is an implicit conversion of a variable from one data type into another. Promotion only occurs if the original type is considered to be a sub-set of the type to be converted to. For instance, since the data type `double` can hold the entire scope of variables available to the data type `single`, a variable that was defined as a `single` can be promoted to a variable of type `double`. The opposite is NOT true, however.
+</dd>
+</dl>
+
+<dl>
+<dt id="passing-data">Passing data:</dt>
+<dd>
+
+When we use the phrase "passing a variable," what we are saying is that we are calling a function with some value as part of the function call, as defined by the parameters in the function definition. There are two ways to pass data to a function: _by value_ or _by reference_. When we pass a variable _by value_, we are actually giving the function a copy of a variable. Any code that manipulates that variable is actually manipulating the copy. If we pass a variable _by reference_, we are giving the function the memory location of the variable. Any code that changes the data we passed in is actually changing the original variable. Be **very** aware of which style you are using, since the results of passing _by value_ and passing _by reference_ can (and probably **will**) be very different.
+</dd>
+</dl>
+
+<dl>
+<dt id="accessibility-level">Accessibility level:</dt>
+<dd>
+
+The term accessibility level defines what level of code can access a variable or function definition. The two most common levels are `public` and `private`. Variables and functions defined as public can be accessed by any other chunk of code that can execute the main program code. Private variables and functions can only be accessed by code within the same level as they are declared. This is an important part of a paradigm known as [OOP](/articles/object-oriented-programming), or _Object Oriented Programming_. In a nutshell, we can use accessibility levels to hide variables or functions from code that we do not want to give direct access to those variables or functions.
+</dd>
+</dl>
+
+<dl>
+<dt id="compiler">Compiler</dt>
+<dd>
+
+A compiler is a specialized program that generates machine-readable (executable) code from program code.
+</dd>
+</dl>
+
+<dl>
+<dt id="scope">Scope:</dt>
+<dd>
+
+The term "scope" refers to the valid lifetime of a variable within a program. There are (in general) only two levels of scope: _global_ and _local_.
+
+**Global** variables exist for the lifetime of the program itself. They are created outside of any method, and as such are accessible by every method. As a general rule, global variables should be avoided in anything but the most simple programs, with the exception of constant variables.
+
+**Local** variables have a very limited existence. Depending on when a variable is created, it can be local to a class, method, or a control statement such as a for() or while() loop. When the class definition ends, when the method completes and returns control to the calling code, or when the control statement completes, any variables defined within them are said to be "out of scope." When a variable goes out of scope, most programming languages are set up to de-allocate any memory (or other resources) that variable previously controlled.
+</dd>
+</dl>
+
+---
+
+<div class="blog-pager" markdown="1">
+[<i class="fas fa-chevron-left"></i> The Many Faces of the Hyperlink Element](/blog/the-many-faces-of-the-hyperlink-element)
+[View all](/blog)
+[Debt Repayment Calculator, Part One <i class="fas fa-chevron-right"></i>](/blog/debt-repayment-calculator-part-one)
+</div>
+

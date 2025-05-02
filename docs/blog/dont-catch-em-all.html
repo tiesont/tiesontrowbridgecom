@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>(Don't) Catch 'Em All! / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="dont-catch-em-all"><a href="/blog/dont-catch-em-all">(Don’t) Catch ‘Em All!</a></h2>
+
+  <p>Posted on <strong>Wednesday, March 15, 2017</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">c#</span></li>
+<li><span class="badge badge-success p-2">exceptions</span></li>
+</ul>
+
+<blockquote>
+  <p>I want to be the very best,
+like no one ever was!
+To catch them is my real test, 
+to train them is my cause…</p>
+</blockquote>
+
+<p>If you’re under the age of 40, that song probably sounds really familiar — it’s the opening theme to Pokemon, whose original catchphrase was “gotta catch ‘em all!”</p>
+
+<p>So, what does that have to do with anything (this is supposed to be a blog about programming stuff, right)? Well, I’m getting to that, but first, let’s discuss something you’ve probably seen a few times:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cm">/* (c1) some code here... */</span>
+
+<span class="k">try</span>
+<span class="p">{</span>
+<span class="p">}</span>
+<span class="k">catch</span><span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="cm">/* (c2) ... some other code here */</span>
+</code></pre></div></div>
+
+<p>What we have here is your garden-variety global exception handling. <code class="language-plaintext highlighter-rouge">Exception</code> is the base class type of every single exception in the .NET Framework, so a <code class="language-plaintext highlighter-rouge">catch</code> block for <code class="language-plaintext highlighter-rouge">Exception</code> is going to catch every single exception. Or, put another way, it will… <em>“catch ‘em all!”</em> (see what I did there?)</p>
+
+<p>Now, leaving aside a very real and valid argument that catching all exceptions like this is a bad architectural decision, there’s a pretty common problem that arises from this Pokemon-style exception handling: <em>not accounting for the exception in the flow of execution</em>. See, handling every exception isn’t itself a horrible thing (you don’t want to dump your users into a state where they can’t finish whatever task they use your code for) – it’s the common mistake of not correctly responding to an exceptional state that leads to issues. Let’s look back at the pseudo-code I added earlier.</p>
+
+<p>Let’s assume some task takes us the point denoted by <code class="language-plaintext highlighter-rouge">(c1)</code> above. I’m going to pretend that we’re, say, doing some IO operation, perhaps on an uploaded file. IO operations are the most likely to fail, in my experience, since there’s a lot of moving parts, with often transient resources in play. So, if we’re using something like the File API, we’ve at least a 50/50 chance that something fails. Since we know that already, maybe we place our IO operations in that Pokemon try/catch block we have at the moment. Problem solved, right?</p>
+
+<p>Well, that depends. What happens at the point in code denoted by <code class="language-plaintext highlighter-rouge">(c2)</code>? Clearly, we’ve successfully navigated our IO operation, right? Maybe, maybe not. We didn’t have an application crash, since we mitigated that with our Pokemon try/catch, but whether we’re in the state we needed to be in depends entirely on what happened in the <code class="language-plaintext highlighter-rouge">catch</code> block. If we simply do nothing, or just log the exception and move on, then our Pokemon try/catch is the programming equivalent of covering our ears and yelling <strong>“LA LA LA, NOT LISTENING!”</strong> when an exception occurs.</p>
+
+<p>Now, what would you expect to happen at <code class="language-plaintext highlighter-rouge">(c2)</code> if an IO exception had been handled (maybe the upload was interrupted)? Let’s pretend that the code beginning at <code class="language-plaintext highlighter-rouge">(c2)</code> assumes that we were able to copy the bytes from the uploaded file into, say, a byte array, and… maybe we’re using the Image class to do something with those bytes. Because we had an exception, our byte array was never populated, and so is empty. We blithely pass our (empty) byte array into the Image class (via a memory stream) and attempt to perform some operation. <strong>BLAMO!</strong> Now we have an unhandled exception from trying to read an empty stream.</p>
+
+<p>What we should have done is abort the method once we knew we had an exception, since nothing past the try/catch is going to work. If we handle specific exceptions, then we can give the user better feedback on what went wrong.</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/implementing-aspnet-membership-with-a-custom-provider"><i class="fas fa-chevron-left"></i> Implementing ASP.NET Membership with a Custom Provider</a>
+<a href="/blog">View all</a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

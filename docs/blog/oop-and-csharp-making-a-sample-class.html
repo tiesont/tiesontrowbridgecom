@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OOP and C#&#58; Making a Sample Class / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="oop-and-c-making-a-sample-class"><a href="/blog/oop-and-csharp-making-a-sample-class">OOP and C#: Making a Sample Class</a></h2>
+
+  <p>Posted on <strong>Friday, January 2, 2009</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">OOP</span></li>
+<li><span class="badge badge-success p-2">C#</span></li>
+<li><span class="badge badge-success p-2">classes</span></li>
+</ul>
+
+<p>Understanding the principles of OOP (object-oriented programming) is very important for those who wish to become .NET programmers, since the .NET Framework is built on the premise that everything is an Object. Since C# was created specifically to implement the .NET Framework, it stands to reason that C# is a good language to demonstrate the development of an object from a logical construct to a piece of working code. The code we will develop here can also be modified to work in pretty much any language that supports OOP. So, get your pencils and notepads ready, kids. It’s time to build an object!</p>
+
+<h4 id="the-construct">The Construct</h4>
+
+<p>OOP is all about using code to represent some “thing,” some real-life object that we can quantify the various aspects (or attributes) of. Therefore, the first step we need to take is to decide on the “thing” we want to model. For our purposes, we should probably make it as simple an object as we can since a complicated object requires a lot of complicated code to reproduce. So… how about a box? It has enough attributes to be interesting, but is simple enough to not require us to write lines and lines of code. Hmm. I like it. A box it is!</p>
+
+<h4 id="the-outline">The Outline</h4>
+
+<p>Now that we have an object to model, let’s think about how we would be able to reproduce that object in code.</p>
+
+<p>Hmm…</p>
+
+<p>We know all boxes have these three attributes: height, width, and length. Feel free to add any other attributes you can think of, but these three are the bare minimum we need. Using those attributes, we can easily calculate a few more attributes: volume and surface area. We’ll stick to those two calculated attributes, for the time being.</p>
+
+<p>So, let’s see what we have so far:</p>
+
+<pre><code class="language-box">- Object: Box.
+- Attributes:
+	- height
+	- width
+	- length
+	- volume
+	- surface area
+</code></pre>
+
+<p>Not too shabby. That’s all we need to make the first version of our object, as seen below:</p>
+
+<h5 id="box">Box</h5>
+
+<pre><code class="language-box">- length
+- height
+- width
+- volume
+- surface area
+</code></pre>
+
+<h4 id="encapsulate-the-attributes">Encapsulate the Attributes</h4>
+
+<p>One of the most important tenets of OOP is that we do not want to just let any ol’ piece of code manipulate our object’s attributes. We want to “protect” our attributes from all code except that which we give explicit permission. This is a process called <strong>encapsulation</strong>. Think of it as “insulating” our attributes. We do this by changing each of our attribute’s modifier, or accessibility level. C# has a bunch of intermediate modifiers, but for now we will only worry about the extremes: private and public. Public attributes are openly accessible by all code, whereas private attributes are only accessible from the code that is within the same scope as the attributes. So, if we want to make our Box attributes “hidden” from code outside our Box code, we simply make them private, like so:</p>
+
+<h5 id="box-1">Box</h5>
+
+<pre><code class="language-box">private:
+- length
+- height
+- width
+- volume
+- surface area
+</code></pre>
+
+<p>Now, I know what some of you are thinking: if nothing can access those attributes, how do I set their values? Good catch! There are three ways we can do this. One method involves something we call a constructor, which I’ll get into later. Another way is to create what we call <strong>functions</strong> (or <strong>methods</strong>, if you were to insist on proper C# nomenclature) to set and/or get the value of each attribute. C# also gives us a nice programming construct called a <strong>property</strong>, which, depending on how it is used in your code, will either get or set the value of your attribute. I really like properties, so the code we will be developing will use them. Our properties are identified by using a capitalized version of the attribute name, and should be public, since we want to make them accessible to external code. Our object now looks something like this:</p>
+
+<h5 id="box-2">Box</h5>
+
+<pre><code class="language-box">private:
+- length
+- height
+- width
+- volume
+- surface area
+	
+public:
+- Length
+- Height
+- Width
+- Volume
+- Surface Area
+</code></pre>
+
+<p>Not bad, if I do say so myself…</p>
+
+<h4 id="create-the-class-code">Create the Class Code</h4>
+
+<p>At this point, we’ve worked through enough of the logic of our object to start working on a real chunk of code. In C#, we can use the <strong>class</strong> construct to build our object. It’s actually remarkably simple, which is one reason I like C# so much.</p>
+
+<p>We’re only going to create the actual class code here. If you were writing this class for a real project, say a class library or some C# application, we would need to add something called a <strong>namespace</strong> to this class code. We are not working on a project that needs compiling, though, so for now, don’t worry about it. I just wanted to make sure you were aware that this code will need some adjustments if you want to see it in action…</p>
+
+<p>First, we need to define the beginning and end of the Box class. This is actually pretty easy:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Box</span>
+<span class="p">{</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The keyword <strong>class</strong> informs the compiler that we are creating an object blueprint. The open and close curly braces, <strong>{   }</strong>, define the scope of the class. Next, we add our attributes to the class. We also need to decide on what type of values we want each attribute to hold. I like flexibility, so I’m going to choose the widest data type I can, <strong>double</strong>, for all the attributes. Also, we don’t really <em>need</em> to specify that the attributes are private, since C# makes them private by default, but I like to anyway. It’s a good habit to get into, in my opinion. So, we should have something like this, now:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Box</span>
+<span class="p">{</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">length</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">height</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">width</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">volume</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">surface_area</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Here’s the fun part: the properties. The properties will share the same data type as the attribute each is matched with. However, each property will be public, rather than private, since we want to use these properties to modify or view the value of each attribute. Each property defines its own scope, and within that scope we place two more keywords: <strong>get</strong> and <strong>set</strong>. The <strong>get</strong> part of the property is used to view the value of our attribute, using the keyword <strong>return</strong>. The <strong>set</strong> part of the property is used to change the value of our attribute, using the keyword <strong>value</strong>. I will explain this process more in just a moment, but first, let’s see what our class looks like with the properties added:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Box</span>
+<span class="p">{</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">length</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">height</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">width</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">volume</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">surface_area</span><span class="p">;</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Length</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">length</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">length</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Height</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">height</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">height</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+   
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Width</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">width</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">width</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Volume</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">volume</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">volume</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Surface_Area</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">surface_area</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">surface_area</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Now that we have our properties in place, we should probably work out the logic for calculating our Box object’s volume and surface area. Volume is easy; we simply multiply length by width by height. Surface area is a little trickier: we basically have to find the area of six different rectangles. We know that there are only three unique sides, so a simple formula could be this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2 x ( ( length x height ) + ( length x width ) + ( height x width ) )
+</code></pre></div></div>
+
+<p>Now that we know how to calculate our volume and surface area, we should add a couple of methods to our class so that we can make these calculations whenever we need to.</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Box</span>
+<span class="p">{</span>
+   <span class="p">[</span> <span class="n">rest</span> <span class="n">omitted</span> <span class="p">...</span> <span class="p">]</span>
+
+   <span class="k">public</span> <span class="k">void</span> <span class="nf">Calculate_Volume</span><span class="p">(</span> <span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">volume</span> <span class="p">=</span> <span class="n">length</span> <span class="p">*</span> <span class="n">width</span> <span class="p">*</span> <span class="n">height</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="k">void</span> <span class="nf">Calculate_Surface_Area</span><span class="p">(</span> <span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">surface_area</span> <span class="p">=</span> <span class="m">2</span> <span class="p">*</span> <span class="p">(</span> <span class="p">(</span> <span class="n">length</span> <span class="p">*</span> <span class="n">height</span> <span class="p">)</span> <span class="p">+</span> <span class="p">(</span> <span class="n">length</span> <span class="p">*</span> <span class="n">width</span> <span class="p">)</span> <span class="p">+</span> <span class="p">(</span> <span class="n">height</span> <span class="p">*</span> <span class="n">width</span> <span class="p">)</span> <span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>At this point, all the fundamental parts of our class are set. We could use this blueprint to create Box objects in a project, if we were so inclined. There is one more thing we should do, however. It would be really useful to be able to set the dimensions of our Box when we create it, instead of having to create the Box and then set the dimensions using the properties. We can add this ability by creating overloaded constructors. A <strong>constructor</strong> is a very specialized method that is called every time we create an instance of a class object. In C#, if we don’t create a constructor in our class code, the compiler adds one for us. This “default” constructor cannot accept any arguments, however, so it’s usefulness is somewhat limited. If we need a constructor to be able to accept arguments, then we create <strong>overloaded constructors</strong>. An overloaded constructor has the exact same name as the default constructor, but we add parameters to it to match the kind of data we want to pass in. So, if we want to be able to set the dimensions of our Box when we create it, we might add something like this:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Box</span>
+<span class="p">{</span>
+   <span class="p">[</span> <span class="n">omitted</span> <span class="p">...</span> <span class="p">]</span>
+
+   <span class="k">public</span> <span class="nf">Box</span><span class="p">(</span> <span class="kt">double</span> <span class="n">len</span><span class="p">,</span> <span class="kt">double</span> <span class="n">wid</span><span class="p">,</span> <span class="kt">double</span> <span class="n">hgt</span> <span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">length</span> <span class="p">=</span> <span class="n">len</span><span class="p">;</span>
+      <span class="n">width</span> <span class="p">=</span> <span class="n">wid</span><span class="p">;</span>
+      <span class="n">height</span> <span class="p">=</span> <span class="n">hgt</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="p">[</span> <span class="n">omitted</span> <span class="p">...</span> <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>We are almost done, but we have to do one more thing. Since we created an overloaded constructor, the C# compiler will no longer add the default constructor for us. Since every class <em>must</em> supply a default constructor, we have to create one or we will not be able to use our nice shiny new class code. Thankfully, default constructors are simple to make: we simply use the code from the overload, but remove the parameters and set all of our dimensions equal to zero, like so:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Box</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="nf">Box</span><span class="p">()</span>
+   <span class="p">{</span>
+      <span class="n">length</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+      <span class="n">width</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+      <span class="n">height</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="p">[</span> <span class="n">omitted</span> <span class="p">...</span> <span class="p">]</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="the-finished-class">The Finished Class</h4>
+
+<p>And we’re done! Here is our new Box class, with everything we talked about in one file:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Box</span>
+<span class="p">{</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">length</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">height</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">width</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">volume</span><span class="p">;</span>
+   <span class="k">private</span> <span class="kt">double</span> <span class="n">surface_area</span><span class="p">;</span>
+
+   <span class="k">public</span> <span class="nf">Box</span><span class="p">(</span> <span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">length</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+      <span class="n">width</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+      <span class="n">height</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="nf">Box</span><span class="p">(</span> <span class="kt">double</span> <span class="n">len</span><span class="p">,</span> <span class="kt">double</span> <span class="n">wid</span><span class="p">,</span> <span class="kt">double</span> <span class="n">hgt</span> <span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">length</span> <span class="p">=</span> <span class="n">len</span><span class="p">;</span>
+      <span class="n">width</span> <span class="p">=</span> <span class="n">wid</span><span class="p">;</span>
+      <span class="n">height</span> <span class="p">=</span> <span class="n">hgt</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Length</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">length</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">length</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Height</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">height</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">height</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Width</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">width</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">width</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Volume</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">volume</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">volume</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="kt">double</span> <span class="n">Surface_Area</span>
+   <span class="p">{</span>
+      <span class="k">get</span><span class="p">{</span> <span class="k">return</span> <span class="n">surface_area</span><span class="p">;</span> <span class="p">}</span>
+      <span class="k">set</span><span class="p">{</span> <span class="n">surface_area</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span> <span class="p">}</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="k">void</span> <span class="nf">Calculate_Volume</span><span class="p">(</span> <span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">volume</span> <span class="p">=</span> <span class="n">length</span> <span class="p">*</span> <span class="n">width</span> <span class="p">*</span> <span class="n">height</span><span class="p">;</span>
+   <span class="p">}</span>
+
+   <span class="k">public</span> <span class="k">void</span> <span class="nf">Calculate_Surface_Area</span><span class="p">(</span> <span class="p">)</span>
+   <span class="p">{</span>
+      <span class="n">surface_area</span> <span class="p">=</span> <span class="m">2</span> <span class="p">*</span> <span class="p">(</span> <span class="p">(</span> <span class="n">length</span> <span class="p">*</span> <span class="n">width</span> <span class="p">)</span> <span class="p">+</span> <span class="p">(</span> <span class="n">length</span> <span class="p">*</span> <span class="n">height</span> <span class="p">)</span> <span class="p">+</span> <span class="p">(</span> <span class="n">height</span> <span class="p">*</span> <span class="n">width</span> <span class="p">)</span> <span class="p">);</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="c-properties">C# Properties</h4>
+
+<p>The interesting thing about a C# property is that, depending on which side of the assignment ( ‘=’ ) operator it is on, the property can be used to either assign (set) a value to an attribute, or can be used to return (get) the current value of the attribute. If the property is used on the left side of the assignment operator, the ‘set’ part of the property is used. If the property is used on the right side of the assignment operator, then the ‘get’ part of the property is used.</p>
+
+<p>Pretty neat, huh? I think so…</p>
+
+<h4 id="the-wrap-up">The Wrap Up</h4>
+
+<p>While not the best of walk-throughs, I do think the information I presented here is fairly useful. This is very similar to the technique I use every time I write a small project, and I hasn’t failed me yet…</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/html-css-calendar"><i class="fas fa-chevron-left"></i> HTML + CSS = A Calendar? Cool!</a>
+<a href="/blog">View all</a>
+<a href="/blog/csharp-sample-randomdataset-class">C# Sample: RandomDataSet Class <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

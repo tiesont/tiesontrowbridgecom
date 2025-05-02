@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Discussion of Class / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="a-discussion-of-class-"><a href="/blog/a-discussion-of-class">A Discussion of Class </a></h2>
+
+  <p>Posted on <strong>Wednesday, March 3, 2010</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">classes</span></li>
+<li><span class="badge badge-success p-2">OOP</span></li>
+</ul>
+
+<p>I seem to have to explain the concept of “classes” to a lot of programming students lately, so I got to thinking that a new blog post may be in order. So, if you happen to be a newbie programmer and are wondering exactly what a class is, tune in and follow along. Please ask questions at the end, too, if anything is not clear…</p>
+
+<h3 id="the-basics">The Basics</h3>
+
+<p>“Class” is a term you’ll hear thrown around a lot in any discussion of OOP, or object-oriented programming. I wrote a simple article about OOP a while ago, so if that term is new to you, follow <a href="/articles/object-oriented-programming">this link</a> and read that post first, then come back here. In a nutshell, OOP is a programming technique that seeks to create systems that can model real-world objects and the way in which we interact with them. An object has “attributes,” or things that describe it, and “methods,” or things it can do. Again, <a href="/articles/object-oriented-programming">see my OOP article</a> if you need something more in-depth.</p>
+
+<p>Okay, so what the heck is this “class” thing anyway? Well, the analogy that most people are comfortable with seems to be “a class is like a blueprint.” A class file represents the attributes and methods of an object within our system. It describes an object as it would exist in our system. When we want to manipulate that kind of object within our system, we create an “instance” of that class object. This would be similar to a construction crew taking a blueprint for a house and actually building a home.</p>
+
+<h3 id="the-not-so-basics">The Not-So-Basics</h3>
+
+<p>One thing that the C# language designers have talked about is that all class definitions are “types.” They define <strong>type</strong> as the root classification of any object within a system. So, when you create a new class definition, you are defining your own custom “type.” This makes sense if you think about how you would describe your objects to a colleague.</p>
+
+<p>There are two relationships you need to be aware of when creating classes: <em><strong>is a</strong></em> and <strong><em>has a</em></strong>. Say, for instance, that you created a class called “Worker” and then created an instance called “worker1.” When you describe worker1, you would say “worker1 <em>is a</em> Worker.” <strong>Is a</strong> relationships indicate that worker1 <em>is an</em> object <em>of type</em> Worker.</p>
+
+<p>Let’s also assume that when you created your class that you defined a couple of attributes, say, “name,” “pay rate,” and “job title.” We could then say that worker1 <em>has a</em> “name,” worker1 <em>has a</em> “job title.” This relationship, <strong>has a</strong>, says that our object is defined by those attributes. In other words, those attributes describe the object. For example, let’s say that we wanted to represent Bob from Accounting within our system. We could say “worker1 <em>is a</em> Worker who <em>has a</em> name of Bob Smith, who <em>has a</em> job title of Accounting Manager, and who <em>has a</em> pay rate of $25.00 per hour.”</p>
+
+<h3 id="danger-danger">Danger! Danger!</h3>
+
+<p>A common trap I see a lot of new programmers fall into is mistaking their class definitions (the class file) for an actual object. It is really important that a clear distinction is made between a class and an object. A class **cannot **be manipulated. It is nothing more than a description, like a diagram of a toad in an anatomy book. An object **can **be manipulated. If we stay with the same analogy, an object would be the actual toad in your dissection pan.</p>
+
+<p>This seems like a good stopping point. Again, if you need anything cleared up, post your questions in the comments, or <a href="/contact">use the contact page</a> to send me your questions. Thanks!</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/c-xml-and-linq-deleting-an-xml-node"><i class="fas fa-chevron-left"></i> C#, XML, and LINQ: Deleting an XML Node</a>
+<a href="/blog">View all</a>
+<a href="/blog/thinking-about-the-past">Thinking About the Past… <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

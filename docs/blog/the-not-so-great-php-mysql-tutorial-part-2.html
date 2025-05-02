@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Not-So-Great PHP/MySQL Tutorial, Part 2 / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="the-not-so-great-phpmysql-tutorial-part-2"><a href="/blog/the-not-so-great-php-mysql-tutorial-part-2">The Not-So-Great PHP/MySQL Tutorial, Part 2</a></h2>
+
+  <p>Posted on <strong>Wednesday, March 23, 2011</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">PHP</span></li>
+<li><span class="badge badge-success p-2">MySQLi</span></li>
+<li><span class="badge badge-success p-2">SQL</span></li>
+</ul>
+
+<p>So, assuming you read (and completed) <a href="/tutorial/the-not-so-great-php-mysql-tutorial-part-1">Part 1</a>, you should have a functional database connection script and an input page. Part 2 will cover how we get our data back out of the database.</p>
+
+<p>To keep things simple, we’re going to load our data out into a table. It’s a simple and valid way of displaying tabular (table-based) data. Once you understand what’s going on in this tutorial, it’s relatively simple to develop alternative methods of displaying our tables.</p>
+
+<h3 id="first-things-first">First Things First</h3>
+
+<p>Obviously, since this is Part 2, you need to have completed Part 1. At the very least, you need a copy of the <code class="language-plaintext highlighter-rouge">db.php</code> file, since it contains the connection script. Once you have your copy of <code class="language-plaintext highlighter-rouge">db.php</code> ready to go, read on.</p>
+
+<p>So let’s think about what we need. We’re trying to display what we’re perhaps misleadingly calling “timesheets.” At this point, it’s more of a simple ledger than anything. Regardless, this is the data I want to pull from the table:</p>
+
+<ul>
+  <li>Employee Name</li>
+  <li>Hourly rate</li>
+  <li>Hours worked</li>
+  <li>Gross pay</li>
+  <li>Federal tax</li>
+  <li>State tax</li>
+  <li>Social Security withholding</li>
+</ul>
+
+<p>The structure we defined for the table in the first part of this tutorial doesn’t match these output “fields,” which is fine. SQL lets us perform aggregation on the server side. We can also perform math functions with SQL. Using the nice aliasing features of most modern database systems (MySQL being one of them), we can run a SQL query, generating some columns on the fly, and then use the aliased values directly in our PHP scripts.</p>
+
+<h3 id="sql-aliasing">SQL Aliasing</h3>
+
+<p>In the SQL world, when you want to have the database engine calculate some aggregate data for you (say, by summing some fields together), you need a way to reference that new value, since it’s not a column that is defined in your table. An alias basically creates a temporary field in real time that you can use in the result set. The result set when using PHP to run a MySQL query is (by default) an associative array. What that means is that each row in the table is returns as an array, with the field name being the key and the field value being the associated value. A rather common aggregate function is <code class="language-plaintext highlighter-rouge">COUNT</code>, which is often used to count the number of rows in a table, like so:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="nv">`id`</span><span class="p">)</span> <span class="k">AS</span> <span class="k">rows</span> <span class="k">FROM</span> <span class="nv">`table`</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Like I mentioned in Part 1, I tend to uppercase SQL keywords, but the MySQL engine is not case-sensitive. In this example, the aggregate function <code class="language-plaintext highlighter-rouge">COUNT</code> is used to count up each ‘id’ field in every row. We assign the alias <code class="language-plaintext highlighter-rouge">rows</code> to the value returned by <code class="language-plaintext highlighter-rouge">COUNT</code>. You’ll see shortly how we reference the values returned by our SQL array.</p>
+
+<h3 id="define-a-query">Define a Query</h3>
+
+<p>The query type we used in Part 1 was an <code class="language-plaintext highlighter-rouge">INSERT</code> query, which is used to (obviously) insert data into our table. Now that we have data in the table, we need a different type of query to pull that data back out. We call these <code class="language-plaintext highlighter-rouge">SELECT</code> queries, as that is the keyword we use in the query string.</p>
+
+<p>It’;s very easy to do something like this when we want a majority of the fields in a table:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="k">table</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p><strong>DO NOT DO THAT.</strong> This is a very lazy query, and often results in larger result sets than we need. For instance, imagine that in the COUNT example earlier we had used this instead:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="k">rows</span> <span class="k">FROM</span> <span class="k">table</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>While this works, using the <code class="language-plaintext highlighter-rouge">*</code> means we grab every value from every row, when all we really wanted was to count the number of rows. Why? Because the <code class="language-plaintext highlighter-rouge">*</code> is what’s called the “wildcard” selector. It will match every single field in the table. I have yet to encounter an instance when getting every single field is a valid action.</p>
+
+<p>So what are we doing at this point? Well, it’s easy enough to concatenate the first and last name together. MySQL has a function called <code class="language-plaintext highlighter-rouge">CONCAT_WS</code>, which accepts a minimum of three arguments: the separator, the leading value of the string, and the string to append to the end of the string. Each string provided after the second string is appended to the end of the concatenated string. So the first part of the query is:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">CONCAT_WS</span><span class="p">(</span><span class="nv">" "</span><span class="p">,</span> <span class="nv">`first`</span><span class="p">,</span> <span class="nv">`last`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">name</span>
+</code></pre></div></div>
+
+<p>Next, we need to aggregate the individual day values into a sum. MySQL is perfectly capable of evaluating basic arithmetic, so we just need to define the expression to evaluate and give the result an alias, like so:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">CONCAT_WS</span><span class="p">(</span><span class="nv">" "</span><span class="p">,</span> <span class="nv">`first`</span><span class="p">,</span> <span class="nv">`last`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="nv">`monday`</span><span class="o">+</span><span class="nv">`tuesday`</span><span class="o">+</span><span class="nv">`wednesday`</span><span class="o">+</span><span class="nv">`thursday`</span><span class="o">+</span><span class="nv">`friday`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">hours</span>
+</code></pre></div></div>
+
+<p>The table also has a field for the pay rate, called <code>rate</code>, so we can also calculate the gross pay, just like we calculated the sum:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">CONCAT_WS</span><span class="p">(</span><span class="nv">" "</span><span class="p">,</span> <span class="nv">`first`</span><span class="p">,</span> <span class="nv">`last`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="nv">`monday`</span><span class="o">+</span><span class="nv">`tuesday`</span><span class="o">+</span><span class="nv">`wednesday`</span><span class="o">+</span><span class="nv">`thursday`</span><span class="o">+</span><span class="nv">`friday`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">hours</span><span class="p">,</span> <span class="p">(</span><span class="nv">`hours`</span> <span class="o">*</span> <span class="nv">`rate`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">gross</span>
+</code></pre></div></div>
+
+<p>Calculating the withholding is a bit trickier. There is no such thing as a flat tax rate; you pay a higher tax rate as you make more. While we can do this in MYSQL, it may be easier to see it done in PHP. That also means we can’t calculate net pay using MySQL, since we need the values of each withholding. Before we can move on the PHP script, we need to close up our query string:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">CONCAT_WS</span><span class="p">(</span><span class="nv">" "</span><span class="p">,</span> <span class="nv">`first`</span><span class="p">,</span> <span class="nv">`last`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="nv">`monday`</span><span class="o">+</span><span class="nv">`tuesday`</span><span class="o">+</span><span class="nv">`wednesday`</span><span class="o">+</span><span class="nv">`thursday`</span><span class="o">+</span><span class="nv">`friday`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">hours</span><span class="p">,</span> <span class="p">(</span><span class="nv">`hours`</span> <span class="o">*</span> <span class="nv">`rate`</span><span class="p">)</span> <span class="k">AS</span> <span class="n">gross</span> <span class="k">FROM</span> <span class="n">employees</span><span class="p">;</span>
+</code></pre></div></div>
+
+<h3 id="outputphp">output.php</h3>
+
+<p>If you haven’t done it yet, create a new PHP file in the same directory as <code class="language-plaintext highlighter-rouge">db.php</code> and <code class="language-plaintext highlighter-rouge">input.php</code>, and name it <code class="language-plaintext highlighter-rouge">output.php</code>. This script will contain both the PHP to generate the content and some HTML to structure the output.</p>
+
+<p>Let’s start off with the HTML part of the page:</p>
+
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+	&lt;head&gt;
+		&lt;meta charset="utf-8" /&gt;
+		&lt;title&amp;gt;Dah Timesheet&lt;/title&gt;
+		&lt;style&gt;
+			body 
+			{ 
+				font: 14px/22px Calibri, "Frutiger Linotype", Frutiger, "Gill Sans", "Gills Sans MT", sans-serif; 
+				color:#333; 
+				background:#fffbff; 
+			}
+		&lt;/style&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;h2&gt;Dah Timesheet&lt;h2&gt;
+		&lt;table&gt;
+			&lt;tr&gt;
+				&lt;th&gt;#&lt;/th&gt;
+				&lt;th&gt;Name&lt;/th&gt;
+				&lt;th&gt;Hours&lt;/th&gt;
+				&lt;th&gt;Gross&lt;/th&gt;
+				&lt;th&gt;Federal&lt;/th&gt;
+				&lt;th&gt;State&lt;/th&gt;
+				&lt;th&gt;Social Security&lt;/th&gt;
+				&lt;th&gt;Net&lt;/th&gt;
+			&lt;/tr&gt;
+		&lt;/table&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>As you can see, there’s not a lot going on in the raw HTML part of the page, which is by design. This is intended to be a simple example, not a full-fledged reporting tool…</p>
+
+<p>Next, we create a PHP zone embedded in the HTML. This will dynamically generate the HTML to display each employee’s “timesheet” in the format we want:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;head&gt;</span>
+		<span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;title&gt;</span>Dah Timesheet<span class="nt">&lt;/title&gt;</span>
+		<span class="nt">&lt;style&gt;</span>
+			<span class="nt">body</span> 
+			<span class="p">{</span> 
+				<span class="nl">font</span><span class="p">:</span> <span class="m">14px</span><span class="o">/</span><span class="m">22px</span> <span class="n">Calibri</span><span class="p">,</span> <span class="s1">"Frutiger Linotype"</span><span class="p">,</span> <span class="n">Frutiger</span><span class="p">,</span> <span class="s1">"Gill Sans"</span><span class="p">,</span> <span class="s1">"Gills Sans MT"</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span> 
+				<span class="nl">color</span><span class="p">:</span> <span class="nx">#333</span><span class="p">;</span> 
+				<span class="nl">background</span><span class="p">:</span> <span class="nx">#fffbff</span><span class="p">;</span> 
+			<span class="p">}</span>
+		<span class="nt">&lt;/style&gt;</span>
+	<span class="nt">&lt;/head&gt;</span>
+	<span class="nt">&lt;body&gt;</span>
+		<span class="nt">&lt;h2&gt;</span>Dah Timesheet<span class="nt">&lt;h2&gt;</span>
+		<span class="nt">&lt;table&gt;</span>
+			<span class="nt">&lt;tr&gt;</span>
+				<span class="nt">&lt;th&gt;</span>#<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Hours<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Gross<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Federal<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>State<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Social Security<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Net<span class="nt">&lt;/th&gt;</span>
+			<span class="nt">&lt;/tr&gt;</span>
+		   
+			<span class="cp">&lt;?php</span> <span class="c1"># Here there be PHP ?&gt;</span>
+		   
+		<span class="o">&lt;/</span><span class="n">table</span><span class="o">&gt;</span>
+	<span class="o">&lt;/</span><span class="n">body</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">html</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>The first thing we do is add a reference to our <code class="language-plaintext highlighter-rouge">db.php</code> file, which gives us a connection to our database. Assuming the connection is now valid, we need to build and execute the query we defined earlier:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;head&gt;</span>
+		<span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;title&gt;</span>Dah Timesheet<span class="nt">&lt;/title&gt;</span>
+		<span class="nt">&lt;style&gt;</span>
+			<span class="nt">body</span> 
+			<span class="p">{</span> 
+				<span class="nl">font</span><span class="p">:</span> <span class="m">14px</span><span class="o">/</span><span class="m">22px</span> <span class="n">Calibri</span><span class="p">,</span> <span class="s1">"Frutiger Linotype"</span><span class="p">,</span> <span class="n">Frutiger</span><span class="p">,</span> <span class="s1">"Gill Sans"</span><span class="p">,</span> <span class="s1">"Gills Sans MT"</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span> 
+				<span class="nl">color</span><span class="p">:</span> <span class="nx">#333</span><span class="p">;</span> 
+				<span class="nl">background</span><span class="p">:</span> <span class="nx">#fffbff</span><span class="p">;</span> 
+			<span class="p">}</span>
+		<span class="nt">&lt;/style&gt;</span>
+	<span class="nt">&lt;/head&gt;</span>
+	<span class="nt">&lt;body&gt;</span>
+		<span class="nt">&lt;h2&gt;</span>Dah Timesheet<span class="nt">&lt;h2&gt;</span>
+		<span class="nt">&lt;table&gt;</span>
+			<span class="nt">&lt;tr&gt;</span>
+				<span class="nt">&lt;th&gt;</span>#<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Hours<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Gross<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Federal<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>State<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Social Security<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Net<span class="nt">&lt;/th&gt;</span>
+			<span class="nt">&lt;/tr&gt;</span>
+		   
+			<span class="cp">&lt;?php</span> <span class="c1"># Here there be PHP</span>
+			   
+				<span class="c1"># include the connection script</span>
+				<span class="k">require</span><span class="p">(</span> <span class="s1">'db.php'</span> <span class="p">);</span>
+			   
+				<span class="c1"># build the query string</span>
+				<span class="nv">$str</span> <span class="o">=</span> <span class="s1">'SELECT CONCAT_WS(" ", `first`, `last`) AS name, (`monday`+`tuesday`+`wednesday`+`thursday`+`friday`) AS hours, (`hours` * `rate`) AS gross FROM employees;'</span><span class="p">;</span>
+			   
+				<span class="c1"># Execute the query, handling the error as needed</span>
+				<span class="nv">$result</span> <span class="o">=</span> <span class="nf">mysqli_query</span><span class="p">(</span> <span class="nv">$dbc</span><span class="p">,</span> <span class="nv">$str</span> <span class="p">)</span> <span class="k">or</span> <span class="k">die</span><span class="p">(</span> <span class="s2">"&lt;h1&gt;SELECT query failed!&lt;/h1&gt; &lt;p&gt;Error: "</span> <span class="mf">.</span> <span class="nf">mysqli_error</span><span class="p">(</span> <span class="nv">$dbc</span> <span class="p">)</span> <span class="mf">.</span> <span class="s2">"&lt;/p&gt;"</span>  <span class="p">);</span>
+
+			<span class="cp">?&gt;</span>
+		   
+		<span class="nt">&lt;/table&gt;</span>
+	<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<h3 id="building-the-table">Building the Table</h3>
+
+<p>We should at this point have a result set. To get our values to build the array, we must use a PHP function called <code class="language-plaintext highlighter-rouge">mysqli_fetch_assoc</code> which returns an associative array equal to one “row” of the result set. We can use a handy feature of PHP, which lets us use pretty much any value in a conditional expression, to create a loop while the result set contains a valid new row:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;head&gt;</span>
+		<span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;title&gt;</span>Dah Timesheet<span class="nt">&lt;/title&gt;</span>
+		<span class="nt">&lt;style&gt;</span>
+			<span class="nt">body</span> 
+			<span class="p">{</span> 
+				<span class="nl">font</span><span class="p">:</span> <span class="m">14px</span><span class="o">/</span><span class="m">22px</span> <span class="n">Calibri</span><span class="p">,</span> <span class="s1">"Frutiger Linotype"</span><span class="p">,</span> <span class="n">Frutiger</span><span class="p">,</span> <span class="s1">"Gill Sans"</span><span class="p">,</span> <span class="s1">"Gills Sans MT"</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span> 
+				<span class="nl">color</span><span class="p">:</span> <span class="nx">#333</span><span class="p">;</span> 
+				<span class="nl">background</span><span class="p">:</span> <span class="nx">#fffbff</span><span class="p">;</span> 
+			<span class="p">}</span>
+
+			<span class="nc">.alt</span> <span class="p">{</span> <span class="nl">background</span><span class="p">:</span> <span class="nx">#d0d0d0</span><span class="p">;</span> <span class="p">}</span>
+		<span class="nt">&lt;/style&gt;</span>
+	<span class="nt">&lt;/head&gt;</span>
+	<span class="nt">&lt;body&gt;</span>
+		<span class="nt">&lt;h2&gt;</span>Dah Timesheet<span class="nt">&lt;h2&gt;</span>
+		<span class="nt">&lt;table&gt;</span>
+			<span class="nt">&lt;tr&gt;</span>
+				<span class="nt">&lt;th&gt;</span>#<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Hours<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Gross<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Federal<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>State<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Social Security<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Net<span class="nt">&lt;/th&gt;</span>
+			<span class="nt">&lt;/tr&gt;</span>
+		   
+			<span class="cp">&lt;?php</span>
+				<span class="c1"># Here there be PHP</span>
+			   
+				<span class="c1"># include the connection script</span>
+				<span class="k">require</span><span class="p">(</span> <span class="s1">'db.php'</span> <span class="p">);</span>
+			   
+				<span class="c1"># build the query string</span>
+				<span class="nv">$str</span> <span class="o">=</span> <span class="s1">'SELECT CONCAT_WS(" ", `first`, `last`) AS name, (`monday`+`tuesday`+`wednesday`+`thursday`+`friday`) AS hours, (`hours` * `rate`) AS gross FROM employees;'</span><span class="p">;</span>
+			   
+				<span class="c1"># Execute the query, handling the error as needed</span>
+				<span class="nv">$result</span> <span class="o">=</span> <span class="nf">mysqli_query</span><span class="p">(</span> <span class="nv">$dbc</span><span class="p">,</span> <span class="nv">$str</span> <span class="p">)</span> <span class="k">or</span> <span class="k">die</span><span class="p">(</span> <span class="s2">"&lt;h1&gt;SELECT query failed!&lt;/h1&gt; &lt;p&gt;Error: "</span> <span class="mf">.</span> <span class="nf">mysqli_error</span><span class="p">(</span> <span class="nv">$dbc</span> <span class="p">)</span> <span class="mf">.</span> <span class="s2">"&lt;/p&gt;"</span>  <span class="p">);</span>
+
+				<span class="nv">$alt</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+				<span class="k">while</span><span class="p">(</span> <span class="nv">$row</span> <span class="o">=</span> <span class="nf">mysqli_fetch_assoc</span><span class="p">(</span> <span class="nv">$result</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+			   
+				<span class="p">}</span>              	   
+			<span class="cp">?&gt;</span>
+		<span class="nt">&lt;/table&gt;</span>
+	<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>What this new line does is project a row of the result set into a new array. This array is then used as the conditional of the <code class="language-plaintext highlighter-rouge">while</code> loop. As long as the array value is not something that would evaluate as <code class="language-plaintext highlighter-rouge">false</code> (an empty or null array), the loop will continue.</p>
+
+<p>Each time we run through the loop, we need to figure out what tax bracket the user falls in for both state and federal taxes. We can use the SQL-calculated value, <code class="language-plaintext highlighter-rouge">gross</code>, in a <code class="language-plaintext highlighter-rouge">switch</code> statement for federal tax. Once we have established what the correct tax rates are, we can build our table rows, using a generated value for each of the federal, state, and Social Security fields:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"en"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;head&gt;</span>
+		<span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;title&gt;</span>Dah Timesheet<span class="nt">&lt;/title&gt;</span>
+		<span class="nt">&lt;style&gt;</span>
+			<span class="nt">body</span> 
+			<span class="p">{</span> 
+				<span class="nl">font</span><span class="p">:</span> <span class="m">14px</span><span class="o">/</span><span class="m">22px</span> <span class="n">Calibri</span><span class="p">,</span> <span class="s1">"Frutiger Linotype"</span><span class="p">,</span> <span class="n">Frutiger</span><span class="p">,</span> <span class="s1">"Gill Sans"</span><span class="p">,</span> <span class="s1">"Gills Sans MT"</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span> 
+				<span class="nl">color</span><span class="p">:</span> <span class="nx">#333</span><span class="p">;</span> 
+				<span class="nl">background</span><span class="p">:</span> <span class="nx">#fffbff</span><span class="p">;</span> 
+			<span class="p">}</span>
+
+		        <span class="nc">.alt</span> <span class="p">{</span> <span class="nl">background</span><span class="p">:</span> <span class="nx">#d0d0d0</span><span class="p">;</span> <span class="p">}</span>
+		<span class="nt">&lt;/style&gt;</span>
+	<span class="nt">&lt;/head&gt;</span>
+	<span class="nt">&lt;body&gt;</span>
+		<span class="nt">&lt;h2&gt;</span>Dah Timesheet<span class="nt">&lt;h2&gt;</span>
+		<span class="nt">&lt;table&gt;</span>
+			<span class="nt">&lt;tr&gt;</span>
+				<span class="nt">&lt;th&gt;</span>#<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Name<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Hours<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Gross<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Federal<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>State<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Social Security<span class="nt">&lt;/th&gt;</span>
+				<span class="nt">&lt;th&gt;</span>Net<span class="nt">&lt;/th&gt;</span>
+			<span class="nt">&lt;/tr&gt;</span>
+		   
+			<span class="cp">&lt;?php</span>
+				<span class="c1"># Here there be PHP</span>
+			   
+				<span class="c1"># include the connection script</span>
+				<span class="k">require</span><span class="p">(</span> <span class="s1">'db.php'</span> <span class="p">);</span>
+			   
+				<span class="c1"># build the query string</span>
+				<span class="nv">$str</span> <span class="o">=</span> <span class="s1">'SELECT CONCAT_WS(" ", `first`, `last`) AS name, (`monday`+`tuesday`+`wednesday`+`thursday`+`friday`) AS hours, (`hours` * `rate`) AS gross FROM employees;'</span><span class="p">;</span>
+			   
+				<span class="c1"># Execute the query, handling the error as needed</span>
+				<span class="nv">$result</span> <span class="o">=</span> <span class="nf">mysqli_query</span><span class="p">(</span> <span class="nv">$dbc</span><span class="p">,</span> <span class="nv">$str</span> <span class="p">)</span> <span class="k">or</span> <span class="k">die</span><span class="p">(</span> <span class="s2">"&lt;h1&gt;SELECT query failed!&lt;/h1&gt; &lt;p&gt;Error: "</span> <span class="mf">.</span> <span class="nf">mysqli_error</span><span class="p">(</span> <span class="nv">$dbc</span> <span class="p">)</span> <span class="mf">.</span> <span class="s2">"&lt;/p&gt;"</span>  <span class="p">);</span>
+
+				<span class="nv">$alt</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+				<span class="k">while</span><span class="p">(</span> <span class="nv">$row</span> <span class="o">=</span> <span class="nf">mysqli_fetch_assoc</span><span class="p">(</span> <span class="nv">$result</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+			   
+					<span class="c1"># Determine the tax brackets via http://www.moneychimp.com/features/tax_brackets.htm</span>
+					<span class="k">switch</span><span class="p">(</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">]</span> <span class="p">)</span> <span class="p">{</span>
+						<span class="k">case</span> <span class="p">(</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">8375</span> <span class="p">)</span><span class="o">:</span>
+							<span class="nv">$fedtax</span> <span class="o">=</span> <span class="mf">0.10</span> <span class="o">*</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">];</span>
+							<span class="k">break</span><span class="p">;</span>
+						<span class="k">case</span> <span class="p">(</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">34000</span> <span class="p">)</span><span class="o">:</span>
+							<span class="nv">$fedtax</span> <span class="o">=</span> <span class="mf">0.15</span> <span class="o">*</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">];</span>
+							<span class="k">break</span><span class="p">;</span>
+						<span class="k">case</span> <span class="p">(</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">82400</span> <span class="p">)</span><span class="o">:</span>
+							<span class="nv">$fedtax</span> <span class="o">=</span> <span class="mf">0.25</span> <span class="o">*</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">];</span>
+							<span class="k">break</span><span class="p">;</span>
+						<span class="k">case</span> <span class="p">(</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">171850</span> <span class="p">)</span><span class="o">:</span>
+							<span class="nv">$fedtax</span> <span class="o">=</span> <span class="mf">0.28</span> <span class="o">*</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">];</span>
+							<span class="k">break</span><span class="p">;</span>
+						<span class="k">case</span> <span class="p">(</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">373650</span> <span class="p">)</span><span class="o">:</span>
+							<span class="nv">$fedtax</span> <span class="o">=</span> <span class="mf">0.33</span> <span class="o">*</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">];</span>
+							<span class="k">break</span><span class="p">;</span>
+						<span class="k">default</span><span class="o">:</span>
+							<span class="nv">$fedtax</span> <span class="o">=</span> <span class="mf">0.35</span> <span class="o">*</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">];</span>
+							<span class="k">break</span><span class="p">;</span>
+					<span class="p">}</span>
+			   
+					<span class="nv">$statetax</span> <span class="o">=</span> <span class="mf">0.0435</span> <span class="o">*</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">];</span>
+					<span class="nv">$sstax</span> <span class="o">=</span> <span class="mf">0.062</span> <span class="o">*</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">];</span>
+					<span class="nv">$net</span> <span class="o">=</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">]</span> <span class="o">-</span> <span class="nv">$fedtax</span> <span class="o">-</span> <span class="nv">$statetax</span> <span class="o">-</span> <span class="nv">$sstax</span><span class="p">;</span>
+				   
+					<span class="k">if</span><span class="p">(</span> <span class="nv">$alt</span> <span class="p">)</span> <span class="p">{</span>
+						<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;tr class=</span><span class="se">\"</span><span class="s2">alt</span><span class="se">\"</span><span class="s2">&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="p">}</span>
+					<span class="k">else</span> <span class="p">{</span>
+						<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;tr&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="p">}</span>
+					<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;td&gt;"</span> <span class="mf">.</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="mf">.</span> <span class="s2">"&lt;td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;td&gt;"</span> <span class="mf">.</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'hours'</span><span class="p">]</span> <span class="mf">.</span> <span class="s2">"&lt;td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;td&gt;"</span> <span class="mf">.</span> <span class="nv">$row</span><span class="p">[</span><span class="s1">'gross'</span><span class="p">]</span> <span class="mf">.</span> <span class="s2">"&lt;td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;td&gt;"</span> <span class="mf">.</span> <span class="nv">$fedtax</span> <span class="mf">.</span> <span class="s2">"&lt;td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;td&gt;"</span> <span class="mf">.</span> <span class="nv">$statetax</span> <span class="mf">.</span> <span class="s2">"&lt;td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;td&gt;"</span> <span class="mf">.</span> <span class="nv">$sstax</span> <span class="mf">.</span> <span class="s2">"&lt;td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;td&gt;"</span> <span class="mf">.</span> <span class="nv">$net</span> <span class="mf">.</span> <span class="s2">"&lt;td&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+					<span class="k">echo</span><span class="p">(</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">&lt;/tr&gt;</span><span class="se">\n</span><span class="s2">"</span> <span class="p">);</span>
+				   
+					<span class="nv">$alt</span> <span class="o">=</span> <span class="o">!</span><span class="nv">$alt</span><span class="p">;</span>
+				<span class="p">}</span>
+			<span class="cp">?&gt;</span>
+		<span class="nt">&lt;/table&gt;</span>
+	<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>And that’s pretty much it. Again, this is a super simple example of extracting output from our table. Depending on how much feedback this tutorial gets, I could write a Part 3, where I could you how to create a much more interesting output page.</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/the-not-so-great-php-mysql-tutorial-part-1"><i class="fas fa-chevron-left"></i> The Not-So-Great PHP/MySQL Tutorial, Part 1</a>
+<a href="/blog">View all</a>
+<a href="/blog/overloading-constructors-in-java">Overloading Constructors in Java <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

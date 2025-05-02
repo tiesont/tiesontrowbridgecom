@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Many Faces of the Hyperlink Element / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="the-many-faces-of-the-hyperlink-element"><a href="/blog/the-many-faces-of-the-hyperlink-element">The Many Faces of the Hyperlink Element</a></h2>
+
+  <p>Posted on <strong>Thursday, February 5, 2009</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">HTML</span></li>
+<li><span class="badge badge-success p-2">hyperlink</span></li>
+</ul>
+
+<p>Ah, the <code class="language-plaintext highlighter-rouge">&lt;a&gt;</code> element. Our friend, the hyperlink. Few HTML elements are as versatile as the hyperlink. We can jump around a page, back and forth between different pages, open our email clients, and execute scripts, all with one meek little HTML tag. Talk about over-achieving…</p>
+
+<p>Don’t believe me? Well then, maybe I should show you some examples!</p>
+
+<h4 id="navigating-a-page">Navigating a Page</h4>
+
+<p>One of the more useful ways to implement a hyperlink is to use it as a method of quickly jumping to different topics within a page. This is accomplished by using what are referred to as “page anchors,” or “anchors” for short. Creating anchors is a simple, two-step process:</p>
+
+<ul>
+  <li>Add the “id” attribute to the HTML element closest to where you want the link to “jump” to.</li>
+  <li>Point the “href” attribute of the link tag to that id, preceded with a # sign.</li>
+</ul>
+
+<p>Like so:</p>
+
+<pre><code class="language-markup">&lt;html&gt;
+	&lt;head&gt;
+		&lt;title&gt;Sample Page&lt;/title&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div&gt;
+				&lt;h2&gt;Hyperlink Sample Page&lt;/h2&gt;
+				&lt;ul&gt;
+					&lt;li&gt;&lt;a href="#one"&gt;Link #1&lt;/a&gt;&lt;/li&gt;
+					&lt;li&gt;&lt;a href="#two"&gt;Link #2&lt;/a&gt;&lt;/li&gt;
+					&lt;li&gt;&lt;a href="mailto:person@fakemail.com"&gt;Contact&lt;/a&gt;&lt;/li&gt;
+				&lt;/ul&gt;
+				&lt;h4 id="one"&gt;Anchor #1&lt;/h4&gt;
+				&lt;p&gt;
+					Sample text here. Blah blah blah.
+				&lt;/p&gt;
+				&lt;p&gt;
+					Blah blah blah some more...
+				&lt;/p&gt;
+				&lt;h4 id="two"&gt;Anchor #2&lt;/h4&gt;
+				&lt;p&gt;
+					Look! More sample text!
+				&lt;/p&gt;
+				&lt;p&gt;
+					Isn't HTML neat? :)
+				&lt;/p&gt;
+		&lt;/div&gt;
+	&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Each of the links in the “navigation bar” would take you to a different section of this page.</p>
+
+<h4 id="the-mailto-link">The MailTo: Link</h4>
+
+<p>The “Contact” link in the example above is what is known as a “mailto” link, which gets its name from the fact that you precede the email address in the “href” attribute with “mailto:”. The browser recognizes that the link is an email address and causes whatever email client you have installed on your machine to launch.</p>
+
+<h4 id="linking-to-another-page">Linking to Another Page</h4>
+
+<p>There are two ways of linking to another page. If you want to link to another page within <em>your</em> website, you only need to specify the folder and file name of the target document. Linking to an entirely <em>different</em> (external) site requires a canonical, or absolute, URL.</p>
+
+<p>Examples:</p>
+
+<ol>
+  <li>Relative (Local site)
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">images/meatball.png</code></li>
+      <li><code class="language-plaintext highlighter-rouge">code/samples/hello-world.html</code></li>
+    </ul>
+  </li>
+  <li>Absolute (External site)
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">http://www.google.com/</code></li>
+      <li><code class="language-plaintext highlighter-rouge">http://www.w3fools.com/</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h4 id="el-fin">El Fin</h4>
+
+<p>I will eventually update this post to include some script links, as well, but for now, I think I’ve given you a good introduction into how to use the hyperlink tag. Questions? Comments? You know what to do…</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/csharp-sample-timing-class"><i class="fas fa-chevron-left"></i> C# Sample: Timing Class</a>
+<a href="/blog">View all</a>
+<a href="/blog/programming-primer">Programming Primer <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

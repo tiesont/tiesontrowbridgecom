@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML Template 1 / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="html-template-1"><a href="/blog/html-template-1">HTML Template 1</a></h2>
+
+  <p>Posted on <strong>Tuesday, July 7, 2009</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">HTML</span></li>
+<li><span class="badge badge-success p-2">template</span></li>
+</ul>
+
+<p>I put together a simple HTML/XHTML template for anyone that wants it. If you’re new to web design, this template should be a good way to get started. I also created a CSS template to go with this HTML template. You can <a href="/code/css-template-1">find it here</a>.&lt;/p&gt;</p>
+
+<h4 id="the-sample-templatehtml">The Sample: template.html</h4>
+
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+	&lt;head&gt;
+		&lt;meta charset="utf-8" /&gt;
+		&lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+		&lt;title&gt;Site/Page Title&lt;/title&gt;
+		&lt;!-- 
+			This is a link to your site's favicon (the icon that appears on bookmarks and/or the navigation bar.
+			Just like the CSS links below, choose one, delete the rest.
+		--&gt;
+		&lt;!-- &lt;link rel="shortcut icon" type="image/x-icon" href="/somepath/image.ico" /&gt; (old style) --&gt;
+		&lt;!-- &lt;link rel="icon" type="image/vnd.microsoft.icon" href="/somepath/image.ico" /&gt; --&gt;
+		&lt;!-- &lt;link rel="icon" type="image/png" href="/somepath/image.png" /&gt; --&gt;
+		&lt;!-- &lt;link rel="icon" type="image/gif" href="/somepath/image.gif" /&gt; --&gt;
+
+		&lt;!--
+			This is a list of all of the possible stylesheet media types. Delete all but the one(s) you are creating CSS for. 
+			Also note that you must remove the HTML comments from around the link tag or the browser will ignore it.
+			Alternately, you could just use the "all" media version, and specify the media-specific CSS in the stylesheet itself,
+			using the @media selector. See sample CSS for details.
+		--&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="screen" /&gt; --&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="tty" /&gt; --&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="tv" /&gt; --&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="projection" /&gt; --&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="handheld" /&gt; --&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="print" /&gt; --&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="braille" /&gt; --&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="aural" /&gt; --&gt;
+		&lt;!-- &lt;link rel="stylesheet" type="text/css" href="" media="all" /&gt; --&gt;
+	&lt;/head&gt;
+	&lt;body&gt;
+		&lt;div id="container"&gt;
+			&lt;div id="header"&gt;
+				&lt;h1&gt;&lt;a href="/link-to-home-page"&gt;Site Title&lt;/a&gt;&lt;/h1&gt;
+			&lt;/div&gt;
+			&lt;div id="navigation"&gt;
+				&lt;ul id="navbar"&gt;
+					&lt;li&gt;
+						&lt;a href=""&gt;
+						Link 1
+					&lt;/a&gt;
+					&lt;/li&gt;
+					&lt;li&gt;
+						&lt;a href=""&gt;
+                            Link 2
+                        &lt;/a&gt;
+                    &lt;/li&gt;
+                    &lt;li&gt;
+                        &lt;a href=""&gt;
+                            Link 3
+                        &lt;/a&gt;
+                    &lt;/li&gt;
+                &lt;/ul&gt;
+            &lt;/div&gt;
+            &lt;div id="content"&gt;
+                &lt;h2&gt;Entry Title 1&lt;/h2&gt;
+                &lt;p&gt;
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur sollicitudin, metus a ultricies laoreet, turpis purus commodo neque, quis vehicula nibh lacus id libero. Duis fringilla, mauris at ultrices aliquet, tellus sapien pharetra augue, quis molestie odio velit quis tortor. Cras molestie sem eu turpis dignissim commodo. Ut condimentum gravida consequat. Curabitur eget ligula est. Phasellus aliquet iaculis tristique. Quisque dapibus lorem est. Vestibulum pulvinar, ligula eu aliquam vehicula, dui odio porttitor urna, a tempor dui arcu in orci. Duis ultricies risus id enim porttitor tristique. Maecenas mollis risus sit amet arcu iaculis eu consectetur nunc luctus. Suspendisse convallis faucibus imperdiet. Nullam pharetra euismod quam vel ultricies. Phasellus in nisl quis turpis sollicitudin porttitor a quis quam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elementum ultricies nisi non vestibulum. Proin sed nunc mauris. Proin purus erat, pulvinar non consequat sed, consectetur at augue. 
+                &lt;/p&gt;
+                &lt;h2&gt;Entry Title 2&lt;/h2&gt;
+                &lt;p&gt;
+                    Vivamus et lectus ante, eu laoreet libero. Vivamus quis porta quam. Integer eu eros arcu, in pharetra est. Duis id diam vel mi eleifend mattis dapibus in purus. Vivamus laoreet porttitor purus. Aliquam at venenatis lectus. Suspendisse vehicula scelerisque fermentum. Ut suscipit orci eu metus rutrum quis pulvinar lectus convallis. Aliquam erat volutpat. Vestibulum sit amet enim lectus. Cras scelerisque aliquam sapien a tempor. Fusce porta nunc in massa molestie ultricies. Suspendisse pulvinar interdum aliquet. Donec nec nisl sed velit pharetra tempor in vitae diam. Donec quis euismod risus. In malesuada, velit tincidunt porttitor sagittis, libero lectus placerat orci, in convallis nibh libero nec metus. Cras vel erat tortor. Aliquam erat volutpat. Nullam sit amet erat odio, in posuere magna. 
+                &lt;/p&gt;
+                &lt;h2&gt;Entry Title 3&lt;/h2&gt;
+                &lt;p&gt;
+                    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed in pharetra quam. Aenean mauris libero, tincidunt eget ultricies sit amet, dictum ut quam. Aliquam erat volutpat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut feugiat accumsan vehicula. Sed congue mattis sapien at tempus. Aliquam ac odio diam. Fusce sodales ipsum ac tortor porta malesuada. Pellentesque feugiat vehicula accumsan. Nunc neque felis, sodales eget porttitor vel, suscipit non velit. Nunc eu justo ipsum, non ultrices orci. Aliquam sed arcu tortor. Donec egestas metus in mauris consectetur a tempus turpis pretium. Maecenas et rutrum dolor. Sed eget massa tellus. Suspendisse potenti. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Curabitur sed lobortis nunc. 
+                &lt;/p&gt;
+            &lt;/div&gt;
+            &lt;div id="footer"&gt;
+                &lt;p&gt;
+                    &amp;amp;copy; First copyright year - current year. Statement of rights reserved. Designer links, etc.
+                &lt;/p&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/survey-of-programming-languages-i"><i class="fas fa-chevron-left"></i> Survey of Programming Languages I</a>
+<a href="/blog">View all</a>
+<a href="/blog/css-template-1">CSS Template 1 <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

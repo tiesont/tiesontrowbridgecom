@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fun with LINQ / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="fun-with-linq"><a href="/blog/fun-with-linq">Fun with LINQ</a></h2>
+
+  <p>Posted on <strong>Monday, August 17, 2009</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">LINQ</span></li>
+</ul>
+
+<p>Anyone who’s read any amount of the content I’ve put on this site knows I love the C# language. It has a lot of capabilities I find really useful, like strong-typing, properties, generics, etc. I also like that C# has implemented one of the more interesting technologies Microsoft has developed recently: LINQ. LINQ stands for <em>Language-Integrated Query</em>, and is a technology we can use to simplify the processing of structured data within the .NET Framework.</p>
+
+<p>My favorite use of LINQ is building database applications. With LINQ, you simply build a database in MS SQL Server, connect to it in the Server Explorer window in Visual Studio, and then drag and drop your tables from the Server Explorer to a special DBML file. DBML, which stands for <em>Database Markup Language</em>, is used by LINQ to build classes out of your table definitions. The database column types are converted to their nearest C# equivalent. The fun comes together if you developed your database correctly using primary and foreign keys. If your tables were properly associated in the database, LINQ builds those associations into the LINQ classes it builds from the DBML file.</p>
+
+<p>The LINQ classes have database connections built right into them. So, you can modify an instance of your class that was populated from the database, and then call a special LINQ function called <code class="language-plaintext highlighter-rouge">SubmitChanges()</code>. LINQ will process the class object and determine what attributes have actually been changed. It then builds LINQ queries to execute against the database, AND it only does that for the values that NEED to be updated. This can save you a lot of bandwidth over time.</p>
+
+<p>Now, you could do this all by hand with the database tools .NET has had pretty much since the beginning. But WHY? LINQ does it just as well, and in a lot of cases BETTER, not to mention QUICKER.</p>
+
+<p>LINQ also comes in handy if you want to parse a structured document, like, say, an XML file. LINQ has an entire library devoted to manipulating and creating XML documents. With a good understanding of building data structures, you can use XML and LINQ to entirely replicate the kind of functionality you get with a database.</p>
+
+<p>The only major beef I have with LINQ is that you don’t get something as nice as DBML for automagically transforming your XML into a class object. Which really makes sense if you think about it, since XML just defines structure, so LINQ would really have no idea what types to apply to your XML data, although it could be argued that other languages are capable of inferring data types from anonymous data.</p>
+
+<p>Anyway, I think that is enough rambling for now. I should have some LINQ examples up sometime soon, hopefully before the month is out…</p>
+
+<p>Cheers!</p>
+
+<p>:]</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/php-referrer-snippet"><i class="fas fa-chevron-left"></i> PHP Referrer Snippet</a>
+<a href="/blog">View all</a>
+<a href="/blog/c-xml-and-linq-sample-1">C#, XML, and LINQ: Load &amp; Parse an XML File <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

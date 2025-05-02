@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Creating A C++ Application, Part 1 / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="creating-a-c-application-part-1"><a href="/blog/creating-a-cplusplus-console-application-part-1">Creating A C++ Application, Part 1</a></h2>
+
+  <p>Posted on <strong>Saturday, April 25, 2009</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">cplusplus</span></li>
+<li><span class="badge badge-success p-2">VisualStudio</span></li>
+</ul>
+
+<p>I’ve seen a lot of ways of making a console application in C/C++, and I’ll admit, I’m not very impressed. Okay, maybe I should clarify the previous statement. I’ve seen how the students at GRCC write console apps, and, well, they need help…</p>
+
+<p>So, I suppose I should fulfill one of my stated goals, and demonstrate some “clean” ways of writing a console app, m’kay?</p>
+
+<p>So, without further ado, here we go…</p>
+
+<h4 id="step-1-set-up-visual-studio">Step 1: Set up Visual Studio</h4>
+
+<p>First off, you don’t really need anything as fancy as Visual Studio just to write a console application, but it is somtimes easier to use than the alternatives. So, if you have Visual Studio (pretty much any version) you can follow along here. If you want to use a plain ol’ text editor, be my guest, but know that I’m not going to show you how to get your code to compile and run…</p>
+
+<p>So, for those of you with Visual Studio, follow the steps below to set up your environment for this tutorial.</p>
+
+<ol>
+  <li>Open Visual Studio</li>
+  <li>Click on <strong>File → New → Project</strong>.</li>
+  <li>Scroll down as needed until you see the section labeled <strong>Visual C++</strong> and click on that heading.</li>
+  <li>You should now see a bunch of possible file types. Select <strong>Empty Project</strong>.</li>
+  <li>Give your project a name. I also tend to uncheck the “Create directory for solution” option, but that’s up to you.</li>
+  <li>Click <strong>OK</strong>.</li>
+</ol>
+
+<p>You should now have a blank editor window. Look for the <strong>Solution Explorer</strong> tab. Depending on your configuration, it may be on the left or right side of the editor window. Now we are going to add the actual C++ file.</p>
+
+<ol>
+  <li>With the <strong>Solution Explorer</strong> tab open, right-click on the Project name.</li>
+  <li>In the context menu that opens, click on <strong>Add → New Item</strong>.</li>
+  <li>A dialog will open. You should see a list of available C/C++ file type.</li>
+  <li>Click <strong>C++ file(.cpp)</strong> and then give your file a name.</li>
+  <li>Click <strong>OK</strong>.</li>
+</ol>
+
+<p>We are now ready to start writing our console application! :)</p>
+
+<h4 id="step-2-add-the-essentials">Step 2: Add the essentials</h4>
+
+<p>Now, the reason I had you set up this project manually, as opposed to just creating a “Win32 Console Application,” is that the latter project type adds some unnecessary “baggage” to the project, like a pre-compiled header and some background crap we don’t really need. Those of you who decided you knew where I was going and went ahead and created a “console app” can still follow along, but be aware that you can’t modify the header for your main() function or remove the “stdafx.h” include directive without causing some major problems. But I digress…</p>
+
+<p>To read or write anything to our console window, we need to add some library functions to our project. There are a lot of options available to us that work more or less the same, but I prefer to use the most “modern” version. As such, we are going to add the <code class="language-plaintext highlighter-rouge">iostream</code> library. IOStream gives us access to a couple of useful functions: <code class="language-plaintext highlighter-rouge">cin</code>, <code class="language-plaintext highlighter-rouge">cout</code>, &amp; <code class="language-plaintext highlighter-rouge">endl</code>. CIN is used for reading character input from the console window. COUT is used to write characters out to the console window, ENDL is a function used for peforming a carriage return (adding a new line) on the console window.</p>
+
+<p>To add the iostream library to our project, we add this line to the top of our blank .cpp file:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></code></pre></div></div>
+
+<p>Next, we have to tell the compiler to give us access to the library function we want. There is a right and a wrong way to do this. N00bs like to add this line:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="k">namespace</span> <span class="n">std</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>which gives us access to EVERYTHING currently available in the std namespace. This works, but its kinda like using a pile-driver to hammer a carpet tack. In other words, its excessive! Instead, we only include those functions we know we will use by employing the <code class="language-plaintext highlighter-rouge">using</code> directive:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>The double colon ( <code class="language-plaintext highlighter-rouge">::</code> ) is what’s known as the <strong>scope resolution operator</strong>. It tells the compiler where to look for the function or attribute specified to the right of the operator. In our case, we’re telling it to look in the std, or <strong>Standard Library</strong>.</p>
+
+<h4 id="step-3-create-the-application-entry-point">Step 3: Create the application entry point</h4>
+
+<p>Now that we have added the functionality we need to our project, we have to add the code that actually executes when the program runs.</p>
+
+<p>Every application needs to have an <strong>entry point</strong>, or if your prefer, a starting point. Most modern compilers are set up to look for a special function called <code class="language-plaintext highlighter-rouge">main()</code>. Furthermore, the compiler in C++ is expecting an integer exit code. The common values are <code class="language-plaintext highlighter-rouge">-1</code>, <code class="language-plaintext highlighter-rouge">0</code>, and <code class="language-plaintext highlighter-rouge">1</code>, which can be interpreted by the calling application to indicate whether or not the program completed successfully. For our purposes, we will be returning the exit code <code class="language-plaintext highlighter-rouge">0</code>. So, add this to your project:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span> <span class="p">)</span>
+<span class="p">{</span>
+     <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="step-4-add-some-code-silly">Step 4: Add some code, silly!</h4>
+
+<p>Okay, we’ve added all the code we need to run a console app, but right now, it doesn’t DO anything. We should probably rectify that by adding some executable code to our <code class="language-plaintext highlighter-rouge">main()</code> function. You can add whatever you want, but for the sake of following convention, I’m gonna add the old standard:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">cout</span><span class="o">&lt;&lt;</span> <span class="s">"Hello, world!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+<span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>The finished product should look similar to this:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">;</span>
+<span class="k">using</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">"Hello, world!"</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+
+    <span class="n">system</span><span class="p">(</span><span class="s">"pause"</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>To see your wonderful new creation, simply click the Run/Debug button (the big green arrow) in your menu bar.</p>
+
+<p>Enjoy!</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/yur-doin-it-wrong"><i class="fas fa-chevron-left"></i> Yur Doin’ It Wrong…</a>
+<a href="/blog">View all</a>
+<a href="/blog/nifty-corners-sah-weeeeet">Nifty Corners = Sah-weeeeet… <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

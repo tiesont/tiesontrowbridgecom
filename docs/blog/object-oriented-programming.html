@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Object-Oriented Programming / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="object-oriented-programming"><a href="/blog/object-oriented-programming">Object-Oriented Programming</a></h2>
+
+  <p>Posted on <strong>Saturday, September 27, 2008</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">OOP</span></li>
+</ul>
+
+<p>Object-oriented programming centers around the idea that everything can be represented as an object. Each object has characteristics, represented programmatically as variables, and actions it can perform, represented programmatically with subroutines and functions.</p>
+
+<p>While syntax will vary, every object-oriented programming (OOP) language conforms to certain standards. What this means is that if a programmer learns the basic premises of OOP, namely <em>encapsulation</em>, <em>polymorphism</em>, and <em>inheritance</em>, he or she should be able to successfully adapt to any OOP programming language.</p>
+
+<h3 id="the-basics">The Basics</h3>
+
+<p>Since understanding encapsulation, polymorphism, and inheritance are important keys to correctly grasping the idea of OOP, I will take a moment here to explain a little bit about each of these points.</p>
+
+<h4 id="encapsulation">Encapsulation</h4>
+
+<p><strong>Encapsulation</strong> revolves around one central tenet: only the object in which the variables, subroutines, and functions are contained should have access to those items, unless an outside object is <em>explicitly</em> given access. This is defined by the item’s “accessibility level.” The syntax varies slightly depending on the language you are using, but every language seems to agree on the two most basic accessibility levels: <strong>private</strong> and <strong>public</strong>.</p>
+
+<p><em>Private</em> elements can only be accessed by the code in which they are defined. <em>Public</em> elements can be accessed by any code into which our original code is embedded.</p>
+
+<p>There are also intermediate stages of accessibility that exist between private and public: <strong>shared</strong>, <strong>static</strong>, <strong>friend</strong>, <strong>protected</strong>, and <strong>protected internal</strong> being the first to come to mind. I am sure there are other terms in other languages, but they all boil down to have the same meaning.</p>
+
+<p>I know this all sounds a bit vague, but I want to avoid using specific references unless I am discussing a specific language.</p>
+
+<h4 id="polymorphism">Polymorphism</h4>
+
+<p><strong>Polymorphism</strong> is a fairly “simple” concept. It means that one object can be adapted to suit new requirements, should the need arise. It always best to create your objects with re-usability in mind.</p>
+
+<p>Polymorphism is achieved programmatically through the use of <strong>overrides</strong> and <strong>overloads</strong>. The syntax is slightly different for each language, so I’ll cover that in each section. <strong>Overrides</strong> replace an existing method, function, or subroutine with another of the same name. This occurs most often during inheritance. <strong>Overloads</strong> provide additional implementations of one method, function, or subroutine. Overloading occurs most frequently when creating <strong>object constructors</strong>. Constructors are special functions that are called when we create a new instance of our object, and are used to set our new object’s attributes to a known state.</p>
+
+<h4 id="inheritance">Inheritance</h4>
+<p><strong>Inheritance</strong> is the concept that confuses many new programmers. Inheritance centers on the principle of starting with a “base” object and building on that object to create new objects. Anthropology students should recognize this idea fairly quickly, as it is very similar to the theory of evolution. Each succeeding “evolution” of the base object adds more functionality or more characteristics to the original object. The new object will have most of the characteristics (depending on the “accessibility level” I mentioned previously) of the base object, plus it’s own unique characteristics.</p>
+
+<h3 id="classes">Classes</h3>
+
+<p>Most OOP languages implement OOP through the use of <strong>classes</strong>. <a href="http://en.wikipedia.org/wiki/Class_(computer_science)">Wikipedia</a> has a good definition of what a class is:</p>
+
+<blockquote>
+  <p>In object-oriented programming, a class is a programming language construct that is used as a blueprint to create objects. This blueprint includes attributes and methods that the created objects all share.</p>
+</blockquote>
+
+<p>I really like their use of the term “blueprint,” because it is a very accurate analogy for how classes are used. When we create a class file, we are <em>defining</em> what our object is and does, but we do not have a “real” object to manipulate. When we want an object to manipulate, we construct (create) an instance of our class, which then has all the attributes and “abilities” our blueprint says it should. If it helps, think of our class file as a stamp press machine. When we create an instance of the class, it is like we are having the machine stamp out a part for us…</p>
+
+<h3 id="summary">Summary</h3>
+
+<p>Object-oriented programming is a method used to represent real-word objects electronically in a way that allows a user to apply logic to manipulate those objects.</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/tutorial-one-html-php"><i class="fas fa-chevron-left"></i> Tutorial One: HTML &gt;&gt; PHP</a>
+<a href="/blog">View all</a>
+<a href="/blog/conditional-statements">Conditional Statements <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Debt Repayment Calculator, Part One / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="debt-repayment-calculator-part-one"><a href="/blog/debt-repayment-calculator-part-one">Debt Repayment Calculator, Part One</a></h2>
+
+  <p>Posted on <strong>Wednesday, March 25, 2009</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">debt</span></li>
+<li><span class="badge badge-success p-2">calculator</span></li>
+<li><span class="badge badge-success p-2">cplusplus</span></li>
+</ul>
+
+<p>I’ve been wanting to create another tutorial for quite some time now, but I could never seem to come up with a good subject for a coding project. I hate wasting anyone’s time, so doing another stupid “Hello, world!” sample was certainly <strong>not</strong> an option. Then it hit me! What is the one subject that seems to be on everyone’s minds lately?</p>
+
+<p>You guessed it: DEBT.</p>
+
+<p>We all seem to be enjoying more debt than we care to admit these days (who knows what I’d do without student loans), but how many of us actually try to think of ways to get out of that debt <em>sooner</em>, rather than at the rate our banks might like us to…?</p>
+
+<p>Haha. That’s right. <strong>Not many</strong>. So, to follow the example our dear friends at Discover Card™ have established, let us build our own debt calculator. We will learn some useful coding practices, AND give ourselves a handy tool that may just save us some stress (and some green…)</p>
+
+<h4 id="step-one-plan">Step One: PLAN</h4>
+
+<p>So, the first thing we need to do is create a plan for our project. That means those of you who have already fired up your favorite IDE can chill out for a while. We won’t be coding for two more steps. First, we need to analyze the problem. Then, we work through the logic of solving that problem. I like to use visual tools to do that, so I will be using step-wise refinement of some pseudo-code and some simple UML. Step two should leave us with a working program, but we won’t quite be done. A good project will be very cohesive. We will accomplish this by refactoring our code into modules, which will also have the side benefit of leaving us with very reusable code. The last step is simply to run our new calculator, and debug any issues that arise.</p>
+
+<p>Do you have your pencils and paper ready? Let’s make us a program! :)</p>
+
+<h4 id="analyze-the-problem">Analyze the Problem</h4>
+
+<p>The first and most important step in solving any problem is to <em>understand</em> the problem. To understand our problem we need to know certain key aspects; what inputs are required, what calculations must be performed, and what outputs are sought? Are there values we can hard-code into out application? Do we need to have a means of storing the results of the application execution somewhere?</p>
+
+<h4 id="inputs">Inputs?</h4>
+
+<p>After a bit of brainstorming, I came up with the following inputs: the <strong>terms of the debt</strong>, the <strong>time constraints</strong>, and (optionally) the <strong>user information</strong>. Additionally, I came up with these specifics:</p>
+
+<ol>
+  <li>APR, or annual percentage rate (interest rate)</li>
+  <li>Current balance of the debt</li>
+  <li>Finance charges</li>
+  <li>Fees</li>
+  <li>Billing cycle</li>
+  <li>Interest cycle (what interest method is used, and when is interest applied?)</li>
+  <li>Minimum repayment period</li>
+  <li>Maximum repayment period</li>
+  <li>Target repayment period</li>
+</ol>
+
+<p>If we decide to take in user information (maybe for purposes of creating a customized report), then we can come up with those specifics at that time.</p>
+
+<p>The only question left to answer at this point is whether or not we process calculations for multiple debts in one instance of our application, or if we simply require the user to run the program again for a different debt. I personally prefer method one, especially since it gives me an excuse to incorporate classes into this tutorial…</p>
+
+<p>:]</p>
+
+<p>Since we will be processing multiple debts, we should probably add a “title” to each debt, to give us a good way to tell them apart. Other than that, I think we have our initial plan set for the inputs we need.</p>
+
+<h4 id="calculations">Calculations?</h4>
+
+<p>Anyone who has taken a basic algebra or economics course has seen the formula for simple interest: <strong>I = PV * i * N</strong>, where PV equals principal or present value, i equals interest rate per period, and N equals number of periods, or the number of times interest is applied. Sadly, no one except your local school-yard bully uses simple interest, so we have to determine which interest method our lender uses, which can vary with the type of debt we have.</p>
+
+<p>A wee bit of web crawling seems to indicate that most institutions use a variation of one compound interest formula or another, so we’ll build our application to use a general compound interest formula. Later, if you find that the formula doesn’t quite match your institution’s policy, you can tweak it to match.</p>
+
+<p>So, what is a compound interest formula? Why, this:</p>
+
+<p><strong>V<sub>future</sub> = V<sub>present</sub> * ( 1 + <em>i</em> )<sup><em>n</em></sup></strong></p>
+
+<p>V<sub>future</sub> equals the future (ending) value of the debt, V<sub>present</sub> equals the present (initial) value of the debt, <em>i</em> equals the interest rate, and <em>n</em> equals the number of times interest is compounded. Using this simple formula will get us a good idea of what the final repayment value of our debt will be, although it does not include such niceties as finance charges or fees.</p>
+
+<p>A rather thoughtful fellow by the name of <strong><a href="http://oakroadsystems.com/math/loan.htm">Stan Brown</a></strong> worked out some rather nice formulas for us, one of which applies directly to our task at hand:</p>
+
+<p><strong>B = A * ( 1 + <em>i</em> )<sup><em>n</em></sup> - ( P * [ ( 1 + <em>i</em> )<sup><em>n</em></sup> - 1 ] ) / <em>i</em></strong></p>
+
+<p>B equals the balance of the debt after a payment is made, A equals the current value of the debt, <em>i</em> equals the interest rate, <em>n</em> is the number of times interest has been compounded since the last payment, and P equals the value of the payment. While Mr. Brown does stress that this calculation yields approximate values, the results we get from it are close enough for our purposes.</p>
+
+<h4 id="explaining-the-formula">Explaining the formula</h4>
+
+<p>Since the above formula looks a bit confusing, let’s talk about each part. Let’s start with the first set of arithematic functions:</p>
+
+<p><strong>A * ( 1 + <em>i</em> )<sup><em>n</em></sup></strong>.</p>
+
+<p>This part of the equation will give us the current value of the debt after interest in applied. We apply interest before subtracting the payment (since that’s how banks and credit card companies do it).</p>
+
+<p>The part in parenthesis will give us the effective interest rate. So if <em>i</em> was equal to, say, 19% (or .19), the effective interest value is 1.19. Then we take the interest rate to the <em>nth</em> power. Last, we multiply that value times the existing debt balance. This gives us the value of our debt should we not make a payment.</p>
+
+<p>Now for the second part:</p>
+
+<p><strong>( P * [ ( 1 + <em>i</em> )<sup><em>n</em></sup> - 1 ] ) / <em>i</em></strong>.</p>
+
+<p>This is where it gets interesting. First, we add the interest rate to 1. Given the previous value we suggested for i (19%, or 0.19), that would give us 1.19. We then take that to the nth power, and then subtract 1. Next, we multiply that value by the value of P. Lastly, we divide everything by i. The result of all these shenanigans? Why, the effective payment amount, of course. In other words, this part calculates how much of the debt we are actually paying off.</p>
+
+<p>Put these two together, and you have the new balance of the debt. Cool, huh?</p>
+
+<p>:]</p>
+
+<h4 id="outputs">Outputs?</h4>
+
+<p>Well, obviously, we want to output the final debt amount somehow, be it to the screen or as a print out. I also like the idea of outputting the payment amount(s) and the number of payments required to pay off the debt. Some extra information we can add might include the total interest, fees, and finance charges paid on the debt.</p>
+
+<p>Hey, guess what? It looks like we are finally done with the planning stage of our application. Now we can move on to developing the logic that drives our program!</p>
+
+<h4 id="step-two-logic">Step Two: LOGIC</h4>
+
+<p>Now that we know what we want our application to accomplish, we can start working out the logic required to arrive at those results. We will start with the simplest pseudo-code necessary to mimic our logic, then steadily refine that pseudo-code into statements that include more and more language keywords, until we are left with the bare-bones of a working application.</p>
+
+<h5 id="first-approximation">First Approximation</h5>
+
+<p>In our first run through, we don’t need to be very specific; we just want to outline the most basic functions of our application, like so:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>START PROGRAM
+
+    PROMPT USER FOR REQUIRED INPUT&lt;
+
+    PERFORM INTEREST CALCULATIONS
+
+    RETURN RESULTS TO USER
+
+END PROGRAM
+</code></pre></div></div>
+
+<p>Our UML would be equally simple:</p>
+
+<p><img src="/content/post-assets/uml-debt-tut.png" alt="Uh, shoulda been something displayed here..." /></p>
+
+<p>Obviously, our real program will be much more complicated than these few lines, but each “call” in our pseudo-code happens to nicely encapsulate the major functions of our applications. We will have one part of our program devoted entirely to getting the data we need from the user. The next part of our program performs the various calculations required to generate the data we are after, such as monthly payments, interest paid over life of the debt, and so on. The last part obviously needs to give us this generated data in some fashion, be it a print out, written to file, or displayed on our screen.</p>
+
+<h4 id="the-wrap-up">The Wrap Up</h4>
+
+<p>Hopefully, if I have been clear enough, you were able to follow along with this tutorial. I encourage you to leave comments below, and above all, ASK QUESTIONS!</p>
+
+<h4 id="to-be-continued">To be continued…</h4>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/programming-primer"><i class="fas fa-chevron-left"></i> Programming Primer</a>
+<a href="/blog">View all</a>
+<a href="/blog/yur-doin-it-wrong">Yur Doin’ It Wrong… <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

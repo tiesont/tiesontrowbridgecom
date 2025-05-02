@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Making Your XML Sitemap a Little More Useful / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="making-your-xml-sitemap-a-little-more-useful"><a href="/blog/making-your-xml-sitemap-a-little-more-useful">Making Your XML Sitemap a Little More Useful</a></h2>
+
+  <p>Posted on <strong>Monday, February 21, 2011</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">sitemap</span></li>
+<li><span class="badge badge-success p-2">XSL</span></li>
+<li><span class="badge badge-success p-2">XML</span></li>
+<li><span class="badge badge-success p-2">jQuery</span></li>
+</ul>
+
+<p>I’ve had a sitemap for this site for quite a while. Google (and the various other search engines) loves them some sitemaps, since it helps them crawl your site a little faster and more efficiently. For those of you wondering what a sitemap is, it is a XML document that contains an element for every public-facing page in your web site. A good sitemap follows the standard setup by <a href="http://sitemaps.org/">Sitemaps.org</a>, a collaboration between Google, Yahoo, and Microsoft to establish a standard sitemap format. You can deviate from the sitemap protocol if you’re feeling rebellious, but the search engines will respond by ignoring your sitemap (and perhaps your site in the process).</p>
+
+<p>One problem with sitemaps (and XML documents in general) is that they aren’t exactly great to look at. A seasoned coding warrior can probably get what they need from viewing a XML document, but for those of us that like things to be a little nicer to read, an HTML version of a sitemap would be wonderful. A HTML sitemap is not a valid sitemap for search engines, though, so what to do? Hmm…</p>
+
+<p>To our rescue comes an often-overlooked sibling of XML: XSL. XSL stands for <em>E<strong>X</strong>tensible <strong>S</strong>tylesheet <strong>L</strong>anguage</em>. What it does is to let us create a series of transformations we can apply to our XML document. So what, you say? It is still an ugly old XML document, you say? Maybe, but I know of a type of XML that I’m particularlly fond of… XHTML.</p>
+
+<p><strong>That’s right, XHTML</strong>.</p>
+
+<p>Bet some of you forgot that XHTML was created to blend the rigor of XML with the presentation aspects of HTML, didn’t you? No worries…</p>
+
+<p>And that brings us to the main topic of this post: <em>making our sitemap more useful</em>. With a XSL document, properly linked to our XML sitemap, we can transform the sitemap into a XHTML page that us humans can read, and the search robots will still get the valid XML document that they came for. Pretty neat, huh?</p>
+
+<p>Even better: you don’t even have to work this XSL out yourself. A rather thoughtful fellow by the name of <a href="http://yoast.com/">Joost de Valk</a> created a plugin for Wordpress to tranform his sitemaps into lovely sortable tables. Best of all, you don’t have to be using Wordpress to use his plugin. You can get the XSL by visiting <a href="http://yoast.com/xsl-stylesheet-xml-sitemap/">http://yoast.com/xsl-stylesheet-xml-sitemap/</a>. You will also need to grab a jQuery plugin called tableSorter from <a href="http://tablesorter.com/docs/">http://tablesorter.com/docs/</a>, or simply edit the XSL to remove the JavaScript references. If you elect to leave the jQuery in, you will need to make a few changes to the source code.</p>
+
+<p>This</p>
+
+<pre><code class="language-markup">&lt;script type="text/javascript" src="http://tablesorter.com/jquery.tablesorter.min.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>needs to be updated to</p>
+
+<pre><code class="language-markup">&lt;script src="/path_to_your_javascript_directory/jquery.tablesorter.min.js"&gt;&lt;/script&gt;
+</code></pre>
+
+<p>as the original markup makes a reference to an external file that doesn’t seem to be available any longer. I also like to limit my external dependencies, so I would probably have changed that link anyway.</p>
+
+<p>If you updated your sitemap correctly, and everything is in place, you should see something similar to my sitemap, found at <a href="/sitemap.xml">https://tiesontrowbridge.com/sitemap.xml</a>. That’s it. You’re done. For the minimum amount of effort we just expended, we get well-formatted, easily-read sitemaps. And that’s just freakin’ cool…</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/using-linq-to-easily-serialize-an-exception-to-xml"><i class="fas fa-chevron-left"></i> Using LINQ to Easily Serialize an Exception to XML</a>
+<a href="/blog">View all</a>
+<a href="/blog/the-not-so-great-php-mysql-tutorial-part-1">The Not-So-Great PHP/MySQL Tutorial, Part 1 <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

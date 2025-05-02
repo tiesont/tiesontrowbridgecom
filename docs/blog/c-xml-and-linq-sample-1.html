@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C#, XML, and LINQ&#58; Load &amp; Parse an XML File / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="c-xml-and-linq-load--parse-an-xml-file"><a href="/blog/c-xml-and-linq-sample-1">C#, XML, and LINQ: Load &amp; Parse an XML File</a></h2>
+
+  <p>Posted on <strong>Saturday, August 22, 2009</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">C#</span></li>
+<li><span class="badge badge-success p-2">XML</span></li>
+<li><span class="badge badge-success p-2">LINQ</span></li>
+</ul>
+
+<p>I promised an example of using LINQ and C# together before the month was out, and it here it is! Whoo. Go me.</p>
+
+<p>Anyway…</p>
+
+<p>In this example, I will provide some sample code of how to use LINQ to parse an existing XML file into a sample class I created in C#. As usual, the code used in this example can be downloaded below.</p>
+
+<h3 id="the-xml-file">The XML File</h3>
+
+<p>First, we need a data file to parse. I recently had to make an academic audit application, so I just happen to have an XML file for compiling a list of student data lying around:</p>
+
+<pre><code class="language-markup">&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;record&gt;
+  &lt;student&gt;
+    &lt;id&gt;2&lt;/id&gt;
+    &lt;firstname&gt;Buddy&lt;/firstname&gt;
+    &lt;lastname&gt;Lee&lt;/lastname&gt;
+    &lt;major&gt;SENG&lt;/major&gt;
+  &lt;/student&gt;
+  &lt;student&gt;
+    &lt;id&gt;1&lt;/id&gt;
+    &lt;firstname&gt;Forrest&lt;/firstname&gt;
+    &lt;lastname&gt;Gump&lt;/lastname&gt;
+    &lt;major&gt;SENG&lt;/major&gt;
+  &lt;/student&gt;
+&lt;/record&gt;
+</code></pre>
+
+<p>Obviously, these are fictitious students, so don’t get any bright ideas, people.</p>
+
+<h3 id="the-c-class">The C# Class</h3>
+
+<p>This is the class I built to model students within my academic audit application:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+
+<span class="c1">/// &lt;summary&gt;</span>
+<span class="c1">/// An object for storing student information; implements ICloneable and IComparable</span>
+<span class="c1">/// &lt;/summary&gt;</span>
+<span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">Student</span> <span class="p">:</span> <span class="n">ICloneable</span><span class="p">,</span> <span class="n">IComparable</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="n">firstName</span><span class="p">,</span> <span class="n">lastName</span><span class="p">,</span> <span class="n">majorID</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Major</span> <span class="n">_major</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Major</span><span class="p">();</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Student's major (as a string ID value)</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">MajorID</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">majorID</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">set</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">value</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">majorID</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">throw</span> <span class="p">(</span><span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="s">"Major ID must contain a value."</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Student's unique identifier</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">ID</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">id</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">set</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">value</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">id</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">throw</span> <span class="p">(</span><span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="s">"ID cannot be empty."</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Student's first name</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">FirstName</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">firstName</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">set</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">value</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">firstName</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">throw</span> <span class="p">(</span><span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="s">"First name must contain a value."</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Student's last name</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">LastName</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">lastName</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">set</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">value</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">lastName</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">throw</span> <span class="p">(</span><span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="s">"Last name must contain a value."</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Major property; returns or accepts a Major object</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="n">Major</span> <span class="n">_Major</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_major</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">set</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="k">value</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="n">_major</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="k">throw</span> <span class="p">(</span><span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="s">"Major value cannot be null."</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Default constructor</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="k">public</span> <span class="nf">Student</span><span class="p">()</span>
+        <span class="p">:</span><span class="k">this</span><span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Overloaded constructor</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="c1">/// &lt;param name="id"&gt;A unique ID to identify this student&lt;/param&gt;</span>
+    <span class="c1">/// &lt;param name="firstname"&gt;Student's first name&lt;/param&gt;</span>
+    <span class="c1">/// &lt;param name="lastname"&gt;Student's last name&lt;/param&gt;</span>
+    <span class="k">public</span> <span class="nf">Student</span><span class="p">(</span><span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="kt">string</span> <span class="n">firstname</span><span class="p">,</span> <span class="kt">string</span> <span class="n">lastname</span><span class="p">)</span>
+        <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">firstname</span><span class="p">,</span> <span class="n">lastname</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Overloaded constructor</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="c1">/// &lt;param name="id"&gt;A unique ID to identify this student&lt;/param&gt;</span>
+    <span class="c1">/// &lt;param name="firstname"&gt;Student's first name&lt;/param&gt;</span>
+    <span class="c1">/// &lt;param name="lastname"&gt;Student's last name&lt;/param&gt;</span>
+    <span class="c1">/// &lt;param name="major"&gt;Student's Major (as a string ID)&lt;/param&gt;</span>
+    <span class="k">public</span> <span class="nf">Student</span><span class="p">(</span><span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="kt">string</span> <span class="n">firstname</span><span class="p">,</span> <span class="kt">string</span> <span class="n">lastname</span><span class="p">,</span> <span class="kt">string</span> <span class="n">major</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">ID</span> <span class="p">=</span> <span class="n">id</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">FirstName</span> <span class="p">=</span> <span class="n">firstname</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">LastName</span> <span class="p">=</span> <span class="n">lastname</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">majorID</span> <span class="p">=</span> <span class="n">major</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Overloaded constructor</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="c1">/// &lt;param name="id"&gt;A unique ID to identify this student&lt;/param&gt;</span>
+    <span class="c1">/// &lt;param name="firstname"&gt;Student's first name&lt;/param&gt;</span>
+    <span class="c1">/// &lt;param name="lastname"&gt;Student's last name&lt;/param&gt;</span>
+    <span class="c1">/// &lt;param name="major"&gt;Student's Major (as a Major object)&lt;/param&gt;</span>
+    <span class="k">public</span> <span class="nf">Student</span><span class="p">(</span><span class="kt">string</span> <span class="n">id</span><span class="p">,</span> <span class="kt">string</span> <span class="n">firstname</span><span class="p">,</span> <span class="kt">string</span> <span class="n">lastname</span><span class="p">,</span> <span class="n">Major</span> <span class="n">major</span><span class="p">)</span>
+        <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="n">id</span><span class="p">,</span> <span class="n">firstname</span><span class="p">,</span> <span class="n">lastname</span><span class="p">,</span> <span class="n">major</span><span class="p">.</span><span class="n">ID</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">_Major</span> <span class="p">=</span> <span class="n">major</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="kt">object</span> <span class="n">ICloneable</span><span class="p">.</span><span class="nf">Clone</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Determines if this Student object is identical to another Student object</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="c1">/// &lt;param name="obj"&gt;The right-hand object to compare to this object&lt;/param&gt;</span>
+    <span class="c1">/// &lt;returns&gt;true if objects match; false if they do not&lt;/returns&gt;</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">Equals</span><span class="p">(</span><span class="kt">object</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Student</span> <span class="n">right</span> <span class="p">=</span> <span class="p">(</span><span class="n">Student</span><span class="p">)</span><span class="n">obj</span><span class="p">;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">ID</span> <span class="p">==</span> <span class="n">right</span><span class="p">.</span><span class="n">ID</span> <span class="p">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="n">FirstName</span> <span class="p">==</span> <span class="n">right</span><span class="p">.</span><span class="n">FirstName</span> <span class="p">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="n">LastName</span> <span class="p">==</span> <span class="n">right</span><span class="p">.</span><span class="n">LastName</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Generate hashcode for comparing instances of student objects</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="c1">/// &lt;returns&gt;This object as a hashcode&lt;/returns&gt;</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="nf">GetHashCode</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">base</span><span class="p">.</span><span class="nf">GetHashCode</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="c1">/// &lt;summary&gt;</span>
+    <span class="c1">/// Displays student data as [ID] Last name, First name</span>
+    <span class="c1">/// &lt;/summary&gt;</span>
+    <span class="c1">/// &lt;returns&gt;This Student object as a string&lt;/returns&gt;</span>
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">ToString</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="n">String</span><span class="p">.</span><span class="nf">Format</span><span class="p">(</span><span class="s">"[{3}] {0}, {1}"</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">LastName</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">FirstName</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="n">ID</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="kt">int</span> <span class="n">IComparable</span><span class="p">.</span><span class="nf">CompareTo</span><span class="p">(</span><span class="kt">object</span> <span class="n">obj</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">Student</span> <span class="n">right</span> <span class="p">=</span> <span class="p">(</span><span class="n">Student</span><span class="p">)</span><span class="n">obj</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">LastName</span><span class="p">.</span><span class="nf">CompareTo</span><span class="p">(</span><span class="n">right</span><span class="p">.</span><span class="n">LastName</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>As you can see, there is a class attribute for every element of a student node in the XML file. While this class does look a bit long, it really isn’t. I added some validation to the properties and implemented a couple of interfaces (for sorting, mostly). You will also notice the comments that are preceded with three slashes. Those are what as known as XML comments. Visual Studio can use those to build tool tips for it’s auto-complete tool when you are using your class in some part of your project.</p>
+
+<h3 id="adding-linq">Adding LINQ</h3>
+
+<p>Now, the fun part of LINQ is taking the data from our XML file and building class objects with it. How do we do that? Glad you asked!</p>
+
+<p>I built two different methods for getting student data. The first method will return a single student, like so:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">/// &lt;summary&gt;</span>
+<span class="c1">/// Get data for a single student record</span>
+<span class="c1">/// &lt;/summary&gt;</span>
+<span class="c1">/// &lt;param name="id"&gt;A student ID&lt;/param&gt;</span>
+<span class="c1">/// &lt;returns&gt;A Student object&lt;/returns&gt;</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">Student</span> <span class="nf">GetStudent</span><span class="p">(</span><span class="kt">string</span> <span class="n">id</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">XDocument</span> <span class="n">xd</span> <span class="p">=</span> <span class="n">XDocument</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="s">"students.xml"</span><span class="p">);</span>
+
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">s</span> <span class="p">=</span> <span class="n">xd</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"record"</span><span class="p">).</span><span class="nf">Elements</span><span class="p">(</span><span class="s">"student"</span><span class="p">).</span><span class="nf">FirstOrDefault</span><span class="p">(</span><span class="n">x</span> <span class="p">=&gt;</span> <span class="n">x</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"id"</span><span class="p">).</span><span class="n">Value</span><span class="p">.</span><span class="nf">Trim</span><span class="p">()</span> <span class="p">==</span> <span class="n">id</span><span class="p">);</span>
+        <span class="n">Student</span> <span class="n">student</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Student</span><span class="p">(</span>
+                <span class="n">s</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"id"</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span>
+                <span class="n">s</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"firstname"</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span>
+                <span class="n">s</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"lastname"</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span>
+                <span class="n">s</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"major"</span><span class="p">).</span><span class="n">Value</span>
+                <span class="p">);</span>
+
+        <span class="n">student</span><span class="p">.</span><span class="n">_Major</span> <span class="p">=</span> <span class="nf">GetMajor</span><span class="p">(</span><span class="n">student</span><span class="p">.</span><span class="n">MajorID</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">student</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">catch</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="k">null</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The second method builds a list of student objects:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">/// &lt;summary&gt;</span>
+<span class="c1">/// Attempt to load the student data from the default location.</span>
+<span class="c1">/// &lt;/summary&gt;</span>
+<span class="c1">/// &lt;param name="path"&gt;Path to the Student XML file.&lt;/param&gt;</span>
+<span class="c1">/// &lt;returns&gt;A List&lt;&gt; of Student objects.&lt;/returns&gt;</span>
+<span class="k">public</span> <span class="k">static</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Student</span><span class="p">&gt;</span> <span class="nf">Students</span><span class="p">(</span><span class="kt">string</span> <span class="n">path</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">XDocument</span> <span class="n">xd</span> <span class="p">=</span> <span class="n">XDocument</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
+    <span class="n">List</span><span class="p">&lt;</span><span class="n">Student</span><span class="p">&gt;</span> <span class="n">students</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Student</span><span class="p">&gt;();</span>
+
+    <span class="c1">//  Method syntax (lambda expression)</span>
+    <span class="kt">var</span> <span class="n">stds</span> <span class="p">=</span> <span class="n">xd</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"record"</span><span class="p">).</span><span class="nf">Elements</span><span class="p">(</span><span class="s">"student"</span><span class="p">);</span>
+
+    <span class="k">try</span>
+    <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">s</span> <span class="k">in</span> <span class="n">stds</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">students</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span>
+                <span class="k">new</span> <span class="nf">Student</span><span class="p">(</span>
+                    <span class="n">s</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"id"</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span>
+                    <span class="n">s</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"firstname"</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span>
+                    <span class="n">s</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"lastname"</span><span class="p">).</span><span class="n">Value</span><span class="p">,</span>
+                    <span class="n">s</span><span class="p">.</span><span class="nf">Element</span><span class="p">(</span><span class="s">"major"</span><span class="p">).</span><span class="n">Value</span>
+                    <span class="p">)</span>
+                <span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="n">students</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">catch</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="p">(</span><span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="s">"Student data file could not be parsed."</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>As you can see, the methods aren’t terribly different, and are actually fairly simple.</p>
+
+<p>Now, these two methods are inside a static class I created called <code class="language-plaintext highlighter-rouge">DataLoader</code>. DataLoader is static so that I don’t have to actually create an instance of it in order to use it’s methods. We likes that, yes we do.</p>
+
+<p>In order to gain access to all the fun LINQ XML tools, we have to add a reference to a special library, like so:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System.Xml.Linq</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>Once we do that, you get access to <code class="language-plaintext highlighter-rouge">XDocument</code>. We use <code class="language-plaintext highlighter-rouge">XDocument</code> to read in our XML file. We could just use the regular <code class="language-plaintext highlighter-rouge">StreamReader</code> in the <code class="language-plaintext highlighter-rouge">System.IO</code> library, but <code class="language-plaintext highlighter-rouge">XDocument</code> objects let us apply LINQ methods to find the nodes we’re looking for. Using <code class="language-plaintext highlighter-rouge">StreamReader</code>, we’d have to build either a fairly complicated substring method, or come up with a good regex pattern to find what we wanted.</p>
+
+<p>As you can see in the first example above, it’s not too hard to find a node. We take our <code class="language-plaintext highlighter-rouge">XDocument</code> object (xd), and (using it’s built-in query methods) descend through the node elements until we find elements that contain a value we want. In my case, I’m looking for a student node that has an id element whose value equals the id parameter I passed into the method. <code class="language-plaintext highlighter-rouge">FirstOrDefault</code> returns the first node that matches or NULL is no node is found that matches.</p>
+
+<p>In the second example, I simply grab every node. That little bit of LINQ code returns an enumerated collection of XElements (the objects LINQ uses to represent XML nodes). I can then use a foreach loop to iterate through that collection and build a list of student objects, assigning the attribute nodes of each student node to the correct attribute in a student object.</p>
+
+<p>Pretty cool, huh?</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/fun-with-linq"><i class="fas fa-chevron-left"></i> Fun with LINQ</a>
+<a href="/blog">View all</a>
+<a href="/blog/c-xml-and-linq-sample-2">C#, XML, and LINQ: Adding Nodes to an XML File <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

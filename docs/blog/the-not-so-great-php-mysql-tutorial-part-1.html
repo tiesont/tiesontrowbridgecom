@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Not-So-Great PHP/MySQL Tutorial, Part 1 / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="the-not-so-great-phpmysql-tutorial-part-1"><a href="/blog/the-not-so-great-php-mysql-tutorial-part-1">The Not-So-Great PHP/MySQL Tutorial, Part 1</a></h2>
+
+  <p>Posted on <strong>Wednesday, March 16, 2011</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">PHP</span></li>
+<li><span class="badge badge-success p-2">MySQLi</span></li>
+</ul>
+
+<p>Ok, so let’s assume you’ve been given a simple task. You need to be able to record some basic data about some theoretical employees, and then produce some basic output. Let’s cover a few rules first.</p>
+
+<h3 id="the-rules">The Rules</h3>
+
+<ul>
+  <li><strong>Numero uno:</strong> Never store what you can calculate. So, if you are, say, generating an employee’s weekly pay, you do not store net pay, gross pay, or any deductive amounts. Store the employee’s pay rate and, in some fashion, the hours they worked. The method you use to store hours depends on how “normalized” you want your tables to be, and to a lesser extent how much work you want to do to aggregate the total work hours for each employee.</li>
+  <li><strong>Numero dos:</strong> It’s much more useful in the long run to have at least two separate pages: one for input, and one for output. Why? Because then we can isolate the logic for each I/O (input/output) path into discrete entities; in our case, separate files.</li>
+  <li><strong>Numero tres:</strong> Add one more file to the list: database configuration. Rather than duplicate the code to create a database connection and make some queries in every page, create one centralized config file and include a reference to it in each page.</li>
+</ul>
+
+<h3 id="design-the-pages">Design the Pages</h3>
+
+<p>Okay, now that we’ve laid the ground rules, let’s think about how we want to assemble the pages. If we stay within the rules above, we know we have these three pages: database config, input, and output. I’m going to build this tutorial using PHP and MySQL, so my pages would be db.php, input.php, and output.php. You can name yours whatever you want (Larry, Moe, and Curly would be pretty sweet). The first page, db.php, needs to configure the database details and establish a database connection. I will show you a really simple (and not too secure) way to do this, using the MySQLi library in PHP (I’d prefer to use PDO, but it requires a bit more work to set up). I’ll show you the code for this sample, and then walk through what each part does.</p>
+
+<h4 id="dbphp">db.php</h4>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span> 
+    <span class="c1"># URI: db.php</span>
+    <span class="c1"># This file contains the database access information.</span>
+    <span class="c1"># This file also establishes a connection to MySQL and selects the database.</span>
+
+    <span class="c1"># Set the database access information as constants.</span>
+    <span class="nb">DEFINE</span> <span class="p">(</span><span class="s1">'DB_USER'</span><span class="p">,</span> <span class="s1">'user_name'</span><span class="p">);</span>
+    <span class="nb">DEFINE</span> <span class="p">(</span><span class="s1">'DB_PASSWORD'</span><span class="p">,</span> <span class="s1">'not_very_good_password'</span><span class="p">);</span>
+    <span class="nb">DEFINE</span> <span class="p">(</span><span class="s1">'DB_HOST'</span><span class="p">,</span> <span class="s1">'localhost'</span><span class="p">);</span>
+    <span class="nb">DEFINE</span> <span class="p">(</span><span class="s1">'DB_NAME'</span><span class="p">,</span> <span class="s1">'your_awesome_db'</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span> <span class="nv">$dbc</span> <span class="o">=</span> <span class="nb">mysqli_connect</span><span class="p">(</span><span class="no">DB_HOST</span><span class="p">,</span> <span class="no">DB_USER</span><span class="p">,</span> <span class="no">DB_PASSWORD</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+
+        <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nf">mysqli_select_db</span><span class="p">(</span> <span class="nv">$dbc</span><span class="p">,</span> <span class="no">DB_NAME</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span> 
+            <span class="c1">#    If it can't select the database.</span>
+            <span class="c1"># Handle the error. Print a message to the user and kill the script.</span>
+            <span class="k">die</span><span class="p">(</span> <span class="s2">"&lt;p&gt;Could not select the database!</span><span class="se">\n</span><span class="s2">&lt;br /&gt;MySQL Error: "</span> <span class="mf">.</span> <span class="nf">mysqli_error</span><span class="p">(</span> <span class="nv">$dbc</span> <span class="p">)</span><span class="mf">.</span><span class="s2">"&lt;/p&gt;"</span> <span class="p">);</span>
+            <span class="k">exit</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+            <span class="c1"># Attempt to set encoding to 'UTF-8' (for universal compatibility)</span>
+            <span class="k">if</span> <span class="p">(</span> <span class="o">!</span><span class="nf">mysqli_set_charset</span><span class="p">(</span> <span class="nv">$dbc</span><span class="p">,</span> <span class="s1">'utf8'</span> <span class="p">)</span> <span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">die</span><span class="p">(</span> <span class="s2">"&lt;p&gt;Unable to set database connection encoding</span><span class="se">\n</span><span class="s2">&lt;br /&gt;MySQL Error: "</span> <span class="mf">.</span> <span class="nf">mysqli_error</span><span class="p">(</span> <span class="nv">$dbc</span> <span class="p">)</span><span class="mf">.</span><span class="s2">"&lt;/p&gt;"</span> <span class="p">);</span>
+                <span class="k">exit</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span> 
+    <span class="k">else</span> <span class="p">{</span> 
+        <span class="c1"># If it couldn't connect to MySQL, print a message to the user and kill the script.</span>
+        <span class="k">die</span><span class="p">(</span> <span class="s2">"&lt;p&gt;Could not connect to MySQL!</span><span class="se">\n</span><span class="s2">&lt;br /&gt;MySQL Error: "</span> <span class="mf">.</span> <span class="nf">mysqli_error</span><span class="p">(</span> <span class="nv">$dbc</span> <span class="p">)</span><span class="mf">.</span><span class="s2">"&lt;/p&gt;"</span> <span class="p">);</span>
+        <span class="k">exit</span><span class="p">();</span>    
+    <span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>So, I know this looks fairly arcane, and it is, to some extent. First, we define some constants. This lets us quickly change our database details in one place, should we need to. This information will normally come from your DBA (database administrator), or assuming you’re running the whole show, will be the database details you set up in phpMyAdmin. That is beyond the scope of this tutorial, though, so hopefully you know those details or can acquire them.</p>
+
+<p>Next, we attempt to establish a connection to the database server, using the user information we defined previously. If we’re able to establish a connection, we attempt to select our database. If our script hasn’t faulted yet, we then attempt to set a character set. That part is optional, but it helps to ensure that we are providing content that can be displayed in as many languages as possible.</p>
+
+<p>Each time you see the keyword <code class="language-plaintext highlighter-rouge">die</code>, you are looking at a PHP method that tells the PHP compiler to display our error message, should an error occur, rather than the default message. On simple sites, I display a simple error message to the user and email a much more detailed message to whatever email is appointed the “support” email role. The method <code class="language-plaintext highlighter-rouge">exit</code> tells the compiler to stop running this script because we are in a state where nothing after this point will function correctly. If we get past all of those <code class="language-plaintext highlighter-rouge">exit</code> methods, we have a working connection to the database, which we will use in each page.</p>
+
+<h4 id="inputphp">input.php</h4>
+
+<p>This is where we gather data on our employees, and also where we have to know how our tables are built. For the sake of simplicity, we will use a non-normalized table that holds everything. This is the table structure:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Employee
+==================================
+int             id         not null     Primary Key
+varchar(35)     first        not null
+varchar(65)     last        not null
+decimal(6,2)     rate        not null
+decimal(4,2)     monday    not null    default 0 
+decimal(4,2)     tuesday    not null    default 0
+decimal(4,2)     wednesday    not null    default 0 
+decimal(4,2)     thursday    not null    default 0 
+decimal(4,2)     friday    not null    default 0
+</code></pre></div></div>
+
+<p>Our page to gather these values will be somewhat simple:</p>
+
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+    &lt;head&gt;
+        &lt;meta charset="utf-8" /&gt;
+        &lt;title&gt;Dah Payrolla&lt;/title&gt;
+        &lt;style&gt;
+            body { font: 14px/22px Calibri, "Frutiger Linotype", Frutiger, "Gill Sans", "Gills Sans MT", sans-serif; color:#333; background:#fffbff; }
+            label { display: block; margin: 5px 0 0; color:#666; }
+            form { 
+                background: #ececec; width: 500px; margin: 25px auto; padding: 25px;
+                -moz-border-radius:.5em .5em 0 0; -webkit-border-radius:.5em .5em 0 0; border-radius:.5em .5em 0 0; 
+                -moz-box-shadow: 0 0 8px #888; -webkit-box-shadow: 0 0 8px #888; box-shadow: 0 0 8px #888;
+            }
+            p.buttons { text-align:right; }
+            button { padding: 5px 10px; }
+            fieldset { padding: 0 15px; }
+            fieldset p { display:inline-table; }
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;form type="POST" action=""&gt;
+            &lt;h1&gt;Dah Payrolla&lt;/h1&gt;
+            &lt;p&gt;
+                &lt;label for=""&gt;First name&lt;/label&gt;
+                &lt;input type="text" name="txtFirstName" id="txtFirstName" value="" /&gt;
+            &lt;/p&gt;
+            &lt;p&gt;
+                &lt;label for=""&gt;Last name&lt;/label&gt;
+                &lt;input type="text" name="txtLastName" id="txtLastName" value="" /&gt;
+            &lt;/p&gt;
+            &lt;p&gt;
+                &lt;label for=""&gt;Pay rate&lt;/label&gt;
+                &lt;input type="text" name="txtPayRate" id="txtPayRate" value="" /&gt;
+            &lt;/p&gt;
+            &lt;fieldset&gt;
+                &lt;legend&gt;Time card&lt;/legend&gt;
+                &lt;p&gt;
+                    &lt;label for=""&gt;Monday&lt;/label&gt;
+                    &lt;input type="text" name="txtMonday" id="txtMonday" value="" /&gt;
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;label for=""&gt;Tuesday&lt;/label&gt;
+                    &lt;input type="text" name="txtTuesday" id="txtTuesday" value="" /&gt;
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;label for=""&gt;Wednesday&lt;/label&gt;
+                    &lt;input type="text" name="txtWednesday" id="txtWednesday" value="" /&gt;
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;label for=""&gt;Thursday&lt;/label&gt;
+                    &lt;input type="text" name="txtThursday" id="txtThursday" value="" /&gt;
+                &lt;/p&gt;
+                &lt;p&gt;
+                    &lt;label for=""&gt;Friday&lt;/label&gt;
+                    &lt;input type="text" name="txtFriday" id="txtFriday" value="" /&gt;
+                &lt;/p&gt;
+            &lt;/fieldset&gt;
+            &lt;p class="buttons"&gt;
+                &lt;button type="reset" name="btnReset" id="btnReset"&gt;Reset&lt;/button&gt;
+                &lt;button type="submit" name="btnSave" id="btnSave"&gt;Save&lt;/button&gt;
+            &lt;/p&gt;
+            &lt;p&gt;&lt;a href="output.php"&gt;View the Timesheets! &amp;rarr;&lt;/a&gt;&lt;/p&gt;
+        &lt;/form&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>The core of this page is the form itself. The rest of the page is just there to make the form look a little nicer:</p>
+
+<p><img src="/post-assets/input_php.png" alt="Form so far..." /></p>
+
+<p>To actually DO anything with the page, we need to add a PHP section to the top and configure some code to handle each submission of the form:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+    <span class="c1"># URI: input.php</span>
+    <span class="c1"># Used to insert employee timesheets into the table</span>
+    
+    <span class="k">include</span><span class="p">(</span> <span class="s1">'db.php'</span> <span class="p">);</span>
+    
+    <span class="k">if</span><span class="p">(</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'btnSave'</span><span class="p">]</span> <span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="c1"># form was submitted. Gather the values and insert if all is well</span>
+        
+        <span class="nv">$first</span> <span class="o">=</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtFirstName'</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtFirstName'</span><span class="p">]</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nv">$last</span> <span class="o">=</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtLastName'</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtLastName'</span><span class="p">]</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nv">$rate</span> <span class="o">=</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtPayRate'</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtPayRate'</span><span class="p">]</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="nv">$days</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+            <span class="s1">'monday'</span>    <span class="o">=&gt;</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtMonday'</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtMonday'</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">'tuesday'</span>   <span class="o">=&gt;</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtTuesday'</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtTuesday'</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">'wednesday'</span> <span class="o">=&gt;</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtWednesday'</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtWednesday'</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">'thursday'</span>  <span class="o">=&gt;</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtThursday'</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtThursday'</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s1">'friday'</span>    <span class="o">=&gt;</span> <span class="k">isset</span><span class="p">(</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtFriday'</span><span class="p">]</span> <span class="p">)</span> <span class="o">?</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">'txtFriday'</span><span class="p">]</span> <span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="p">);</span>
+        
+        <span class="c1"># The required values are correct</span>
+        <span class="k">if</span><span class="p">(</span> <span class="nv">$first</span> <span class="o">&amp;&amp;</span> <span class="nv">$last</span> <span class="o">&amp;&amp;</span> <span class="nv">$rate</span> <span class="p">)</span> <span class="p">{</span>
+            <span class="c1"># Build a database INSERT query string</span>
+            <span class="nv">$str</span> <span class="o">=</span> <span class="s2">"INSERT INTO employees ( first, last, rate, monday, tuesday, wednesday, thursday, friday ) VALUES ("</span><span class="p">;</span>
+            <span class="nv">$str</span> <span class="mf">.</span><span class="o">=</span> <span class="s2">"?, ?, ?, ?, ?, ?, ?, ? );"</span><span class="p">;</span>
+            <span class="nv">$times</span> <span class="o">=</span> <span class="k">array</span><span class="p">();</span>
+            <span class="k">foreach</span><span class="p">(</span> <span class="nv">$days</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span> <span class="p">)</span> <span class="p">{</span>
+                <span class="nv">$times</span><span class="p">[]</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
+            <span class="p">}</span>
+            
+            <span class="nv">$query</span> <span class="o">=</span> <span class="nf">mysqli_prepare</span><span class="p">(</span> <span class="nv">$dbc</span><span class="p">,</span> <span class="nv">$str</span> <span class="p">)</span> <span class="k">or</span> <span class="k">die</span><span class="p">(</span> <span class="s2">"&lt;h1&gt;INSERT query failed!&lt;/h1&gt;</span><span class="se">\n</span><span class="s2">&lt;p&gt;Error: "</span> <span class="mf">.</span> <span class="nf">mysqli_error</span><span class="p">(</span> <span class="nv">$dbc</span> <span class="p">)</span> <span class="mf">.</span> <span class="s2">"&lt;/p&gt;"</span> <span class="p">);</span>
+            <span class="k">if</span><span class="p">(</span><span class="nf">mysqli_stmt_bind_param</span><span class="p">(</span> <span class="nv">$query</span><span class="p">,</span> <span class="s2">"ssdddddd"</span><span class="p">,</span> <span class="nv">$first</span><span class="p">,</span> <span class="nv">$last</span><span class="p">,</span><span class="nv">$rate</span><span class="p">,</span> <span class="nv">$times</span> <span class="p">))</span> <span class="p">{</span>
+                <span class="nf">mysqli_stmt_execute</span><span class="p">(</span><span class="nv">$query</span><span class="p">);</span>
+                <span class="k">if</span><span class="p">(</span> <span class="nf">mysqli_stmt_affected_rows</span><span class="p">(</span> <span class="nv">$query</span> <span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="p">)</span> <span class="p">{</span>
+                    <span class="c1"># INSERT worked</span>
+                    <span class="nb">header</span><span class="p">(</span> <span class="s2">"Location input.php"</span> <span class="p">);</span>
+                    <span class="k">exit</span><span class="p">();</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>So what does this snippet do? First, we include our database file, <code class="language-plaintext highlighter-rouge">db.php</code>. This makes all the code in that file available to this page. Second, we have a conditional that checks to see if the form has been submitted. If the form has been submitted, we go on to step three. I used what is called the tenary conditional. For each control, I check to see if the <code class="language-plaintext highlighter-rouge">$_POST</code> array contains an index for that control. This merely tells me that the form was submitted properly. In future tutorials we will cover how to make sure a value was entered by the user. If the <code class="language-plaintext highlighter-rouge">$_POST</code> array does not contain the control I’m looking for, I assign a default value to the PHP variable I would otherwise use to hold the value of the <code class="language-plaintext highlighter-rouge">$_POST</code> array item. The second part of validation, where you see me declare an array, is really just to establish a pattern for the second page. By using an array for the days, we logically group them as a unit. Arrays also have a lot of useful functions in PHP, which you will see in Part 2.</p>
+
+<p>Once we’ve gathered our values, we check to see if the required variables have valid values. Since I assigned <code class="language-plaintext highlighter-rouge">false</code> to any variable that was not found in the <code class="language-plaintext highlighter-rouge">$_POST</code> array, using its value in the conditional will make the condition fail if any of them were not set correctly. We don’t want to insert garbage into our table, so this is a check we should always make. In real life you would sanitize these variables to remove any chance of malicious code being inserted, but for this example I leave that out.</p>
+
+<p>If the conditional passes, we then build a query string. I always uppercase SQL keywords, since it helps me see what is a keyword and what is a field or table name (or alias) in the query string. I’ll let you figure out what the next couple of lines are doing, but in a nutshell, I assembling a string from the values of the PHP variables.</p>
+
+<p>Once the string has been assembled, we use the PHP MySQLi library to prepare the query, using <code class="language-plaintext highlighter-rouge">mysqli_stmt_prepare</code>. The line that follows binds the values we want to insert to the placeholders in the SQL string (the ‘?’ characters) using the <code class="language-plaintext highlighter-rouge">mysqli_stmt_bind_param</code> function. The second parameter lets the MySQLi library know what the datatypes of the variables are, which is used to properly escape the parameters. An ‘s’ means the parameter is a string, whereas the ‘d’ means that the value is (or should be) a double-precision floating point number (or something that can be implicitly cast to one). We then execute the query, using the function <code class="language-plaintext highlighter-rouge">mysqli_stmt_execute</code>, which wants (in order) the connection to use and the query to execute. The variable <code class="language-plaintext highlighter-rouge">$dbc</code> was defined in our <code class="language-plaintext highlighter-rouge">db.php</code> file, and contains the information that <code class="language-plaintext highlighter-rouge">mysqli_stmt_execute</code> needs to connect with the database and execute the query. If the function completes without generating an error, we check to see if a new row was actually inserted, using the method <code class="language-plaintext highlighter-rouge">mysqli_stmt_affected_rows</code>. If the query executed correctly, the insert query should have inserted one and only one record. A value of <code class="language-plaintext highlighter-rouge">1</code> returned by <code class="language-plaintext highlighter-rouge">mysqli_stmt_affected_rows</code> indicates that the query worked. We then use another PHP method, <code class="language-plaintext highlighter-rouge">header</code>, to redirect the page to itself. This has the effect of completely resetting the form, which is what we want.</p>
+
+<p>That’s it for Part 1. Part 2 will cover building the report from the data we insert on this page. If you want to verify your data is in the table before then, log into phpMyAdmin and look at your table.</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/making-your-xml-sitemap-a-little-more-useful"><i class="fas fa-chevron-left"></i> Making Your XML Sitemap a Little More Useful</a>
+<a href="/blog">View all</a>
+<a href="/blog/the-not-so-great-php-mysql-tutorial-part-2">The Not-So-Great PHP/MySQL Tutorial, Part 2 <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

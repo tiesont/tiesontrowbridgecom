@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tutorial One&#58; HTML &gt;&gt; PHP / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="tutorial-one-html--php"><a href="/blog/tutorial-one-html-php">Tutorial One: HTML &gt;&gt; PHP</a></h2>
+
+  <p>Posted on <strong>Thursday, September 18, 2008</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">HTML</span></li>
+<li><span class="badge badge-success p-2">PHP</span></li>
+</ul>
+
+<p>Welcome! For those of you stumbling onto this page, this is the first in a series of articles where I walk through creating a simple website for a fictional friend of mine. We will start with the complete HTML source for the index page, and then analyze it to determine which parts can be repeated in our other pages. Then, we will create a dynamically-generated PHP index page from the original HTML source.</p>
+
+<p>So, let’s get this party started, right? Okay! What you see below is the HTML of our friend Louie’s index page. It’s not too fancy. <a href="/samples/design-by-louie/">Take a look</a>, then come back and read the next section.</p>
+
+<h4 id="indexhtml">index.html</h4>
+
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+	
+    &lt;title&gt;Design by Louie | Home&lt;/title&gt;
+	
+    &lt;link rel="Stylesheet" type="text/css" href="design-by-louie.css" media="screen" /&gt;
+    &lt;link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+   &lt;div id="header"&gt;
+      &lt;a href="index.html"&gt;
+         &lt;img alt="" src="images/louie-logo.png" /&gt;
+      &lt;/a&gt;
+   &lt;/div&gt;
+   &lt;div id="bodytext"&gt;
+      &lt;div&gt;
+         &lt;p&gt;
+            &lt;span class="de1"&gt;DESIGN&lt;/span&gt;&lt;span class="de2"&gt; | by Louie&amp;trade;&lt;/span&gt;.
+            Creating custom, clean imagery for everyone. Bold, but understated. Bright, not flashy. Set your
+            brand apart from a sea of monotonous look-alikes. Get &lt;span class="de1"&gt;DESIGN&lt;/span&gt;ed.
+         &lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div id="navigate"&gt;
+         &lt;ul&gt;
+            &lt;li&gt;
+               &lt;a href="stock-images.html"&gt;
+                  &lt;img alt="" src="images/stock.png" title="Browse Louie's pre-made imagery." /&gt;
+                  &lt;br /&gt;Stock Imagery...
+               &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+               &lt;a href="custom-design.html"&gt;
+                  &lt;img alt="" src="images/custom.png" title="Request a custom design." /&gt;
+                  &lt;br /&gt;Custom Design...
+               &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+               &lt;a href="about.html"&gt;
+                  &lt;img alt="" src="images/louie.png" title="Learn more about Louie." /&gt;
+                  &lt;br /&gt;Louie is...
+               &lt;/a&gt;
+            &lt;/li&gt;
+         &lt;/ul&gt;
+      &lt;/div&gt;
+   &lt;/div&gt;
+   &lt;div id="footer"&gt;
+      &amp;amp;copy; 2008. All rights reserved.
+      &lt;small&gt;&amp;bull;&lt;/small&gt; Last Update: May 5 2008.
+      &lt;small&gt;&amp;bull;&lt;/small&gt; &lt;a href="http://validator.w3.org/check/referer"&gt;Valid XHTML&lt;/a&gt;
+   &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>Not bad, eh? Louie is a minimalist. He likes things simple. As you can see, he has created “zones” in his code with ID’d <code class="language-plaintext highlighter-rouge">&lt;div&gt;</code> tags, to separate the page into sections he can style separately. The “header” div will contain his site logo, which he has also made a link back to the index page. That is very common, since it gives our visitors a “fail-safe” way of getting back to the first page. Next, he defined a zone for the page content. Lastly, we see he has created a “footer” zone, where he can place his copyright information, the date this page was last modified, and a link to the W3C code validator.</p>
+
+<p>Also, those of you with keen eyes may have noticed that there is some extra info within the <code class="language-plaintext highlighter-rouge">&lt;head&gt;</code> tag. I will cover that in later tutorials, or you can go <a href="/articles/cascading-stylesheets">here</a> if you want to read what I have to say about CSS. Basically, it is a link to an external cascading stylesheet.</p>
+
+<h4 id="analyze-the-code">Analyze the Code</h4>
+
+<p>So, let’s think about this page for a minute. What do we see that we will probably be able to reuse on the other pages? Hmm…</p>
+
+<p>Well, we know that all that nice stuff above the “bodytext” div tag will be the same on every page, with the exception of the title. So let’s snip that and place it in another file.</p>
+
+<p>What else? We definitely know we will be re-using the code from the “footer” div on down, so snip that into another file…</p>
+
+<p>And I would say that is it. You could argue that we need to make a separate file for the section surrounded by the “navigate” div tag. But… this specific setup will only be used on the index page. As you will see in later tutorials, the other pages will employ a similar, but smaller, version of that menu.</p>
+
+<p>So what do we have now? Look:</p>
+
+<h4 id="snipped-sections">Snipped sections</h4>
+
+<pre><code class="language-markup">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8" /&gt;
+    &lt;meta name="viewport" content="width=device-width, initial-scale=1.0" /&gt;
+	
+    &lt;title&gt;Design by Louie | Home&lt;/title&gt;
+	
+    &lt;link rel="Stylesheet" type="text/css" href="design-by-louie.css" media="screen" /&gt;
+    &lt;link rel="shortcut icon" type="image/x-icon" href="favicon.ico" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+   &lt;div id="header"&gt;
+      &lt;a href="index.html"&gt;
+         &lt;img alt="" src="images/louie-logo.png" /&gt;
+      &lt;/a&gt;
+   &lt;/div&gt;
+</code></pre>
+
+<pre><code class="language-markup">   &lt;div id="bodytext"&gt;
+      &lt;div&gt;
+         &lt;p&gt;
+            &lt;span class="de1"&gt;DESIGN&lt;/span&gt;&lt;span class="de2"&gt; | by Louie&amp;trade;&lt;/span&gt;.
+            Creating custom, clean imagery for everyone. Bold, but understated. Bright, not flashy. Set your
+            brand apart from a sea of monotonous look-alikes. Get &lt;span class="de1"&gt;DESIGN&lt;/span&gt;ed.
+         &lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div id="navigate"&gt;
+         &lt;ul&gt;
+            &lt;li&gt;
+               &lt;a href="stock-images.html"&gt;
+                  &lt;img alt="" src="images/stock.png" title="Browse Louie's pre-made imagery." /&gt;
+                  &lt;br /&gt;Stock Imagery...
+               &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+               &lt;a href="custom-design.html"&gt;
+                  &lt;img alt="" src="images/custom.png" title="Request a custom design." /&gt;
+                  &lt;br /&gt;Custom Design...
+               &lt;/a&gt;
+            &lt;/li&gt;
+            &lt;li&gt;
+               &lt;a href="about.html"&gt;
+                  &lt;img alt="" src="images/louie.png" title="Learn more about Louie." /&gt;
+                  &lt;br /&gt;Louie is...
+               &lt;/a&gt;
+            &lt;/li&gt;
+         &lt;/ul&gt;
+      &lt;/div&gt;
+   &lt;/div&gt;
+</code></pre>
+
+<pre><code class="language-markup">   &lt;div id="footer"&gt;
+      &amp;amp;copy; 2008. All rights reserved.
+      &lt;small&gt;&amp;bull;&lt;/small&gt; Last Update: May 5 2008.
+      &lt;small&gt;&amp;bull;&lt;/small&gt; &lt;a href="http://validator.w3.org/check/referer"&gt;Valid XHTML&lt;/a&gt;
+   &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h4 id="and-now-for-the-maaaa-gic">And now for the Maaaa-gic!</h4>
+
+<p>First, we need to save each of these files. I like to use obvious names. Also, each file is now saved as a <code class="language-plaintext highlighter-rouge">.php</code> file, which yields the best results for ensuring our php code is parsed correctly. So, we should now have: <em>header.php</em>, <em>index.php</em>, and <em>footer.php</em>.</p>
+
+<h4 id="and-the-page-title">And the page title?</h4>
+
+<p>We can take care of that issue with a simple PHP trick. First, we add a PHP “zone” to the top of the <em>index.php</em> page. Add a PHP start tag, like this: <code class="language-plaintext highlighter-rouge">&lt;?php</code>, and an end tag, like so: <code class="language-plaintext highlighter-rouge">?&gt;</code>. In between we put this code: <code class="language-plaintext highlighter-rouge">$page_title="DESIGN by Louie | Home"</code>. To wrap up our site surgery, go back to our <em>header.php</em> file, and where we see the text for the page title (the <code class="language-plaintext highlighter-rouge">&lt;title&gt;</code> tag), we replace that text with this: <code class="language-plaintext highlighter-rouge">&lt;?php echo($page_title); ?&gt;</code>.</p>
+
+<h4 id="snipped-section-with-added-php">Snipped Section, with added PHP</h4>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+   <span class="nv">$page_title</span><span class="o">=</span><span class="s2">"DESIGN by Louie | Home"</span><span class="p">;</span>
+<span class="cp">?&gt;</span>
+
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1.0"</span> <span class="nt">/&gt;</span>
+	
+   <span class="nt">&lt;title&gt;</span> <span class="cp">&lt;?php</span> <span class="k">echo</span><span class="p">(</span><span class="nv">$page_title</span><span class="p">);</span> <span class="cp">?&gt;</span> <span class="nt">&lt;/title&gt;</span>
+	
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"Stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">href=</span><span class="s">"design-by-louie.css"</span> <span class="na">media=</span><span class="s">"screen"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"shortcut icon"</span> <span class="na">type=</span><span class="s">"image/x-icon"</span> <span class="na">href=</span><span class="s">"favicon.ico"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+   <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"header"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"index.html"</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;img</span> <span class="na">alt=</span><span class="s">""</span> <span class="na">src=</span><span class="s">"images/louie-logo.png"</span> <span class="nt">/&gt;</span>
+      <span class="nt">&lt;/a&gt;</span>
+   <span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"bodytext"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div&gt;</span>
+   ...
+
+   ...
+      <span class="nt">&lt;/div&gt;</span>
+   <span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<p>The last step is really quite simple. Simply add the PHP <code class="language-plaintext highlighter-rouge">include</code> directive to <em>index.php</em> wherever we want insert our new PHP files. Like so:</p>
+
+<h4 id="finished-product-indexphp">Finished Product: index.php</h4>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+   <span class="nv">$page_title</span><span class="o">=</span><span class="s2">"DESIGN by Louie | Home"</span><span class="p">;</span>
+<span class="cp">?&gt;</span>
+
+<span class="cp">&lt;?php</span> <span class="k">include</span><span class="p">(</span><span class="s1">'includes/header.php'</span><span class="p">);</span> <span class="cp">?&gt;</span>
+
+   <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"bodytext"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;div&gt;</span>
+         <span class="nt">&lt;p&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"de1"</span><span class="nt">&gt;</span>DESIGN<span class="nt">&lt;/span&gt;&lt;span</span> <span class="na">class=</span><span class="s">"de2"</span><span class="nt">&gt;</span> | by Louie<span class="ni">&amp;trade;</span><span class="nt">&lt;/span&gt;</span>.
+            Creating custom, clean imagery for everyone. Bold, but understated. Bright, not flashy. Set your
+            brand apart from a sea of monotonous look-alikes. Get <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"de1"</span><span class="nt">&gt;</span>DESIGN<span class="nt">&lt;/span&gt;</span>ed.
+         <span class="nt">&lt;/p&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">"navigate"</span><span class="nt">&gt;</span>
+         <span class="nt">&lt;ul&gt;</span>
+            <span class="nt">&lt;li&gt;</span>
+               <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"stock-images.html"</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;img</span> <span class="na">alt=</span><span class="s">""</span> <span class="na">src=</span><span class="s">"images/stock.png"</span> <span class="na">title=</span><span class="s">"Browse Louie's pre-made imagery."</span> <span class="nt">/&gt;</span>
+                  <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>Stock Imagery...
+               <span class="nt">&lt;/a&gt;</span>
+            <span class="nt">&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;</span>
+               <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"custom-design.html"</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;img</span> <span class="na">alt=</span><span class="s">""</span> <span class="na">src=</span><span class="s">"images/custom.png"</span> <span class="na">title=</span><span class="s">"Request a custom design."</span> <span class="nt">/&gt;</span>
+                  <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>Custom Design...
+               <span class="nt">&lt;/a&gt;</span>
+            <span class="nt">&lt;/li&gt;</span>
+            <span class="nt">&lt;li&gt;</span>
+               <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"about.html"</span><span class="nt">&gt;</span>
+                  <span class="nt">&lt;img</span> <span class="na">alt=</span><span class="s">""</span> <span class="na">src=</span><span class="s">"images/louie.png"</span> <span class="na">title=</span><span class="s">"Learn more about Louie."</span> <span class="nt">/&gt;</span>
+                  <span class="nt">&lt;br</span> <span class="nt">/&gt;</span>Louie is...
+               <span class="nt">&lt;/a&gt;</span>
+            <span class="nt">&lt;/li&gt;</span>
+         <span class="nt">&lt;/ul&gt;</span>
+      <span class="nt">&lt;/div&gt;</span>
+   <span class="nt">&lt;/div&gt;</span>
+
+<span class="cp">&lt;?php</span> <span class="k">include</span><span class="p">(</span><span class="s1">'includes/footer.php'</span><span class="p">);</span> <span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>While not necessary, it is common practice to place our “partial” files in a separate directory, which is normally given the name “includes.” This helps make sure that a user couldn’t accidentally navigate to those files, which could happen if they are left in the “root” directory.</p>
+
+<h4 id="the-wrap-up">The Wrap Up</h4>
+
+<p>Hopefully, if I have been clear enough, you were able to follow along with this tutorial. We started with a nice, valid XHTML file, and were able to reduce it to it’s unique parts. Employing this same technique on every page that follows, we should be able to create a easily-maintained, dynamic web site. I encourage you to leave comments below, and above all, ASK QUESTIONS!</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/whatever-happened-to-thinking-logically"><i class="fas fa-chevron-left"></i> What Ever Happened to Thinking Logically?</a>
+<a href="/blog">View all</a>
+<a href="/blog/object-oriented-programming">Object-Oriented Programming <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

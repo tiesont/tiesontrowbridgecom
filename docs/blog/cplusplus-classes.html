@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C/C++ &#58; Creating a Custom Class / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="cc--creating-a-custom-class"><a href="/blog/cplusplus-classes">C/C++ : Creating a Custom Class</a></h2>
+
+  <p>Posted on <strong>Friday, October 3, 2008</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">cplusplus</span></li>
+<li><span class="badge badge-success p-2">classes</span></li>
+</ul>
+
+<p>There are two methods for creating a class in a C++ project. The first method is to code your class directly in the project code in which you will be using the class. However, if you take that route, you cannot reuse that code later (say, for an entirely different project) without opening the first project, copying the code, and pasting it into your new project. The second method involves creating a discrete class project, separate from any program code, and then “including” the class in your program code. I try to always use the second method, for the very simple fact that if I create a class I find useful, I can use it again and again.</p>
+
+<p>So, I will be covering the second method here. :)</p>
+
+<h4 id="lets-get-classy">Let’s Get Classy…</h4>
+
+<p>As I mentioned previously, a C++ class consists of two parts: a <code class="language-plaintext highlighter-rouge">.h</code> file and a <code class="language-plaintext highlighter-rouge">.cpp</code> file. I made up a couple of really simple examples, which you can probably see below. The top sample is the <code class="language-plaintext highlighter-rouge">.h</code> file, and the bottom sample is its associated <code class="language-plaintext highlighter-rouge">.cpp</code> file.</p>
+
+<h4 id="sampleclassh">SampleClass.h</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="k">class</span> <span class="nc">SampleClass</span>
+<span class="p">{</span>
+    <span class="nl">public:</span>
+    <span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span> <span class="c1">// constructor</span>
+    <span class="o">~</span><span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span> <span class="c1">// destructor</span>
+
+    <span class="nl">private:</span>
+    <span class="c1">// internal variables and functions go here</span>
+
+    <span class="nl">public:</span>
+    <span class="cm">/* shared variables and external functions go here */</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h4 id="sampleclasscpp">SampleClass.cpp</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"SampleClass.h"</span><span class="cp">
+</span>
+<span class="c1">// default constructor</span>
+<span class="n">SampleClass</span><span class="o">::</span><span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* place code here that needs to execute
+    when an instance of our class is created */</span>
+<span class="p">}</span>
+
+<span class="c1">// destructor - this is called when our class object</span>
+<span class="c1">// is no longer being used.</span>
+<span class="n">SampleClass</span><span class="o">::~</span><span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="p">[</span> <span class="k">return</span> <span class="n">type</span> <span class="p">]</span> <span class="n">SampleClass</span><span class="o">::</span><span class="p">[</span> <span class="n">function</span> <span class="n">name</span> <span class="p">](</span> <span class="p">[</span> <span class="n">parameter</span> <span class="n">type</span><span class="p">]</span> <span class="p">[</span> <span class="n">parameter</span> <span class="n">name</span> <span class="p">]</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* place code here that needs to execute
+    when this function is called */</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h4 id="h-filetype"><code class="language-plaintext highlighter-rouge">.h</code> Filetype</h4>
+
+<p>Within the <code class="language-plaintext highlighter-rouge">.h</code> file, you <strong>define</strong> the outline of your class object; what characteristics (variables) it has, and what actions it can perform (functions). You can (and must) define the data-type of your variables and the return type of your functions within the .h file. You DO NOT (and cannot) initialize, or “set default values”, for your variables within the <code class="language-plaintext highlighter-rouge">.h</code> file. That happens within your <code class="language-plaintext highlighter-rouge">.cpp</code> file.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">.h</code> file basically is you telling the compiler <em>“here is my class, this is the type of data I am going to use, and this is where you find it.”</em></p>
+
+<h4 id="cpp-filetype"><code class="language-plaintext highlighter-rouge">.cpp</code> Filetype</h4>
+
+<p>The <code class="language-plaintext highlighter-rouge">.cpp</code> file contains all of the code that is capable of acting on your class data. It is only here, within the <code class="language-plaintext highlighter-rouge">.cpp</code> file, that you will find the assignment operator, otherwise known as the “ = “ sign. This is also where you will implement your relational operators ( <code class="language-plaintext highlighter-rouge">&lt;</code>, <code class="language-plaintext highlighter-rouge">&gt;</code>, <code class="language-plaintext highlighter-rouge">==</code>, and <code class="language-plaintext highlighter-rouge">!=</code> ).</p>
+
+<p>In order for the compiler to know what the outline of your class is, you must include the <code class="language-plaintext highlighter-rouge">.h</code> file you built previously, using the proper notation:</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"SampleClass.h"</span><span class="cp">
+</span></code></pre></div></div>
+
+<p>Recall (if you read that part already) that there are two distinct ways of including a class in C++. We use <code class="language-plaintext highlighter-rouge">" "</code> because our class is <em>not</em> part of the STL. If it were, we would use <code class="language-plaintext highlighter-rouge">&lt; &gt;</code> instead.</p>
+
+<h4 id="the-constructor">The Constructor</h4>
+
+<p>When you create an instance of your class, the constructor is used to set your member variables (variables local to this class) to a known state, or value. In other words, it <strong>initializes</strong> those variables. This clears out any data that may have previously existed in the location in memory in which our new variables now reside. We do this to make certain that our program will not be crashed by random invalid data.</p>
+
+<h4 id="the-destructor">The Destructor</h4>
+
+<p>This basically a “self-destruct button” for our class object. When the object goes out of <a href="/blog/programming-primer#scope">scope</a>, it’s destructor is called to destroy the object. This frees up any resources the object may have been using (usually memory).</p>
+
+<h4 id="class-level-functions">Class-level Functions</h4>
+
+<p>Class functions are normally used in one of two ways:</p>
+
+<ul>
+  <li>To provide access to our (preferably) private member variables.</li>
+  <li>To implement class-level logic, such as calculations, that do not need to be (and perhaps shouldn’t be) exposed to the user of our class.</li>
+</ul>
+
+<h5 id="function-examples">Function Examples</h5>
+
+<p>Let us suppose our class, SampleClass, has a couple of member variables declared: <code class="language-plaintext highlighter-rouge">char name[25]</code> and <code class="language-plaintext highlighter-rouge">int age</code>. Now, if we want to be good OOP programmers (and we do!), we need to enforce encapsulation. That means we should make these variables <strong>private</strong>, since we don’t want any ol’ bit of code to be able to modify these variables unless we say it can. So we have this:</p>
+
+<h4 id="sampleclassh-1">SampleClass.h</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="k">class</span> <span class="nc">SampleClass</span>
+<span class="p">{</span>
+    <span class="nl">public:</span>
+    <span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span> <span class="c1">// constructor</span>
+    <span class="o">~</span><span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span> <span class="c1">// deconstructor</span>
+
+    <span class="nl">private:</span>
+    <span class="c1">// internal variables and functions go here</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">25</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+
+    <span class="nl">public:</span>
+    <span class="cm">/* shared variables and external functions
+    go here */</span>
+<span class="p">};</span>
+</code></pre></div></div>
+
+<p>Since our variables are now private, we need a way of accessing and/or modifying them. Suppose for now we just want to be able to view the values of our object’s variables. We can create a function for each variable that will do just that, like so:</p>
+
+<h4 id="sampleclassh-2">SampleClass.h</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#pragma once
+</span>
+<span class="k">class</span> <span class="nc">SampleClass</span>
+<span class="p">{</span>
+    <span class="nl">public:</span>
+    <span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span> <span class="c1">// constructor</span>
+    <span class="o">~</span><span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span> <span class="c1">// deconstructor</span>
+
+    <span class="nl">private:</span>
+    <span class="c1">// internal variables and functions go here</span>
+    <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">25</span><span class="p">];</span>
+    <span class="kt">int</span> <span class="n">age</span><span class="p">;</span>
+
+    <span class="nl">public:</span>
+    <span class="cm">/* shared variables and external functions
+    go here */</span>
+    <span class="kt">char</span><span class="o">*</span> <span class="n">GetName</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span>
+    <span class="kt">int</span> <span class="n">GetAge</span><span class="p">(</span> <span class="kt">void</span> <span class="p">);</span>
+
+<span class="p">};</span>
+</code></pre></div></div>
+
+<h4 id="sampleclasscpp-1">SampleClass.cpp</h4>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">#include</span> <span class="cpf">"SampleClass.h"</span><span class="cp">
+</span>
+<span class="c1">// default constructor</span>
+<span class="n">SampleClass</span><span class="o">::</span><span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* place code here that needs to execute
+    when an instance of our class is created */</span>
+<span class="p">}</span>
+
+<span class="c1">// deconstructor - this is called when our class object is no longer being used.</span>
+<span class="n">SampleClass</span><span class="o">::~</span><span class="n">SampleClass</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>
+<span class="p">{</span>
+<span class="p">}</span>
+
+<span class="kt">char</span><span class="o">*</span> <span class="n">SampleClass</span><span class="o">::</span><span class="n">GetName</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* place code here that needs to execute
+    when this function is called */</span>
+    <span class="k">return</span> <span class="n">name</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="n">SampleClass</span><span class="o">::</span><span class="n">GetAge</span><span class="p">(</span> <span class="kt">void</span> <span class="p">)</span>
+<span class="p">{</span>
+    <span class="cm">/* place code here that needs to execute 
+    when this function is called */</span>
+    <span class="k">return</span> <span class="n">age</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>The “return type” of the function needs to match the data type of the variable whose value we want to return as a result of calling this function.</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/cplusplus-includes"><i class="fas fa-chevron-left"></i> C/C++ : Includes</a>
+<a href="/blog">View all</a>
+<a href="/blog/why-sherlock-holmes-would-have-made-a-kick-ass-programmer">Why Sherlock Holmes Would Have Made A Kick-Ass Programmer <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

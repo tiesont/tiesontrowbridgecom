@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Implementing ASP.NET Membership with a Custom Provider / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="implementing-aspnet-membership-with-a-custom-provider"><a href="/blog/implementing-aspnet-membership-with-a-custom-provider">Implementing ASP.NET Membership with a Custom Provider</a></h2>
+
+  <p>Posted on <strong>Tuesday, September 3, 2013</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">security</span></li>
+<li><span class="badge badge-success p-2">providers</span></li>
+<li><span class="badge badge-success p-2">C#</span></li>
+<li><span class="badge badge-success p-2">ASP.NET</span></li>
+</ul>
+
+<p>Perhaps one of the most ubiquitous means of user management in an ASP.NET application is the oft-maligned Membership library, but let’s be honest; <strong>the default Membership tools are pretty terrible.</strong> If you use the default <code class="language-plaintext highlighter-rouge">Membership</code>, <code class="language-plaintext highlighter-rouge">Roles</code>, and <code class="language-plaintext highlighter-rouge">Profile</code> providers, you’re going to have the awesome privilege of dealing with a database schema that revolves around serializing user information to <code class="language-plaintext highlighter-rouge">BLOB</code> fields.</p>
+
+<p><strong>Yuck.</strong></p>
+
+<p>Fortunately, you can use the provider model AND still maintain a sane, usable database schema; especially helpful when trying to integrate with an existing user store. And how do we accomplish this minor miracle? Well, I’m glad you asked!</p>
+
+<p>See, it’s easy to forget sometimes that a lot of the classes we use as part of the .NET framework are not sealed, which means we can extend their functionality through inheritance, or (in the case of abstract classes like <code class="language-plaintext highlighter-rouge">MembershipProvider</code>) implement our own derived classes, which can then be plugged into any library that is built to accept the base type as a parameter or property. This is especially true of ASP.NET and the provider model. For this post, I’m going to cover how we can implement a custom <code class="language-plaintext highlighter-rouge">MembershipProvider</code>, and touch on how it integrates with my preferred method of authenticating users, <code class="language-plaintext highlighter-rouge">FormsAuthentication</code>.</p>
+
+<h4 id="the-gist">The Gist</h4>
+
+<p>First, let’s look at the code you need for a custom provider, and then I’ll explain what still needs to be done:</p>
+
+<div class="language-csharp highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Specialized</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Configuration.Provider</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web.Configuration</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Web.Security</span><span class="p">;</span>
+ 
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CustomMembershipProvider</span> <span class="p">:</span> <span class="n">MembershipProvider</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">string</span> <span class="n">_applicationName</span><span class="p">,</span> <span class="n">_passwordStrengthRegularExpression</span><span class="p">,</span> <span class="n">_connectionString</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">bool</span> <span class="n">_requiresUniqueEmail</span><span class="p">,</span> <span class="n">_requiresQuestionAndAnswer</span><span class="p">,</span> <span class="n">_enablePasswordRetrieval</span><span class="p">,</span> <span class="n">_enablePasswordReset</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_passwordAttemptWindow</span><span class="p">,</span> <span class="n">_minRequiredPasswordLength</span><span class="p">,</span> <span class="n">_minRequiredNonAlphanumericCharacters</span><span class="p">,</span> <span class="n">_maxInvalidPasswordAttempts</span><span class="p">;</span>
+     
+    <span class="k">private</span> <span class="n">MachineKeySection</span> <span class="n">_machineKey</span><span class="p">;</span> <span class="c1">//Used when determining encryption key values.</span>
+    <span class="k">private</span> <span class="n">MembershipPasswordFormat</span> <span class="n">_passwordFormat</span> <span class="p">=</span> <span class="n">MembershipPasswordFormat</span><span class="p">.</span><span class="n">Hashed</span><span class="p">;</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">ApplicationName</span>
+    <span class="p">{</span>
+        <span class="k">get</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_applicationName</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="k">set</span>
+        <span class="p">{</span>
+            <span class="n">_applicationName</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="n">MaxInvalidPasswordAttempts</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_maxInvalidPasswordAttempts</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="n">MinRequiredNonAlphanumericCharacters</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_minRequiredNonAlphanumericCharacters</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="n">MinRequiredPasswordLength</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_minRequiredPasswordLength</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="n">PasswordAttemptWindow</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_passwordAttemptWindow</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="n">MembershipPasswordFormat</span> <span class="n">PasswordFormat</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_passwordFormat</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">PasswordStrengthRegularExpression</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_passwordStrengthRegularExpression</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="n">RequiresQuestionAndAnswer</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_requiresQuestionAndAnswer</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="n">RequiresUniqueEmail</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_requiresUniqueEmail</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="n">EnablePasswordReset</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_enablePasswordReset</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="n">EnablePasswordRetrieval</span>
+    <span class="p">{</span>
+        <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_enablePasswordRetrieval</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">ChangePassword</span><span class="p">(</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">string</span> <span class="n">oldPassword</span><span class="p">,</span> <span class="kt">string</span> <span class="n">newPassword</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">ChangePasswordQuestionAndAnswer</span><span class="p">(</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">string</span> <span class="n">password</span><span class="p">,</span> <span class="kt">string</span> <span class="n">newPasswordQuestion</span><span class="p">,</span> <span class="kt">string</span> <span class="n">newPasswordAnswer</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="n">MembershipUser</span> <span class="nf">CreateUser</span><span class="p">(</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">string</span> <span class="n">password</span><span class="p">,</span> <span class="kt">string</span> <span class="n">email</span><span class="p">,</span> <span class="kt">string</span> <span class="n">passwordQuestion</span><span class="p">,</span> <span class="kt">string</span> <span class="n">passwordAnswer</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">isApproved</span><span class="p">,</span> <span class="kt">object</span> <span class="n">providerUserKey</span><span class="p">,</span> <span class="k">out</span> <span class="n">MembershipCreateStatus</span> <span class="n">status</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">DeleteUser</span><span class="p">(</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">deleteAllRelatedData</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="n">MembershipUserCollection</span> <span class="nf">FindUsersByEmail</span><span class="p">(</span> <span class="kt">string</span> <span class="n">emailToMatch</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pageIndex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pageSize</span><span class="p">,</span> <span class="k">out</span> <span class="kt">int</span> <span class="n">totalRecords</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="n">MembershipUserCollection</span> <span class="nf">FindUsersByName</span><span class="p">(</span> <span class="kt">string</span> <span class="n">usernameToMatch</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pageIndex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pageSize</span><span class="p">,</span> <span class="k">out</span> <span class="kt">int</span> <span class="n">totalRecords</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="n">MembershipUserCollection</span> <span class="nf">GetAllUsers</span><span class="p">(</span> <span class="kt">int</span> <span class="n">pageIndex</span><span class="p">,</span> <span class="kt">int</span> <span class="n">pageSize</span><span class="p">,</span> <span class="k">out</span> <span class="kt">int</span> <span class="n">totalRecords</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">int</span> <span class="nf">GetNumberOfUsersOnline</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">GetPassword</span><span class="p">(</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">string</span> <span class="n">answer</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="n">MembershipUser</span> <span class="nf">GetUser</span><span class="p">(</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">userIsOnline</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="n">MembershipUser</span> <span class="nf">GetUser</span><span class="p">(</span> <span class="kt">object</span> <span class="n">providerUserKey</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">userIsOnline</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">GetUserNameByEmail</span><span class="p">(</span> <span class="kt">string</span> <span class="n">email</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="nf">ResetPassword</span><span class="p">(</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">string</span> <span class="n">answer</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">UnlockUser</span><span class="p">(</span> <span class="kt">string</span> <span class="n">userName</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">UpdateUser</span><span class="p">(</span> <span class="n">MembershipUser</span> <span class="n">user</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">ValidateUser</span><span class="p">(</span> <span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">string</span> <span class="n">password</span> <span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NotImplementedException</span><span class="p">();</span> <span class="c1">// NOTE: should implement this</span>
+    <span class="p">}</span>
+     
+    <span class="k">public</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">Initialize</span><span class="p">(</span><span class="kt">string</span> <span class="n">name</span><span class="p">,</span> <span class="n">NameValueCollection</span> <span class="n">config</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">config</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ArgumentNullException</span><span class="p">(</span><span class="s">"config"</span><span class="p">);</span>
+        <span class="p">}</span>
+         
+        <span class="k">if</span> <span class="p">(</span><span class="n">name</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">name</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">name</span> <span class="p">=</span> <span class="s">"CustomMembershipProvider"</span><span class="p">;</span>
+        <span class="p">}</span>
+     
+        <span class="k">if</span> <span class="p">(</span><span class="n">String</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s">"description"</span><span class="p">]))</span>
+        <span class="p">{</span>
+            <span class="n">config</span><span class="p">.</span><span class="nf">Remove</span><span class="p">(</span><span class="s">"description"</span><span class="p">);</span>
+            <span class="n">config</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="s">"description"</span><span class="p">,</span> <span class="s">"Custom MembershipProvider"</span><span class="p">);</span>
+        <span class="p">}</span>
+         
+        <span class="c1">// Initialize the abstract base class.</span>
+        <span class="k">base</span><span class="p">.</span><span class="nf">Initialize</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">config</span><span class="p">);</span>
+         
+        <span class="n">_applicationName</span> <span class="p">=</span> <span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"applicationName"</span><span class="p">,</span> <span class="n">System</span><span class="p">.</span><span class="n">Web</span><span class="p">.</span><span class="n">Hosting</span><span class="p">.</span><span class="n">HostingEnvironment</span><span class="p">.</span><span class="n">ApplicationVirtualPath</span><span class="p">);</span>
+        <span class="n">_maxInvalidPasswordAttempts</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToInt32</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"maxInvalidPasswordAttempts"</span><span class="p">,</span> <span class="s">"5"</span><span class="p">));</span>
+        <span class="n">_passwordAttemptWindow</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToInt32</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"passwordAttemptWindow"</span><span class="p">,</span> <span class="s">"10"</span><span class="p">));</span>
+        <span class="n">_minRequiredNonAlphanumericCharacters</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToInt32</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"minRequiredAlphaNumericCharacters"</span><span class="p">,</span> <span class="s">"1"</span><span class="p">));</span>
+        <span class="n">_minRequiredPasswordLength</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToInt32</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"minRequiredPasswordLength"</span><span class="p">,</span> <span class="s">"7"</span><span class="p">));</span>
+        <span class="n">_passwordStrengthRegularExpression</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToString</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"passwordStrengthRegularExpression"</span><span class="p">,</span> <span class="n">String</span><span class="p">.</span><span class="n">Empty</span><span class="p">));</span>
+        <span class="n">_enablePasswordReset</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBoolean</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"enablePasswordReset"</span><span class="p">,</span> <span class="s">"true"</span><span class="p">));</span>
+        <span class="n">_enablePasswordRetrieval</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBoolean</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"enablePasswordRetrieval"</span><span class="p">,</span> <span class="s">"true"</span><span class="p">));</span>
+        <span class="n">_requiresQuestionAndAnswer</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBoolean</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"requiresQuestionAndAnswer"</span><span class="p">,</span> <span class="s">"false"</span><span class="p">));</span>
+        <span class="n">_requiresUniqueEmail</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBoolean</span><span class="p">(</span><span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="s">"requiresUniqueEmail"</span><span class="p">,</span> <span class="s">"true"</span><span class="p">));</span>
+     
+        <span class="kt">string</span> <span class="n">temp_format</span> <span class="p">=</span> <span class="n">config</span><span class="p">[</span><span class="s">"passwordFormat"</span><span class="p">];</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">temp_format</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">temp_format</span> <span class="p">=</span> <span class="s">"Hashed"</span><span class="p">;</span>
+        <span class="p">}</span>
+         
+        <span class="k">switch</span> <span class="p">(</span><span class="n">temp_format</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">case</span> <span class="s">"Hashed"</span><span class="p">:</span>
+                <span class="n">_passwordFormat</span> <span class="p">=</span> <span class="n">MembershipPasswordFormat</span><span class="p">.</span><span class="n">Hashed</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s">"Encrypted"</span><span class="p">:</span>
+                <span class="n">_passwordFormat</span> <span class="p">=</span> <span class="n">MembershipPasswordFormat</span><span class="p">.</span><span class="n">Encrypted</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">case</span> <span class="s">"Clear"</span><span class="p">:</span>
+                <span class="n">_passwordFormat</span> <span class="p">=</span> <span class="n">MembershipPasswordFormat</span><span class="p">.</span><span class="n">Clear</span><span class="p">;</span>
+                <span class="k">break</span><span class="p">;</span>
+            <span class="k">default</span><span class="p">:</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ProviderException</span><span class="p">(</span><span class="s">"Password format not supported."</span><span class="p">);</span>
+        <span class="p">}</span>
+     
+        <span class="kt">var</span> <span class="n">ConnectionStringSettings</span> <span class="p">=</span> <span class="n">WebConfigurationManager</span><span class="p">.</span><span class="n">ConnectionStrings</span><span class="p">[</span><span class="n">config</span><span class="p">[</span><span class="s">"connectionStringName"</span><span class="p">]];</span>
+         
+        <span class="k">if</span> <span class="p">((</span><span class="n">ConnectionStringSettings</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">||</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrWhiteSpace</span><span class="p">(</span><span class="n">ConnectionStringSettings</span><span class="p">.</span><span class="n">ConnectionString</span><span class="p">.</span><span class="nf">Trim</span><span class="p">())))</span>
+        <span class="p">{</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">ProviderException</span><span class="p">(</span><span class="s">"Connection string cannot be blank."</span><span class="p">);</span>
+        <span class="p">}</span>
+     
+        <span class="n">_connectionString</span> <span class="p">=</span> <span class="n">ConnectionStringSettings</span><span class="p">.</span><span class="n">ConnectionString</span><span class="p">;</span>
+         
+        <span class="c1">// Get encryption and decryption key information from the configuration.</span>
+        <span class="kt">var</span> <span class="n">cfg</span> <span class="p">=</span> <span class="n">WebConfigurationManager</span><span class="p">.</span><span class="nf">OpenWebConfiguration</span><span class="p">(</span><span class="n">System</span><span class="p">.</span><span class="n">Web</span><span class="p">.</span><span class="n">Hosting</span><span class="p">.</span><span class="n">HostingEnvironment</span><span class="p">.</span><span class="n">ApplicationVirtualPath</span><span class="p">);</span>
+        <span class="n">_machineKey</span> <span class="p">=</span> <span class="n">cfg</span><span class="p">.</span><span class="nf">GetSection</span><span class="p">(</span><span class="s">"system.web/machineKey"</span><span class="p">)</span> <span class="k">as</span> <span class="n">MachineKeySection</span><span class="p">;</span>
+     
+        <span class="k">if</span> <span class="p">(</span><span class="n">_machineKey</span><span class="p">.</span><span class="n">ValidationKey</span><span class="p">.</span><span class="nf">Contains</span><span class="p">(</span><span class="s">"AutoGenerate"</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">PasswordFormat</span> <span class="p">!=</span> <span class="n">MembershipPasswordFormat</span><span class="p">.</span><span class="n">Clear</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">throw</span> <span class="k">new</span> <span class="nf">ProviderException</span><span class="p">(</span><span class="s">"Hashed or encrypted passwords are not supported with auto-generated keys."</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+     
+    <span class="k">private</span> <span class="kt">string</span> <span class="nf">GetConfigValue</span><span class="p">(</span><span class="n">NameValueCollection</span> <span class="n">configuration</span><span class="p">,</span> <span class="kt">string</span> <span class="n">key</span><span class="p">,</span> <span class="kt">string</span> <span class="n">defaultValue</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">configuration</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">String</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">defaultValue</span><span class="p">;</span>
+        <span class="p">}</span>
+     
+        <span class="k">return</span> <span class="n">configuration</span><span class="p">[</span><span class="n">key</span><span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Amusingly, most of the methods that are defined in a <code class="language-plaintext highlighter-rouge">MembershipProvider</code> are not actually necessary if you don’t plan on using FormsAuthentication beyond simply authenticating users. More than a few older tutorials might include something like <code class="language-plaintext highlighter-rouge">Membership.ValidateUser(userName, password)</code> within a login page; if you want that to work, you need to implement the <code class="language-plaintext highlighter-rouge">ValidateUser()</code> method in your custom provider. Pretty much everything else is done using the FormsAuthentication object; <code class="language-plaintext highlighter-rouge">FormsAuthentication.CreateAuthToken(userName, false)</code> and <code class="language-plaintext highlighter-rouge">FormsAuthentication.SignOut()</code> more or less handle signing a user in and out of your application.</p>
+
+<h4 id="what-you-need-to-do">What YOU Need to Do</h4>
+
+<p>The code above is the basic shell you’ll need to create a custom Membership provider. To make it work, you’ll need to add or amend the <code class="language-plaintext highlighter-rouge">&lt;membership&gt;</code> section in your web.config so that ASP.NET knows to use your provider. It should look similar to this:</p>
+
+<pre><code class="language-markup">&lt;membership defaultProvider="CustomMembershipProvider"&gt;
+  &lt;providers&gt;
+	&lt;clear /&gt;
+	&lt;add name="CustomMembershipProvider" 
+		 type="Fully.Qualified.Namespace.CustomMembershipProvider" 
+		 connectionStringName="YourConnectionStringName" 
+		 enablePasswordRetrieval="false" 
+		 enablePasswordReset="true" 
+		 requiresQuestionAndAnswer="false" 
+		 requiresUniqueEmail="true" 
+		 maxInvalidPasswordAttempts="5" 
+		 minRequiredPasswordLength="6" 
+		 minRequiredNonalphanumericCharacters="0" 
+		 passwordAttemptWindow="10" 
+		 applicationName="/" /&gt;
+  &lt;/providers&gt;
+&lt;/membership&gt;
+</code></pre>
+
+<p>You also need, at a minimum, to add code to the <code class="language-plaintext highlighter-rouge">ValidateUser()</code> method to query your data store for a user matching the provided credentials.</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/c-hashing-utility"><i class="fas fa-chevron-left"></i> C# Hashing Utility</a>
+<a href="/blog">View all</a>
+<a href="/blog/dont-catch-em-all">(Don’t) Catch ‘Em All! <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

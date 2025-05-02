@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fixing an odd bug in .htaccess / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="fixing-an-odd-bug-in-htaccess"><a href="/blog/fixing-an-odd-bug-in-htaccess">Fixing an odd bug in .htaccess</a></h2>
+
+  <p>Posted on <strong>Sunday, June 21, 2009</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">Apache</span></li>
+<li><span class="badge badge-success p-2">htaccess</span></li>
+</ul>
+
+<p>I don’t know if this is relevant to anyone else, but I’ve been experiencing issues with some of my sites where I get a 500 (server configuration) error. Something like this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://somesite.com/blog
+</code></pre></div></div>
+
+<p>is fine, but going to this:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://somesite.com/blog/
+</code></pre></div></div>
+
+<p>would throw a 500 error. I think I finally figured out why, and I thought some of you might benefit as well.</p>
+
+<p>See, I have this line in my .htaccess file:</p>
+
+<pre><code class="language-apacheconf">RewriteRule ^(.*)$ $1.php
+</code></pre>
+
+<p>I think what is happening is that Apache is merrily doing what I’ve asked it to do: add <code class="language-plaintext highlighter-rouge">.php</code> to the end of the url. So my first example becomes:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://somesite.com/blog.php
+</code></pre></div></div>
+
+<p>which I want, but then it is also doing this (I think):</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://somesite.com/blog/.php
+</code></pre></div></div>
+
+<p>which is obviously invalid. So, to fix it, I added this rule before that rule:</p>
+
+<pre><code class="language-apacheconf">RewriteRule ^(.*)/$ $1.php [L]
+</code></pre>
+
+<p>And et viola! No more 500 errors. May just be coincidence, and if someone reads this and knows better, let me know. For now, though, I am happy to let it stand.</p>
+
+<p>Hope this helps!</p>
+
+<p><strong>[EDIT:]</strong> I think the real fix here was the <code class="language-plaintext highlighter-rouge">[L]</code> flag. That flag tells Apache to stop processing my htaccess file. That prevents the rewrite engine from trying to add a <code class="language-plaintext highlighter-rouge">.php</code> to a directory.</p>
+
+<p>This also seems to have the added bonus of keeping people from snooping in my various directories, since my htaccess file makes each directory look like a file to Apache. So if someone tries to peek into, say, the <code class="language-plaintext highlighter-rouge">/images/</code> directory, they get a 404 error instead, since I do not have a file called ‘images.php’.</p>
+
+<p>:)</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/nifty-corners-sah-weeeeet"><i class="fas fa-chevron-left"></i> Nifty Corners = Sah-weeeeet…</a>
+<a href="/blog">View all</a>
+<a href="/blog/survey-of-programming-languages-i">Survey of Programming Languages I <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

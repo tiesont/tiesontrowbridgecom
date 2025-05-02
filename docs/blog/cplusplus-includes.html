@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en-us" class="no-js">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>C/C++ &#58; Includes / Tieson Trowbridge</title>
+    <meta name="google-site-verification" content="RFBZQXFvanCS2z5AvL5INMzLImSL20U_7yP4Xofckx8" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700&display=swap" />
+
+    <link rel="stylesheet" href="/css/fontawesome.css" />
+    <link rel="stylesheet" href="/css/site.css" asp-append-version="true" />
+
+    <script src="/libs/modernizr/js/modernizr-custom.js"></script>
+</head>
+<body>
+    <div class="container d-flex w-100 h-100 py-3 mx-auto flex-column">
+        <header class="masthead mb-auto text-center">
+            
+                <div class="page-header">
+    <h2>Hello, I'm</h2>
+    <h1 class="display-5 font-weight-bold mb-2"><a href="/">Tieson Trowbridge</a></h1>
+    <h3 class="text-nowrap">&mdash; Developer Ordinaire &mdash;</h3>
+</div>
+            
+            
+            <div id="random-quote" class="random-quote-light">
+                <span class="quote-loading text-center">
+                    <i class="fas fa-3x fa-spin fa-spinner"></i>
+                </span>
+            </div>
+            
+        </header>
+
+        <main role="main" class="post-container">
+            <div class="post-title">
+  <h2 id="cc--includes"><a href="/blog/cplusplus-includes">C/C++ : Includes</a></h2>
+
+  <p>Posted on <strong>Friday, October 3, 2008</strong></p>
+</div>
+
+<ul class="post-tags-list">
+<li><span class="badge badge-success p-2">cplusplus</span></li>
+<li><span class="badge badge-success p-2">includes</span></li>
+</ul>
+
+<p>C++ includes take one of two forms: <code class="language-plaintext highlighter-rouge">#include &lt;&gt;</code> or <code class="language-plaintext highlighter-rouge">#include ""</code>. The only difference is that the former tells the compiler to look within the STL (Standard Template Library) for the source code, while the latter instructs the compiler to look in the local project folder first. If the compiler doesn’t find the file in the local folder, it will search the STL.</p>
+
+<p>Certain header files seem to see a lot of use in low-level programming courses, especially those that focus on creating console-based programs. These include, but are not limited to:</p>
+
+<ul>
+  <li>iostream</li>
+  <li>iomanip</li>
+  <li>list</li>
+  <li>map</li>
+  <li>stdlib</li>
+  <li>string</li>
+  <li>math</li>
+</ul>
+
+<p>As you read on, I will try to explain the use of each class, and show ways to implement it in your code.</p>
+
+<h4 id="iostream">iostream</h4>
+
+<p>From the MSDN Standard C++ Library Reference:</p>
+
+<blockquote>
+  <p>[This class] declares objects that control reading from and writing to the standard streams. This is often the only header you need to include to perform input and output from a C++ program.</p>
+</blockquote>
+
+<p>Specifically, <code class="language-plaintext highlighter-rouge">iostream</code> contains the following functions:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">cerr</code></li>
+  <li><code class="language-plaintext highlighter-rouge">cin</code></li>
+  <li><code class="language-plaintext highlighter-rouge">clog</code></li>
+  <li><code class="language-plaintext highlighter-rouge">cout</code></li>
+  <li><code class="language-plaintext highlighter-rouge">wcerr</code></li>
+  <li><code class="language-plaintext highlighter-rouge">wcin</code></li>
+  <li><code class="language-plaintext highlighter-rouge">wclog</code></li>
+  <li><code class="language-plaintext highlighter-rouge">wcout</code>.</li>
+</ul>
+
+<p>The functions used most often are <code class="language-plaintext highlighter-rouge">cin</code> and <code class="language-plaintext highlighter-rouge">cout</code>. These are used for console input and output, respectively; in other words, to read in character input from a console window and display character output back out to the console window.</p>
+
+<h4 id="iomanip">iomanip</h4>
+
+<p>This class is used to manipulate the input and output sent and received by the console window.</p>
+
+<p><code class="language-plaintext highlighter-rouge">iomanip</code> contains the following functions: ``</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">resetiosflags</code></li>
+  <li><code class="language-plaintext highlighter-rouge">setbase</code></li>
+  <li><code class="language-plaintext highlighter-rouge">setfill</code></li>
+  <li><code class="language-plaintext highlighter-rouge">setiosflags</code></li>
+  <li><code class="language-plaintext highlighter-rouge">setprecision</code></li>
+  <li><code class="language-plaintext highlighter-rouge">setw</code>.</li>
+</ul>
+
+<p>The functions I used most often are <code class="language-plaintext highlighter-rouge">setfill</code>, <code class="language-plaintext highlighter-rouge">setprecision</code> and <code class="language-plaintext highlighter-rouge">setw</code>. These are used for formatting the output sent to the console window. <code class="language-plaintext highlighter-rouge">setfill</code> is used to define an automatically-inserted character, <code class="language-plaintext highlighter-rouge">setprecision</code> is used to set the number of trailing digits displayed, and <code class="language-plaintext highlighter-rouge">setw</code> sets a minimum width to an output string.</p>
+
+<p>Using these three functions together, it is quite easy to format your output to mimic, say, an ATM screen, with the output formatted correctly for currency, without need for excessive code.</p>
+
+<h4 id="list">list</h4>
+
+<p>The easiest way to define the <code class="language-plaintext highlighter-rouge">list</code> class is to think of it as an automatic array. A <code class="language-plaintext highlighter-rouge">list</code> object is a dynamically re-sized collection of other objects, such as integers, floats, characters, and pointers.</p>
+
+<h4 id="map">map</h4>
+
+<p>The <code class="language-plaintext highlighter-rouge">map</code> class is very similar to the list class, with the exception being that a <code class="language-plaintext highlighter-rouge">map</code> object’s collection is automatically sorted.</p>
+
+<h4 id="stdlib">stdlib</h4>
+
+<p>This class is mostly used to implement legacy C code. It contains a long list of functions. The functions I have used most often are:</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">atof</code></li>
+  <li><code class="language-plaintext highlighter-rouge">atoi</code></li>
+  <li><code class="language-plaintext highlighter-rouge">atol</code></li>
+  <li><code class="language-plaintext highlighter-rouge">rand</code></li>
+  <li><code class="language-plaintext highlighter-rouge">srand </code>.</li>
+</ul>
+
+<p>The first three, <code class="language-plaintext highlighter-rouge">atof</code>, <code class="language-plaintext highlighter-rouge">atoi</code> and <code class="language-plaintext highlighter-rouge">atol</code>, are used to convert a character string into, in order, a float, integer, or long integer value. <code class="language-plaintext highlighter-rouge">rand</code> is used to generate a pseudo-random number. <code class="language-plaintext highlighter-rouge">srand</code> is used to “seed”, or <em>initialize</em>, the random number generator, which helps to increase the randomness of any subsequent calls to the <code class="language-plaintext highlighter-rouge">rand</code> function.</p>
+
+<h4 id="string">string</h4>
+
+<p>The <code class="language-plaintext highlighter-rouge">string</code> class is easily the most welcomed class to be added the STL, as it saves programmers from having to manually build either their own string class for each program or from having to deal with the complexities of character arrays.</p>
+
+<p>The <code class="language-plaintext highlighter-rouge">string</code> class implements it’s own overloaded operators, and gives us access to the function <code class="language-plaintext highlighter-rouge">getline</code>, which is extremely useful for when you wish to read in a line of text (from the console window) that contains spaces, a condition that the character inputs have issues dealing with.</p>
+
+<h4 id="math">math</h4>
+
+<p>The <code class="language-plaintext highlighter-rouge">math</code> class, according to <a href="http://www.cplusplus.com/reference/cmath/">cplusplus.com</a>, <em>“declares a set of functions to compute common mathematical operations and transformations.”</em></p>
+
+<p>These include:</p>
+
+<p><code class="language-plaintext highlighter-rouge">acos</code>, <code class="language-plaintext highlighter-rouge">asin</code>, <code class="language-plaintext highlighter-rouge">atan</code>, <code class="language-plaintext highlighter-rouge">atan2</code>, <code class="language-plaintext highlighter-rouge">ceil</code>, <code class="language-plaintext highlighter-rouge">cos</code>, <code class="language-plaintext highlighter-rouge">cosh</code>, <code class="language-plaintext highlighter-rouge">exp</code>,<code class="language-plaintext highlighter-rouge">fabs</code>, <code class="language-plaintext highlighter-rouge">floor</code>, <code class="language-plaintext highlighter-rouge">fmod</code>, <code class="language-plaintext highlighter-rouge">frexp</code>, <code class="language-plaintext highlighter-rouge">ldexp</code>, <code class="language-plaintext highlighter-rouge">log</code>, <code class="language-plaintext highlighter-rouge">log10</code>, <code class="language-plaintext highlighter-rouge">modf</code>, <code class="language-plaintext highlighter-rouge">pow</code>, <code class="language-plaintext highlighter-rouge">sin</code>, <code class="language-plaintext highlighter-rouge">sinh</code>, <code class="language-plaintext highlighter-rouge">sqrt</code>, <code class="language-plaintext highlighter-rouge">tan</code>, and <code class="language-plaintext highlighter-rouge">tanh</code>.</p>
+
+<hr />
+
+<div class="blog-pager">
+  <p><a href="/blog/conditional-statements"><i class="fas fa-chevron-left"></i> Conditional Statements</a>
+<a href="/blog">View all</a>
+<a href="/blog/cplusplus-classes">C/C++ : Creating a Custom Class <i class="fas fa-chevron-right"></i></a></p>
+</div>
+
+
+        </main>
+
+        <div class="marque">
+            <a href="https://developer.mozilla.org/en-US/">
+                <img src="/images/MDN_promoBanner_120x120px.png" alt="Open docs for an open Web" height="85" />
+            </a>
+            <a href="https://www.fightforthefuture.org/">
+                <img src="/images/fight-for-the-future.svg" alt="Fight for THE FUTURE" height="50" />
+            </a>
+        </div>
+
+        <footer id="footer" class="mastfoot mt-auto text-center">
+            <div class="inner">
+                <p>
+                    &copy; 2025 Tieson Trowbridge
+                    &middot;
+                    Released under a
+                    <a href="https://creativecommons.org/licenses/by-sa/3.0/us/" class="text-nowrap mx-1" title="Creative Commons Attribution Share-Alike 3.0 United States">
+                        <i class="fab fa-creative-commons"></i>
+                        <i class="fab fa-creative-commons-by"></i>
+                        <i class="fab fa-creative-commons-sa"></i>
+                        3.0 United States
+                    </a> license.
+                    &middot;
+                    <a href="/policies/termsofservice">Terms</a>
+                    &middot;
+                    <a href="/policies/privacy">Privacy</a>
+                </p>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments);
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+                m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-6323079-2', 'tiesontrowbridge.com');
+        ga('send', 'pageview');
+    </script>
+
+    <div class="scroll-widget">
+        <a href="#" class="back-to-top">
+            <i class="fas fa-3x fa-arrow-circle-up"></i>
+        </a>
+    </div>
+
+    <script src="/libs/jquery/jquery-3.2.1.min.js"></script>
+    <script src="/libs/prismjs/js/prism.min.js"></script>
+    
+    <script src="/js/data/quotes.js"></script>
+    <script src="/js/random-quote.js"></script>
+    
+</body>
+</html>

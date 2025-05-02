@@ -1,0 +1,219 @@
+$grid-gutter-width: 1rem;
+
+@import 'variables/colors';
+
+@import '../libs/bootstrap/scss/bootstrap';
+@import '../libs/prismjs/scss/prism';
+
+html,body
+{
+    height: 100%;
+}
+
+body
+{
+    display: -ms-flexbox;
+    display: flex;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.container
+{
+    max-width: 1040px;
+}
+
+
+#random-quote
+{
+    max-width: 800px;
+    margin: 1.5rem auto;
+    text-align: left;
+    background: $dark-blue;
+    color: $white;
+    padding: 1.5rem;
+    border-radius: 0.35rem;
+
+    > blockquote
+    {
+        font-style: italic;
+        font-weight: 300;
+        margin-bottom: 0;
+
+        p
+        {
+            &:last-child
+            {
+                margin-bottom: 0;
+            }
+        }
+
+        cite
+        {
+            font-style: normal;
+            color: rgba(255,255,0,.85);
+            margin-bottom: 0;
+        }
+    }
+
+    &.random-quote-light
+    {
+        max-width: 700px;
+        background: none;
+        color: $dark-blue;
+        text-align: center;
+
+        > blockquote
+        {
+            cite
+            {
+                color: $black;
+            }
+        }
+    }
+
+    .quote-loading
+    {
+        width: 100px;
+        display: block;
+        margin: 1rem auto;
+        color: #4ab3f4;
+    }
+}
+
+
+.alert
+{
+    p:last-child
+    {
+        margin-bottom: 0;
+    }
+}
+
+
+p code
+{
+    font-family: Consolas, monospace;
+    font-weight: 600;
+}
+
+
+.scroll-widget
+{
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem;
+    padding: 5px;
+    background: none;
+    color: #4ab3f4;
+    line-height: 1;
+    display: none;
+
+    a.back-to-top
+    {
+        color: darken($primary, 10%);
+
+        &:hover
+        {
+            color: darken($primary, 20%);
+            opacity: 1;
+        }
+    }
+}
+
+
+.text-github
+{
+    color: #24292e;
+}
+
+.text-stackoverflow
+{
+    color: #F48024;
+}
+
+.text-twitter
+{
+    color: #4ab3f4;
+}
+
+
+.bg-dark
+{
+    background: $dark-blue !important;
+
+    .text-github
+    {
+        color: invert(#24292e);
+    }
+}
+
+
+.post-container
+{    
+    .post-title
+    {
+        text-align: center;
+        display: block;
+        margin: 1rem 0;
+    }
+
+    .post-tags-list
+    {
+        text-align: center;
+        display: block;
+        list-style: none;
+
+        li 
+        {
+            display: inline-block;
+
+            + li 
+            {
+                margin-left: 0.5rem;
+            }
+        }
+    }
+}
+
+.blog-pager
+{
+    text-align: center;
+    display: flex;
+    align-items: top;
+    justify-content: center;
+
+    p
+    {
+        width: 100%;
+        margin: 1rem;
+    }
+
+    a
+    {
+        background: $light;
+        color: $dark-blue;
+        padding: 0.75rem 1rem;
+    }
+}
+
+
+.marque
+{
+    text-align: center;
+    display: flex;
+    align-items: top;
+    justify-content: space-between;
+
+    a
+    {
+        margin: 1rem;
+        display: inline-block;
+    }
+}
+
+
+#footer
+{
+    font-size: 0.85rem;
+    color: lighten($black, 35%);
+}
