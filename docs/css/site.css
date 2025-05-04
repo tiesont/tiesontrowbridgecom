@@ -9290,29 +9290,30 @@ p code {
 
 .blog-pager {
   text-align: center;
-  display: flex;
-  align-items: top;
-  justify-content: center;
 }
 .blog-pager p {
   width: 100%;
-  margin: 1rem;
+  margin: 1rem 0;
 }
 .blog-pager a {
-  background: #f8f9fa;
+  display: inline-block;
   color: #1a2b46;
   padding: 0.75rem 1rem;
+  margin: 0.25rem;
+  text-decoration: underline;
 }
 
 .marque {
   text-align: center;
-  display: flex;
-  align-items: top;
-  justify-content: space-between;
 }
 .marque a {
-  margin: 1rem;
   display: inline-block;
+  margin: 1rem;
+}
+.marque a img {
+  max-width: 75vw;
+  max-height: 100px;
+  vertical-align: top;
 }
 
 #footer {

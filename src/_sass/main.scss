@@ -178,21 +178,20 @@ p code
 .blog-pager
 {
     text-align: center;
-    display: flex;
-    align-items: top;
-    justify-content: center;
 
     p
     {
         width: 100%;
-        margin: 1rem;
+        margin: 1rem 0;
     }
 
     a
     {
-        background: $light;
+        display: inline-block;
         color: $dark-blue;
         padding: 0.75rem 1rem;
+        margin: 0.25rem;
+        text-decoration: underline;
     }
 }
 
@@ -200,14 +199,18 @@ p code
 .marque
 {
     text-align: center;
-    display: flex;
-    align-items: top;
-    justify-content: space-between;
 
     a
     {
-        margin: 1rem;
         display: inline-block;
+        margin: 1rem;
+
+        img
+        {
+            max-width: 75vw;
+            max-height: 100px;
+            vertical-align: top;
+        }
     }
 }
 
